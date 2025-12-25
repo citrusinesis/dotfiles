@@ -3,27 +3,25 @@
 {
   programs.ssh = {
     enable = true;
-    enableDefaultConfig = false;
 
-    matchBlocks."*" = {
-      extraOptions = {
-        AddKeysToAgent = "yes";
-        IdentitiesOnly = "yes";
-        ServerAliveInterval = "60";
-        ServerAliveCountMax = "30";
-        TCPKeepAlive = "yes";
-        Compression = "yes";
-        ControlMaster = "auto";
-        ControlPath = "~/.ssh/control/%r@%h:%p";
-        ControlPersist = "600";
-        StrictHostKeyChecking = "ask";
-        VerifyHostKeyDNS = "yes";
-        HashKnownHosts = "yes";
-        UserKnownHostsFile = "~/.ssh/known_hosts";
-      };
-    };
+    extraConfig = ''
+      Host *
+        AddKeysToAgent yes
+        IdentitiesOnly yes
+        ServerAliveInterval 60
+        ServerAliveCountMax 30
+        TCPKeepAlive yes
+        Compression yes
+        ControlMaster auto
+        ControlPath ~/.ssh/control/%r@%h:%p
+        ControlPersist 600
+        StrictHostKeyChecking ask
+        VerifyHostKeyDNS yes
+        HashKnownHosts yes
+        UserKnownHostsFile ~/.ssh/known_hosts
 
-    includes = [ "~/.ssh/config.local" ];
+      Include ~/.ssh/config.local
+    '';
   };
 
   home.file.".ssh/.keep".text = "";
