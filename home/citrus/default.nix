@@ -38,13 +38,13 @@
     minikube
     kubectl
     podman
-    containerd
 
     file
     dust
     duf
     procs
   ] ++ lib.optionals pkgs.stdenv.isLinux [
+    containerd
     slack
     obsidian
     pkgs.unstable.claude-code
