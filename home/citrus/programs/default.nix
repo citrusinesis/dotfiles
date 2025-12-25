@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  # Import all program configurations
   imports = [
     ./git.nix
     ./zsh.nix

@@ -1,7 +1,7 @@
+# Power management - disable sleep/suspend (NixOS)
 { config, pkgs, lib, ... }:
 
-{
-  # Power management - disable sleep/suspend system-wide
+lib.mkIf pkgs.stdenv.isLinux {
   services.logind = {
     lidSwitch = "ignore";
     powerKey = "ignore";
