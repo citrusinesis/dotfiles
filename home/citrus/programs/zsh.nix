@@ -10,18 +10,15 @@
     syntaxHighlighting.enable = true;
 
     shellAliases = {
-      # Navigation
       ".." = "cd ..";
       "..." = "cd ../..";
       "...." = "cd ../../..";
 
-      # Listing files
       ls = "ls --color=auto";
       ll = "ls -la";
       la = "ls -lah";
       l = "ls -CF";
 
-      # Git shortcuts
       g = "git";
       ga = "git add";
       gc = "git commit";
@@ -29,15 +26,12 @@
       gs = "git status";
       gl = "git log";
 
-      # System commands
       update = if pkgs.stdenv.isDarwin
                then "sudo darwin-rebuild switch --flake ~/.config/dotnix#squeezer"
                else "sudo nixos-rebuild switch --flake ~/.config/dotnix#blender";
 
-      # Kubernetes/Minikube
       kubectl = "minikube kubectl --";
 
-      # Utilities
       grep = "grep --color=auto";
       df = "df -h";
       free = "free -m";
@@ -47,12 +41,10 @@
       rm = "rm -v";
       cat = "${pkgs.bat}/bin/bat";
 
-      # Quick edit
       zshrc = "$EDITOR ~/.zshrc";
       nixconf = "cd ~/.config/dotnix";
     };
 
-    # History configuration
     history = {
       size = 10000;
       path = "${config.xdg.dataHome}/zsh/history";
@@ -62,7 +54,6 @@
       share = true;
     };
 
-    # Oh My Zsh configuration
     oh-my-zsh = {
       enable = true;
       plugins = [
@@ -75,71 +66,53 @@
         "colored-man-pages"
         "extract"
       ];
-      # No theme as we're using starship
       theme = "";
     };
 
-    # Additional configuration
     initContent = lib.mkOrder 550 ''
-      # Show system info on shell start
       ${pkgs.fastfetch}/bin/fastfetch
 
-      # Disable oh-my-zsh themes (let starship handle the prompt)
       export ZSH_THEME=""
-
-      # Set PATH
       export PATH=$HOME/.local/bin:$PATH
 
-      # Default editor is set in shared module environment variables
-
-      # Bind keys
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
 
-      # FZF integration
       if [ -n "''${commands[fzf-share]}" ]; then
         source "$(fzf-share)/key-bindings.zsh"
         source "$(fzf-share)/completion.zsh"
       fi
 
-      # Kubernetes/Minikube completions
       if command -v minikube &> /dev/null; then
         source <(minikube completion zsh)
       fi
-      
+
       if command -v helm &> /dev/null; then
         source <(helm completion zsh)
       fi
 
-      # kubectl and docker completion require the control plane to be running
       if command -v minikube &> /dev/null && [ "$(minikube status -o json 2>/dev/null | ${pkgs.jq}/bin/jq -r '.Host // "Stopped"')" = "Running" ]; then
         source <(minikube kubectl -- completion zsh)
-        # Only load docker-env for docker driver
         if [ "$(minikube config get driver 2>/dev/null)" = "docker" ]; then
           eval $(minikube -p minikube docker-env)
         fi
       fi
 
-      # Load local zshrc if it exists
       if [ -f ~/.zshrc.local ]; then
         source ~/.zshrc.local
       fi
 
-      # OS-specific configurations
       if [[ "$(uname)" == "Darwin" ]]; then
-        # macOS specific settings
         export CLICOLOR=1
         alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder'
         alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
       else
-        # Linux specific settings
         alias open='xdg-open'
         alias pbcopy='xclip -selection clipboard'
         alias pbpaste='xclip -selection clipboard -o'
       fi
     '';
 
-    # Additional shell plugins not in oh-my-zsh
     plugins = [
       {
         name = "zsh-nix-shell";
@@ -154,7 +127,6 @@
     ];
   };
 
-  # Ensure programs that integrate with zsh are installed
   home.packages = with pkgs; [
     fzf
     zsh-completions
