@@ -44,13 +44,13 @@
     du-dust
     duf
     procs
-
-    pkgs.unstable.claude-code
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     slack
     obsidian
+    pkgs.unstable.claude-code
     pkgs.unstable.firefox
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     coreutils
+    claude-code
   ];
 }
