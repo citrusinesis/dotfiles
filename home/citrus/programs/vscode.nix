@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
+    package = if pkgs.stdenv.isLinux then pkgs.unstable.vscode else pkgs.vscode;
 
     profiles.default.userSettings = {
       editor.formatOnSaveMode = "modificationsIfAvailable";
@@ -63,11 +63,11 @@
         scminput = false;
       };
     };
-    
+
     profiles.default.extensions = with pkgs.vscode-extensions; [
       catppuccin.catppuccin-vsc-icons
       catppuccin.catppuccin-vsc
-      
+
       vscodevim.vim
 
       jnoortheen.nix-ide
