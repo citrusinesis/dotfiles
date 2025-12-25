@@ -1,8 +1,9 @@
 { pkgs, ... }:
+
 {
   programs.vscode = {
     enable = true;
-    package = pkgs.bleeding.vscode;
+    package = pkgs.unstable.vscode;
 
     profiles.default.userSettings = {
       editor.formatOnSaveMode = "modificationsIfAvailable";

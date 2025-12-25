@@ -1,29 +1,24 @@
+# PipeWire audio configuration (NixOS)
 { config, pkgs, lib, ... }:
 
-{
-  # Enable sound with PipeWire (recommended for Plasma 6)
+lib.mkIf pkgs.stdenv.isLinux {
   security.rtkit.enable = true;
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
     jack.enable = true;
-    
-    # Fix audio delay/pop when starting playback by disabling node suspension
+
+    # Disable node suspension to fix audio delay
     wireplumber.configPackages = [
       (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/disable-suspension.conf" ''
         monitor.alsa.rules = [
           {
             matches = [
-              {
-                # Matches all sources
-                node.name = "~alsa_input.*"
-              },
-              {
-                # Matches all sinks
-                node.name = "~alsa_output.*"
-              }
+              { node.name = "~alsa_input.*" },
+              { node.name = "~alsa_output.*" }
             ]
             actions = {
               update-props = {
@@ -32,18 +27,11 @@
             }
           }
         ]
-        # bluetooth devices
         monitor.bluez.rules = [
           {
             matches = [
-              {
-                # Matches all sources
-                node.name = "~bluez_input.*"
-              },
-              {
-                # Matches all sinks
-                node.name = "~bluez_output.*"
-              }
+              { node.name = "~bluez_input.*" },
+              { node.name = "~bluez_output.*" }
             ]
             actions = {
               update-props = {
