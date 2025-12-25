@@ -20,7 +20,6 @@
       ];
 
       trusted-users = [ "root" "@wheel" "@admin" ];
-      auto-optimise-store = true;
     };
 
     gc = {
