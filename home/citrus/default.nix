@@ -41,7 +41,7 @@
     containerd
 
     file
-    du-dust
+    dust
     duf
     procs
   ] ++ lib.optionals pkgs.stdenv.isLinux [
