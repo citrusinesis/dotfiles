@@ -6,8 +6,6 @@ in
 {
   programs.git = {
     enable = true;
-    userName = personal.git.userName;
-    userEmail = personal.git.userEmail;
 
     ignores = [
       ".DS_Store"
@@ -21,7 +19,11 @@ in
       "tmp"
     ];
 
-    extraConfig = {
+    settings = {
+      user = {
+        name = personal.git.userName;
+        email = personal.git.userEmail;
+      };
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
@@ -30,27 +32,27 @@ in
       merge.conflictstyle = "diff3";
       diff.colorMoved = "default";
       credential.helper = "cache --timeout=3600";
-    };
-
-    aliases = {
-      co = "checkout";
-      br = "branch";
-      ci = "commit";
-      st = "status";
-      unstage = "reset HEAD --";
-      last = "log -1 HEAD";
-      visual = "!gitk";
-      lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-    };
-
-    delta = {
-      enable = true;
-      options = {
-        navigate = true;
-        light = false;
-        line-numbers = true;
-        syntax-theme = "ansi";
+      alias = {
+        co = "checkout";
+        br = "branch";
+        ci = "commit";
+        st = "status";
+        unstage = "reset HEAD --";
+        last = "log -1 HEAD";
+        visual = "!gitk";
+        lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       };
+    };
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      navigate = true;
+      light = false;
+      line-numbers = true;
+      syntax-theme = "ansi";
     };
   };
 }
