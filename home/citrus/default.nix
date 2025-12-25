@@ -45,11 +45,11 @@
     duf
     procs
 
-    pkgs.unstable.claude-code
+    claude-code
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     slack
     obsidian
-    pkgs.unstable.firefox
+    firefox
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     coreutils
   ];
