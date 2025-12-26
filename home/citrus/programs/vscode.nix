@@ -3,7 +3,9 @@
 {
   programs.vscode = {
     enable = true;
-    package = if pkgs.stdenv.isLinux then pkgs.unstable.vscode else pkgs.vscode;
+    package = pkgs.unstable.vscode;
+    
+    mutableExtensionsDir = true;
 
     profiles.default.userSettings = {
       editor.formatOnSaveMode = "modificationsIfAvailable";
