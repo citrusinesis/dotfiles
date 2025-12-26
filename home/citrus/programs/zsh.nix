@@ -42,7 +42,7 @@
       cat = "${pkgs.bat}/bin/bat";
 
       zshrc = "$EDITOR ~/.zshrc";
-      nixconf = "cd ~/.config/dotnix";
+      dotfiles = "cd ~/.config/dotfiles";
     };
 
     history = {
