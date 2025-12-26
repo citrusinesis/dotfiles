@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 {
-  # Configure containers/podman
   xdg.configFile."containers/policy.json".text = builtins.toJSON {
     default = [
       {

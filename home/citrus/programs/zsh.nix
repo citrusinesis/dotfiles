@@ -1,4 +1,4 @@
-{ config, lib, pkgs, username, ... }:
+{ self, config, lib, pkgs, username, ... }:
 
 {
   programs.zsh = {
@@ -27,8 +27,8 @@
       gl = "git log";
 
       update = if pkgs.stdenv.isDarwin
-               then "sudo darwin-rebuild switch --flake ~/.config/dotnix#squeezer"
-               else "sudo nixos-rebuild switch --flake ~/.config/dotnix#blender";
+               then "sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
+               else "sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
 
       kubectl = "minikube kubectl --";
 
