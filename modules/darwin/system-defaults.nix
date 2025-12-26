@@ -22,6 +22,7 @@
       finder = {
         _FXShowPosixPathInTitle = true;
         AppleShowAllExtensions = true;
+        AppleShowAllFiles = true;
         FXEnableExtensionChangeWarning = false;
         QuitMenuItem = true;
         ShowPathbar = true;
