@@ -9,7 +9,7 @@
 
     settings = {
       add_newline = true;
-      scan_timeout = 10;
+      scan_timeout = 30;
       command_timeout = 1000;
 
       character = {
