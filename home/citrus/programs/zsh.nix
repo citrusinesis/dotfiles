@@ -26,9 +26,15 @@
       gs = "git status";
       gl = "git log";
 
-      update = if pkgs.stdenv.isDarwin
-               then "sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
-               else "sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
+      update =
+        if pkgs.stdenv.isDarwin
+        then "sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
+        else "sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
+
+      upgrade =
+        if pkgs.stdenv.isDarwin
+        then "nix flake update --flake ~/.config/dotfiles && sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
+        else "nix flake update --flake ~/.config/dotfiles && sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
 
       kubectl = "minikube kubectl --";
 
