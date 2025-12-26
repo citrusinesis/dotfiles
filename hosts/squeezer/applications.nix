@@ -5,21 +5,31 @@
     casks = [
       "google-chrome"
       "firefox"
+
       "jetbrains-toolbox"
       "visual-studio-code"
+
       "figma"
+
       "slack"
       "notion"
       "obsidian"
+
       "raycast"
-      "tailscale-app"
       "ghostty"
-      "logi-options+"
+
+      "claude"
+
+      "tailscale-app"
       "cloudflare-warp"
+      
+      "logi-options+"
       "monitorcontrol"
     ];
 
-    brews = [];
+    brews = [
+      "opencode"
+    ];
 
     masApps = {
       "KakaoTalk" = 869223134;

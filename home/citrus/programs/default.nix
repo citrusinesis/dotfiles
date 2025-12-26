@@ -12,5 +12,6 @@
     ./neovim.nix
     ./podman.nix
     ./ghostty.nix
+    ./opencode.nix
   ];
 }

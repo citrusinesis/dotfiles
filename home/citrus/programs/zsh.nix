@@ -81,6 +81,10 @@
       export ZSH_THEME=""
       export PATH=$HOME/.local/bin:$PATH
 
+      if [[ -d /opt/homebrew/bin ]]; then
+        export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+      fi
+
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
 
