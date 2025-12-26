@@ -44,7 +44,6 @@ lib.mkIf pkgs.stdenv.isLinux {
     ];
   };
 
-  # Bluetooth
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;

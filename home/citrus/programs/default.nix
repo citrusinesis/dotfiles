@@ -11,5 +11,6 @@
     ./kitty.nix
     ./neovim.nix
     ./podman.nix
+    ./ghostty.nix
   ];
 }

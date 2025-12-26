@@ -4,6 +4,7 @@
   imports = [
     ../modules/nix.nix
     ../modules/fonts.nix
+    ../modules/shell.nix
     ../modules/base.nix
     ../modules/desktop.nix
     ../modules/nvidia.nix

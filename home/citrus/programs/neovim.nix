@@ -42,7 +42,6 @@
     '';
 
     plugins = with pkgs.vimPlugins; [
-      # Essential plugins
       {
         plugin = telescope-nvim;
         type = "lua";
@@ -81,7 +80,6 @@
         '';
       }
 
-      # File explorer
       {
         plugin = nvim-tree-lua;
         type = "lua";
@@ -91,7 +89,6 @@
         '';
       }
 
-      # Git integration
       {
         plugin = gitsigns-nvim;
         type = "lua";
@@ -100,16 +97,14 @@
         '';
       }
 
-      # Completion and LSP support
-      {
+     {
         plugin = nvim-lspconfig;
         type = "lua";
         config = ''
-          local lspconfig = require('lspconfig')
-          
           -- Nix LSP
-          lspconfig.nil_ls.setup{}
-          lspconfig.nixd.setup{}
+          vim.lsp.config('nil_ls', {})
+          vim.lsp.config('nixd', {})
+          vim.lsp.enable({'nil_ls', 'nixd'})
           
           -- Global mappings
           vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
@@ -138,7 +133,6 @@
         '';
       }
 
-      # Completion
       {
         plugin = nvim-cmp;
         type = "lua";
@@ -161,12 +155,10 @@
         '';
       }
 
-      # Completion sources
       cmp-nvim-lsp
       cmp-buffer
       cmp-path
 
-      # Color scheme
       {
         plugin = catppuccin-nvim;
         type = "lua";
@@ -176,7 +168,6 @@
         '';
       }
 
-      # Additional useful plugins
       telescope-fzf-native-nvim
       plenary-nvim
       nvim-web-devicons

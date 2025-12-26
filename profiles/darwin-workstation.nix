@@ -1,6 +1,6 @@
 # Darwin Workstation Profile
 # macOS development machine with Homebrew GUI apps
-{ config, pkgs, lib, ... }:
+{ ... }:
 
 {
   imports = [

@@ -10,9 +10,12 @@
     if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}"
   );
 
-  home.stateVersion = "25.05";
+  home.stateVersion = "25.11";
 
   programs.home-manager.enable = true;
+
+  targets.darwin.copyApps.enable = lib.mkIf pkgs.stdenv.isDarwin false;
+  targets.darwin.linkApps.enable = lib.mkIf pkgs.stdenv.isDarwin true;
 
   home.packages = with pkgs; [
     tmux
@@ -26,7 +29,6 @@
     fd
     jq
     tree
-
     btop
     bat
     eza
@@ -34,6 +36,14 @@
     fastfetch
 
     gh
+    lorri
+    entr
+
+    python3
+    nodejs
+    go
+    rustc
+    cargo
 
     minikube
     kubectl
@@ -43,14 +53,14 @@
     dust
     duf
     procs
+
+    pkgs.unstable.claude-code
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     containerd
     slack
     obsidian
-    pkgs.unstable.claude-code
     pkgs.unstable.firefox
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     coreutils
-    claude-code
   ];
 }

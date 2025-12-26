@@ -5,7 +5,6 @@
     enable = true;
     nix-direnv.enable = true;
 
-    # Enable better support for various programming environments
     stdlib = ''
       # Import common layout functions
       source "${pkgs.direnv}/share/direnv/direnvrc"
@@ -89,7 +88,6 @@
       export DIRENV_LOG_FORMAT="$(tput setaf 3)direnv: %s$(tput sgr0)"
     '';
 
-    # Configure environment variables for common tools
     config = {
       global = {
         load_dotenv = true;
@@ -99,22 +97,11 @@
     };
   };
 
-  # Ensure directories exist
   home.activation.direnvDirectories = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD mkdir -p $VERBOSE_ARG ~/.config/direnv
   '';
 
-  # Add helpful packages for development environments
   home.packages = with pkgs; [
-    nix-direnv          # Enhanced direnv integration with Nix
-    lorri               # Improved nix-shell replacement for direnv
-    entr                # Run commands when files change
-
-    # Language-specific tools that work well with direnv
-    python3             # Python support
-    nodejs              # Node.js support
-    go                  # Go support
-    rustc               # Rust support
-    cargo               # Rust package manager
+    nix-direnv
   ];
 }
