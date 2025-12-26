@@ -41,6 +41,7 @@
 
     python3
     nodejs
+    bun
     go
     rustc
     cargo
