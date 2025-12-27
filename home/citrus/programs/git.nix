@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ ... }:
 
 let
   personal = import ../../../personal.nix;
@@ -19,10 +14,13 @@ in
       };
 
       alias = {
+        a = "add";
         co = "checkout";
         br = "branch";
         ci = "commit";
         st = "status";
+        p = "push";
+        l = "log";
         unstage = "reset HEAD --";
         last = "log -1 HEAD";
         visual = "!gitk";
@@ -33,7 +31,6 @@ in
       pull.rebase = true;
       push.autoSetupRemote = true;
       core.editor = "vim";
-      color.ui = "auto";
       merge.conflictstyle = "diff3";
       diff.colorMoved = "default";
       credential.helper = "cache --timeout=3600";

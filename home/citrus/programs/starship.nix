@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ ... }:
 
 {
   programs.starship = {
@@ -19,8 +19,4 @@
       };
     };
   };
-
-  home.activation.starshipConfigDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    $DRY_RUN_CMD mkdir -p $VERBOSE_ARG ${config.xdg.configHome}
-  '';
 }

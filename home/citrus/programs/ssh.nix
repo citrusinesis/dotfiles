@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   programs.ssh = {
@@ -24,7 +24,6 @@
           StrictHostKeyChecking = "ask";
           VerifyHostKeyDNS = "yes";
           HashKnownHosts = "yes";
-          UserKnownHostsFile = "~/.ssh/known_hosts";
         };
       };
     };
@@ -32,12 +31,7 @@
     includes = [ "~/.ssh/config.local" ];
   };
 
-  home.file.".ssh/.keep".text = "";
-  home.activation.sshDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    $DRY_RUN_CMD mkdir -p $VERBOSE_ARG ~/.ssh/control
-    $DRY_RUN_CMD chmod 700 $VERBOSE_ARG ~/.ssh
-    $DRY_RUN_CMD chmod 700 $VERBOSE_ARG ~/.ssh/control
-  '';
+  home.file.".ssh/control/.keep".text = "";
 
   home.packages = with pkgs; [
     ssh-audit
