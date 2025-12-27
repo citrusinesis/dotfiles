@@ -1,6 +1,17 @@
-{ self, config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, ... }:
 
 {
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ] ++ lib.optionals pkgs.stdenv.isDarwin [
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+  ];
+
+  home.sessionVariables = lib.mkIf pkgs.stdenv.isDarwin {
+    CLICOLOR = "1";
+  };
+
   programs.zsh = {
     enable = true;
     autosuggestion = {
@@ -14,17 +25,8 @@
       "..." = "cd ../..";
       "...." = "cd ../../..";
 
-      ls = "ls --color=auto";
-      ll = "ls -la";
       la = "ls -lah";
       l = "ls -CF";
-
-      g = "git";
-      ga = "git add";
-      gc = "git commit";
-      gp = "git push";
-      gs = "git status";
-      gl = "git log";
 
       update =
         if pkgs.stdenv.isDarwin
@@ -38,7 +40,6 @@
 
       kubectl = "minikube kubectl --";
 
-      grep = "grep --color=auto";
       df = "df -h";
       free = "free -m";
       mkdir = "mkdir -pv";
@@ -78,13 +79,6 @@
     initContent = lib.mkOrder 550 ''
       ${pkgs.fastfetch}/bin/fastfetch
 
-      export ZSH_THEME=""
-      export PATH=$HOME/.local/bin:$PATH
-
-      if [[ -d /opt/homebrew/bin ]]; then
-        export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
-      fi
-
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
 
@@ -113,7 +107,6 @@
       fi
 
       if [[ "$(uname)" == "Darwin" ]]; then
-        export CLICOLOR=1
         alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder'
         alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
       else
@@ -137,9 +130,4 @@
     ];
   };
 
-  home.packages = with pkgs; [
-    fzf
-    zsh-completions
-    nix-zsh-completions
-  ];
 }

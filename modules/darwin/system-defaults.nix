@@ -1,5 +1,19 @@
-# macOS system defaults
 { config, pkgs, lib, username, ... }:
+
+let
+  hidutilKeyMapping = builtins.toJSON {
+    UserKeyMapping = [
+      {
+        HIDKeyboardModifierMappingSrc = 30064771303;
+        HIDKeyboardModifierMappingDst = 30064771181;
+      }
+      {
+        HIDKeyboardModifierMappingSrc = 30064771302;
+        HIDKeyboardModifierMappingDst = 1095216660483;
+      }
+    ];
+  };
+in
 
 {
   system = {
@@ -78,10 +92,33 @@
         };
         "com.apple.AdLib".allowApplePersonalizedAdvertising = false;
         "com.apple.ImageCapture".disableHotPlug = true;
+        "com.apple.symbolichotkeys".AppleSymbolicHotKeys = {
+          "60".enabled = false;
+          "61" = {
+            enabled = true;
+            value = {
+              type = "standard";
+              parameters = [ 65535 79 0 ];
+            };
+          };
+          "64".enabled = false;
+          "65".enabled = false;
+        };
       };
 
       loginwindow.GuestEnabled = false;
     };
+  };
+
+  launchd.agents.key-remapping.serviceConfig = {
+    Label = "com.local.KeyRemapping";
+    ProgramArguments = [
+      "/usr/bin/hidutil"
+      "property"
+      "--set"
+      hidutilKeyMapping
+    ];
+    RunAtLoad = true;
   };
 
   security.pam.services.sudo_local.touchIdAuth = true;

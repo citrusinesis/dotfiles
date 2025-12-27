@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   programs.vscode = {
@@ -49,14 +49,6 @@
       };
       nix.enableLanguageServer = true;
       nixEnvSelector.useFlakes = true;
-
-      javascript.format.enable = false;
-      typescript.format.enable = false;
-      css.format.enable = false;
-      less.format.enable = false;
-      scss.format.enable = false;
-      html.format.enable = false;
-      json.format.enable = false;
 
       github.copilot.enable = {
         "*" = true;

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, username, ... }:
+{ pkgs, lib, username, ... }:
 
 let
   personal = import ../../personal.nix;
