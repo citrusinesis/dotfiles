@@ -12,7 +12,10 @@ let
   };
 
   modelModalities = {
-    input = [ "text" "image" ];
+    input = [
+      "text"
+      "image"
+    ];
     output = [ "text" ];
   };
 
@@ -35,7 +38,11 @@ let
   };
 
   geminiModalities = {
-    input = [ "text" "image" "pdf" ];
+    input = [
+      "text"
+      "image"
+      "pdf"
+    ];
     output = [ "text" ];
   };
 in
@@ -97,12 +104,16 @@ in
             };
             "gemini-3-flash" = {
               name = "Gemini 3 Flash (Antigravity)";
-              limit = geminiLimit // { output = 65536; };
+              limit = geminiLimit // {
+                output = 65536;
+              };
               modalities = geminiModalities;
             };
             "gemini-3-flash-lite" = {
               name = "Gemini 3 Flash Lite (Antigravity)";
-              limit = geminiLimit // { output = 65536; };
+              limit = geminiLimit // {
+                output = 65536;
+              };
               modalities = geminiModalities;
             };
           };
@@ -111,7 +122,8 @@ in
     };
 
     "opencode/oh-my-opencode.json".text = builtins.toJSON {
-      "$schema" = "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json";
+      "$schema" =
+        "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json";
 
       google_auth = false;
 

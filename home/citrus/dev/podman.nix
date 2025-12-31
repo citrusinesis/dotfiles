@@ -1,6 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
+  home.packages =
+    with pkgs;
+    [
+      podman
+    ]
+    ++ lib.optionals pkgs.stdenv.isLinux [
+      containerd
+    ];
+
   xdg.configFile."containers/policy.json".text = builtins.toJSON {
     default = [
       {
