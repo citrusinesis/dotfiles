@@ -11,27 +11,12 @@ Personal Nix flake managing NixOS and macOS systems with Home Manager.
 
 ## Quick Start
 
-### Rebuild
-
 ```bash
 # NixOS
 sudo nixos-rebuild switch --flake .#blender
 
 # macOS
 darwin-rebuild switch --flake .#squeezer
-```
-
-### Development
-
-```bash
-# Enter dev shell
-nix develop
-
-# Format files
-nixpkgs-fmt **/*.nix
-
-# Check syntax
-nix flake check
 ```
 
 ## Structure
@@ -42,8 +27,13 @@ nix flake check
 ├── lib.nix             # Helper functions
 ├── personal.nix        # User info (git, username)
 ├── home/citrus/        # Home Manager config
-│   ├── default.nix     # User packages
-│   └── programs/       # Program configs (git, zsh, neovim, etc.)
+│   ├── cli/            # bat, eza, btop, ripgrep, fd
+│   ├── dev/            # git, direnv, podman, kubernetes
+│   ├── editors/        # neovim, vscode
+│   ├── languages/      # go, rust, typescript, python, nix (runtime + LSP)
+│   ├── misc/           # ssh, opencode, apps
+│   ├── shell/          # zsh, starship, fzf, tmux
+│   └── terminals/      # kitty, ghostty
 ├── hosts/              # Host-specific configs
 │   ├── blender/        # NixOS desktop
 │   └── squeezer/       # macOS
@@ -55,20 +45,25 @@ nix flake check
 └── overlays/           # Package overlays (unstable channel)
 ```
 
-## Packages
+## Languages
 
-### User Packages (home/citrus/default.nix)
+Each language module (`home/citrus/languages/`) includes runtime, LSP, and tools:
 
-- **Terminal**: tmux, zellij
-- **Nix tools**: nil, nixd, nixfmt-rfc-style
-- **CLI**: ripgrep, fd, jq, bat, eza, fzf, btop
-- **Languages**: python3, nodejs, go, rust
-- **Containers**: podman, minikube, kubectl
-- **Utils**: dust, duf, procs, gh
+| Language | Runtime | LSP | Tools |
+|----------|---------|-----|-------|
+| Go | go | gopls | gofumpt, golangci-lint |
+| Rust | rustc, cargo | rust-analyzer | clippy, rustfmt |
+| TypeScript | nodejs | typescript-language-server | prettier |
+| Python | python3 | pyright | ruff |
+| Nix | - | nixd | nixfmt-rfc-style |
+| YAML | - | yaml-language-server | - |
+| JSON | - | vscode-langservers-extracted | - |
 
-### macOS Apps (hosts/squeezer/applications.nix)
+## macOS Apps
 
-Chrome, Firefox, VS Code, Slack, Obsidian, Raycast, Ghostty, Tailscale, etc.
+Managed via Homebrew in `hosts/squeezer/applications.nix`:
+
+Chrome, Firefox, VS Code, Slack, Obsidian, Element, Raycast, Ghostty, Tailscale, etc.
 
 ## Channels
 
