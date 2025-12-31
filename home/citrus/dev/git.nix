@@ -1,9 +1,13 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
   personal = import ../../../personal.nix;
 in
 {
+  home.packages = with pkgs; [
+    gh
+  ];
+
   programs.git = {
     enable = true;
 

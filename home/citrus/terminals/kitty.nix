@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   programs.kitty = {
     enable = true;
 
@@ -8,11 +9,11 @@
     };
 
     themeFile = "Catppuccin-Macchiato";
-    
+
     settings = {
       cursor_shape = "block";
       cursor_beam_thickness = "1.5";
-      cursor_blink_interval = "0"; 
+      cursor_blink_interval = "0";
 
       scrollback_lines = 10000;
       scrollback_pager_history_size = 100;
@@ -26,8 +27,8 @@
       enable_audio_bell = "no";
       visual_bell_duration = "0.1";
 
-      repaint_delay = 10; 
-      input_delay = 3;  
+      repaint_delay = 10;
+      input_delay = 3;
 
       "map ctrl+shift+enter" = "new_window";
       "map ctrl+shift+t" = "new_tab";

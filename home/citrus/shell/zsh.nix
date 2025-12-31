@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   home.sessionPath = [
     "$HOME/.local/bin"
-  ] ++ lib.optionals pkgs.stdenv.isDarwin [
+  ]
+  ++ lib.optionals pkgs.stdenv.isDarwin [
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
   ];
@@ -25,20 +31,24 @@
       "..." = "cd ../..";
       "...." = "cd ../../..";
 
-      la = "ls -lah";
-      l = "ls -CF";
+      ls = "${pkgs.eza}/bin/eza --icons --group-directories-first";
+      l = "${pkgs.eza}/bin/eza -l --icons --group-directories-first --git";
+      la = "${pkgs.eza}/bin/eza -la --icons --group-directories-first --git";
+      ll = "${pkgs.eza}/bin/eza -l --icons --group-directories-first --git --header";
+      lt = "${pkgs.eza}/bin/eza -T --icons --group-directories-first --level=2";
+      lta = "${pkgs.eza}/bin/eza -Ta --icons --group-directories-first --level=2";
 
       update =
-        if pkgs.stdenv.isDarwin
-        then "sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
-        else "sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
+        if pkgs.stdenv.isDarwin then
+          "sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
+        else
+          "sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
 
       upgrade =
-        if pkgs.stdenv.isDarwin
-        then "nix flake update --flake ~/.config/dotfiles && sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
-        else "nix flake update --flake ~/.config/dotfiles && sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
-
-      kubectl = "minikube kubectl --";
+        if pkgs.stdenv.isDarwin then
+          "nix flake update --flake ~/.config/dotfiles && sudo darwin-rebuild switch --flake ~/.config/dotfiles#squeezer"
+        else
+          "nix flake update --flake ~/.config/dotfiles && sudo nixos-rebuild switch --flake ~/.config/dotfiles#blender";
 
       df = "df -h";
       free = "free -m";
@@ -73,34 +83,15 @@
         "colored-man-pages"
         "extract"
       ];
-      theme = "";
+      theme = ""; # using starship
     };
 
+    # mkOrder 550: after plugins loaded
     initContent = lib.mkOrder 550 ''
       ${pkgs.fastfetch}/bin/fastfetch
 
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
-
-      if [ -n "''${commands[fzf-share]}" ]; then
-        source "$(fzf-share)/key-bindings.zsh"
-        source "$(fzf-share)/completion.zsh"
-      fi
-
-      if command -v minikube &> /dev/null; then
-        source <(minikube completion zsh)
-      fi
-
-      if command -v helm &> /dev/null; then
-        source <(helm completion zsh)
-      fi
-
-      if command -v minikube &> /dev/null && [ "$(minikube status -o json 2>/dev/null | ${pkgs.jq}/bin/jq -r '.Host // "Stopped"')" = "Running" ]; then
-        source <(minikube kubectl -- completion zsh)
-        if [ "$(minikube config get driver 2>/dev/null)" = "docker" ]; then
-          eval $(minikube -p minikube docker-env)
-        fi
-      fi
 
       if [ -f ~/.zshrc.local ]; then
         source ~/.zshrc.local

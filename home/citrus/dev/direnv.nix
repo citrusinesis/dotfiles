@@ -1,6 +1,10 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    lorri
+  ];
+
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
