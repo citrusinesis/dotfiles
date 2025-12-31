@@ -14,6 +14,7 @@
       "slack"
       "notion"
       "obsidian"
+      "element"
 
       "raycast"
       "ghostty"
