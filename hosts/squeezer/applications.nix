@@ -20,6 +20,7 @@
       "ghostty"
 
       "claude"
+      "codex"
 
       "tailscale-app"
       "cloudflare-warp"
