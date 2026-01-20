@@ -7,18 +7,25 @@
 
 let
   inherit (flake.inputs) self;
-  username = (import (self + /personal.nix)).user.username;
+  personal = import (self + /personal.nix);
+  username = personal.user.username;
+
+  localFiles = [
+    ./local/ssh-local.nix
+    ./local/teleport-local.nix
+  ];
 in
 {
   imports = [
-    ./cli
-    ./shell
-    ./editors
-    ./terminals
-    ./dev
-    ./languages
-    ./misc
-  ];
+    (self + /modules/home/cli)
+    (self + /modules/home/dev)
+    (self + /modules/home/editors)
+    (self + /modules/home/languages)
+    (self + /modules/home/misc)
+    (self + /modules/home/shell)
+    (self + /modules/home/terminals)
+  ]
+  ++ builtins.filter builtins.pathExists localFiles;
 
   home.username = username;
   home.homeDirectory = lib.mkDefault (

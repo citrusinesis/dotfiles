@@ -38,8 +38,8 @@
       lt = "${pkgs.eza}/bin/eza -T --icons --group-directories-first --level=2";
       lta = "${pkgs.eza}/bin/eza -Ta --icons --group-directories-first --level=2";
 
-      update = "nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
-      upgrade = "nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#update && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
+      update = "git -C \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles add -A && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
+      upgrade = "git -C \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles add -A && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#update && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
 
       df = "df -h";
       free = "free -m";
