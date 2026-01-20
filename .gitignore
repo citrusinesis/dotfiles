@@ -2,9 +2,6 @@
 result
 result-*
 
-# Local/private configuration (not tracked)
-*-local.nix
-
 # Editor files
 .vscode/
 .idea/
