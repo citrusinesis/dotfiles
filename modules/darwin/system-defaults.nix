@@ -1,6 +1,9 @@
-{ config, pkgs, lib, username, ... }:
+{ flake, ... }:
 
 let
+  inherit (flake.inputs) self;
+  personal = import (self + /personal.nix);
+  username = personal.user.username;
   hidutilKeyMapping = builtins.toJSON {
     UserKeyMapping = [
       {
@@ -98,7 +101,11 @@ in
             enabled = true;
             value = {
               type = "standard";
-              parameters = [ 65535 79 0 ];
+              parameters = [
+                65535
+                79
+                0
+              ];
             };
           };
           "64".enabled = false;
