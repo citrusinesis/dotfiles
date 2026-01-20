@@ -1,6 +1,6 @@
 # Nix Configuration
 
-Personal Nix flake managing NixOS and macOS systems with Home Manager.
+Personal Nix flake managing NixOS and macOS systems with Home Manager, powered by [nixos-unified](https://github.com/srid/nixos-unified).
 
 ## Systems
 
@@ -12,42 +12,61 @@ Personal Nix flake managing NixOS and macOS systems with Home Manager.
 ## Quick Start
 
 ```bash
-# NixOS
-sudo nixos-rebuild switch --flake .#blender
+# Activate current system (auto-detects hostname)
+nix run .#activate
 
-# macOS
-darwin-rebuild switch --flake .#squeezer
+# Update flake inputs and activate
+nix run .#update && nix run .#activate
+```
+
+### New Machine Setup
+
+```bash
+# 1. Install Nix
+curl -L https://nixos.org/nix/install | sh -s -- --daemon
+
+# 2. Enable flakes
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# 3. Clone dotfiles
+git clone <repo> ~/.config/dotfiles
+cd ~/.config/dotfiles
+
+# 4. Activate
+nix run .#activate           # Full system (matches hostname)
+nix run .#activate squeezer  # Specific Darwin config
+nix run .#activate blender   # Specific NixOS config
+nix run .#activate citrus@   # Home Manager only (for Ubuntu/other Linux)
 ```
 
 ## Structure
 
 ```
 .
-├── flake.nix           # Flake inputs/outputs
-├── lib.nix             # Helper functions
-├── personal.nix        # User info (git, username)
-├── home/citrus/        # Home Manager config
-│   ├── cli/            # bat, eza, btop, ripgrep, fd
-│   ├── dev/            # git, direnv, podman, kubernetes
-│   ├── editors/        # neovim, vscode
-│   ├── languages/      # go, rust, typescript, python, nix (runtime + LSP)
-│   ├── misc/           # ssh, opencode, apps
-│   ├── shell/          # zsh, starship, fzf, tmux
-│   └── terminals/      # kitty, ghostty
-├── hosts/              # Host-specific configs
-│   ├── blender/        # NixOS desktop
-│   └── squeezer/       # macOS
-├── modules/            # Reusable modules
-│   ├── shell.nix       # Shared shell config
-│   ├── base.nix        # NixOS base
-│   └── darwin/         # macOS modules
-├── profiles/           # System profiles
-└── overlays/           # Package overlays (unstable channel)
+├── flake.nix                    # nixos-unified flake
+├── personal.nix                 # User info (git, username)
+├── configurations/
+│   ├── nixos/blender/           # NixOS config → nixosConfigurations.blender
+│   ├── darwin/squeezer/         # Darwin config → darwinConfigurations.squeezer
+│   └── home/citrus/             # Home Manager → homeConfigurations.citrus
+│       ├── cli/                 # bat, eza, btop, ripgrep, fd
+│       ├── dev/                 # git, direnv, podman, kubernetes
+│       ├── editors/             # neovim, vscode
+│       ├── languages/           # go, rust, typescript, python, nix
+│       ├── misc/                # ssh, apps
+│       ├── shell/               # zsh, starship, fzf, tmux
+│       └── terminals/           # kitty, ghostty
+├── modules/
+│   ├── nixos/                   # NixOS modules → nixosModules.*
+│   ├── darwin/                  # Darwin modules → darwinModules.*
+│   ├── shared/                  # Shared modules (nix, fonts, shell)
+│   └── flake/                   # Flake-parts modules (overlays)
 ```
 
 ## Languages
 
-Each language module (`home/citrus/languages/`) includes runtime, LSP, and tools:
+Each language module includes runtime, LSP, and tools:
 
 | Language | Runtime | LSP | Tools |
 |----------|---------|-----|-------|
@@ -61,9 +80,7 @@ Each language module (`home/citrus/languages/`) includes runtime, LSP, and tools
 
 ## macOS Apps
 
-Managed via Homebrew in `hosts/squeezer/applications.nix`:
-
-Chrome, Firefox, VS Code, Slack, Obsidian, Element, Raycast, Ghostty, Tailscale, etc.
+Managed via Homebrew in `configurations/darwin/squeezer/applications.nix`.
 
 ## Channels
 
