@@ -1,8 +1,12 @@
-{ config, pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   imports = [
-    ../shell.nix
+    ../shared/shell.nix
   ];
 
   time.timeZone = lib.mkDefault "UTC";
