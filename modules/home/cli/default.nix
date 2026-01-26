@@ -8,5 +8,6 @@
     ./ripgrep.nix
     ./fd.nix
     ./packages.nix
+    ./ssh.nix
   ];
 }

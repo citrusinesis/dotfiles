@@ -9,8 +9,6 @@ in
 {
   imports = [
     self.darwinModules.default
-    (self + /modules/shared/nix.nix)
-    (self + /modules/shared/fonts.nix)
     ./applications.nix
     inputs.home-manager.darwinModules.home-manager
   ];
@@ -35,7 +33,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "bak";
-    users.${username} = import (self + /configurations/home/citrus);
+    users.${username} = import (self + /configurations/home/default);
     extraSpecialArgs = { inherit flake; };
   };
 }

@@ -2,6 +2,6 @@
 
 {
   imports = [
-    ./apps.nix
+    ./system/base.nix
   ];
 }
