@@ -29,3 +29,6 @@ result-*
 
 # Darwin rebuild state
 /private/var/folders/
+
+.claude/
+*local*

@@ -2,9 +2,9 @@
 
 {
   imports = [
-    ./ssh.nix
-    ./opencode.nix
     ./apps.nix
+    ./opencode.nix
+    ./ssh.nix
     ./torrent.nix
   ];
 }

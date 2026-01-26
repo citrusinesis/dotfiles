@@ -60,6 +60,11 @@
         markdown = false;
         scminput = false;
       };
+
+      claudeCode.useTerminal = true;
+      claudeCode.allowDangerouslySkipPermissions = true;
+      claudeCode.autosave = true;
+      claudeCode.initialPermissionMode = "bypassPermissions";
     };
 
     profiles.default.extensions = with pkgs.vscode-extensions; [
