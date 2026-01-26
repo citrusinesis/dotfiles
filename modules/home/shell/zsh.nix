@@ -14,7 +14,11 @@
     "/opt/homebrew/sbin"
   ];
 
-  home.sessionVariables = lib.mkIf pkgs.stdenv.isDarwin {
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    TERM = "xterm-256color";
+  } // lib.optionalAttrs pkgs.stdenv.isDarwin {
     CLICOLOR = "1";
   };
 
@@ -48,6 +52,11 @@
       mv = "mv -iv";
       rm = "rm -v";
       cat = "${pkgs.bat}/bin/bat";
+
+      grep = "grep --color=auto";
+      g = "git";
+      vi = "nvim";
+      vim = "nvim";
 
       zshrc = "$EDITOR ~/.zshrc";
       dotfiles = "cd \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles";

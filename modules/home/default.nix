@@ -2,6 +2,7 @@
 
 {
   imports = [
-    ./apps.nix
+    ./development.nix
+    ./misc
   ];
 }
