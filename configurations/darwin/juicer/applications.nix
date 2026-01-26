@@ -13,6 +13,8 @@
       "raycast"
       "ghostty"
 
+      "utm"
+
       "tailscale-app"
       "cloudflare-warp"
 
