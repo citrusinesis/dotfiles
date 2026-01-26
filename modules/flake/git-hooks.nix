@@ -7,7 +7,6 @@
     { config, pkgs, ... }:
     {
       pre-commit.settings.hooks = {
-        # Nix formatting
         nixfmt-rfc-style.enable = true;
       };
 

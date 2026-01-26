@@ -9,10 +9,8 @@ in
 {
   imports = [
     self.darwinModules.default
-    (self + /modules/shared/nix.nix)
-    (self + /modules/shared/fonts.nix)
-    ./applications.nix
     inputs.home-manager.darwinModules.home-manager
+    ./applications.nix
   ];
 
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -35,7 +33,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "bak";
-    users.${username} = import (self + /configurations/home/citrus);
+    users.${username} = import (self + /configurations/home/minimal);
     extraSpecialArgs = { inherit flake; };
   };
 }

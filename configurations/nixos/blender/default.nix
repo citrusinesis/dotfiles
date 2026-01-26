@@ -10,9 +10,6 @@ in
   imports = [
     ./hardware-configuration.nix
     self.nixosModules.default
-    (self + /modules/shared/nix.nix)
-    (self + /modules/shared/fonts.nix)
-    (self + /modules/shared/shell.nix)
     inputs.home-manager.nixosModules.home-manager
   ];
 
@@ -39,7 +36,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
-    users.${username} = import (self + /configurations/home/citrus);
+    users.${username} = import (self + /configurations/home/default);
     extraSpecialArgs = { inherit flake; };
   };
 
