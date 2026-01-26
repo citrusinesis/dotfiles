@@ -11,7 +11,6 @@
       dust
       duf
       procs
-      pkgs.unstable.claude-code
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin [
       coreutils
