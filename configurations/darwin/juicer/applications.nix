@@ -3,15 +3,7 @@
 {
   homebrew = {
     casks = [
-      "google-chrome"
-      "firefox"
       "orion"
-
-      "jetbrains-toolbox"
-      "visual-studio-code"
-      "zed"
-
-      "figma"
 
       "slack"
       "notion"
@@ -21,9 +13,6 @@
       "raycast"
       "ghostty"
 
-      "claude"
-      "codex"
-
       "tailscale-app"
       "cloudflare-warp"
 
@@ -31,9 +20,7 @@
       "monitorcontrol"
     ];
 
-    brews = [
-      "opencode"
-    ];
+    brews = [ ];
 
     masApps = {
       "KakaoTalk" = 869223134;
