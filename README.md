@@ -7,7 +7,8 @@ Personal Nix flake managing NixOS and macOS systems with Home Manager, powered b
 | Host | OS | Arch | Description |
 |------|----|------|-------------|
 | **blender** | NixOS | x86_64 | Desktop with KDE Plasma 6, NVIDIA GPU |
-| **squeezer** | macOS | aarch64 | MacBook |
+| **squeezer** | macOS | aarch64 | MacBook (full Homebrew app set) |
+| **juicer** | macOS | aarch64 | macOS with minimal Home Manager profile |
 
 ## Quick Start
 
@@ -35,7 +36,8 @@ cd ~/.config/dotfiles
 
 # 4. Activate
 nix run .#activate           # Full system (matches hostname)
-nix run .#activate squeezer  # Specific Darwin config
+nix run .#activate squeezer  # Specific Darwin config (full apps)
+nix run .#activate juicer    # Specific Darwin config (minimal apps)
 nix run .#activate blender   # Specific NixOS config
 nix run .#activate citrus@   # Home Manager only (for Ubuntu/other Linux)
 ```
@@ -47,21 +49,18 @@ nix run .#activate citrus@   # Home Manager only (for Ubuntu/other Linux)
 ├── flake.nix                    # nixos-unified flake
 ├── personal.nix                 # User info (git, username)
 ├── configurations/
-│   ├── nixos/blender/           # NixOS config → nixosConfigurations.blender
-│   ├── darwin/squeezer/         # Darwin config → darwinConfigurations.squeezer
-│   └── home/citrus/             # Home Manager → homeConfigurations.citrus
-│       ├── cli/                 # bat, eza, btop, ripgrep, fd
-│       ├── dev/                 # git, direnv, podman, kubernetes
-│       ├── editors/             # neovim, vscode
-│       ├── languages/           # go, rust, typescript, python, nix
-│       ├── misc/                # ssh, apps
-│       ├── shell/               # zsh, starship, fzf, tmux
-│       └── terminals/           # kitty, ghostty
+│   ├── nixos/blender/           # nixosConfigurations.blender
+│   ├── darwin/squeezer/         # darwinConfigurations.squeezer (full apps)
+│   ├── darwin/juicer/           # darwinConfigurations.juicer (minimal apps)
+│   └── home/                    # Home Manager profiles
+│       ├── default/             # default profile (used on blender/squeezer)
+│       ├── minimal/             # minimal profile (used on juicer)
+│       └── development/         # dev-focused profile
 ├── modules/
 │   ├── nixos/                   # NixOS modules → nixosModules.*
 │   ├── darwin/                  # Darwin modules → darwinModules.*
-│   ├── shared/                  # Shared modules (nix, fonts, shell)
-│   └── flake/                   # Flake-parts modules (overlays)
+│   ├── shared/                  # Shared modules (nix, fonts)
+│   └── flake/                   # Flake-parts modules (overlays, formatter)
 ```
 
 ## Languages
@@ -80,7 +79,7 @@ Each language module includes runtime, LSP, and tools:
 
 ## macOS Apps
 
-Managed via Homebrew in `configurations/darwin/squeezer/applications.nix`.
+Managed via Homebrew in `configurations/darwin/squeezer/applications.nix` (full set) and `configurations/darwin/juicer/applications.nix` (minimal set).
 
 ## Channels
 
