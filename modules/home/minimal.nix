@@ -12,5 +12,6 @@
     ./languages/nix.nix
     ./dev/direnv.nix
     ./dev/git.nix
+    ./dev/teleport.nix
   ];
 }
