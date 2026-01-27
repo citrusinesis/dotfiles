@@ -6,18 +6,6 @@
     enableDefaultConfig = false;
 
     matchBlocks = {
-      # Local VMs
-      vm-personal-arm = {
-        user = "citrus";
-        hostname = "vm-personal.local";
-      };
-
-      vm-work-arm = {
-        user = "citrus";
-        hostname = "vm-work.local";
-      };
-
-      # Default settings for all hosts
       "*" = {
         extraOptions = {
           AddKeysToAgent = "yes";
