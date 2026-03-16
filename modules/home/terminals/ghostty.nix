@@ -17,6 +17,8 @@
 
       window-padding-x = 12
       window-padding-y = 4
+
+      macos-option-as-alt = left
     '';
   };
 
