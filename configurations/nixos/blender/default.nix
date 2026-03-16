@@ -15,7 +15,6 @@ in
 
   nixpkgs.hostPlatform = "x86_64-linux";
   nixpkgs.overlays = [ self.overlays.default ];
-  nixpkgs.config.allowUnfree = true;
 
   networking.hostName = "blender";
   time.timeZone = personal.timezone;

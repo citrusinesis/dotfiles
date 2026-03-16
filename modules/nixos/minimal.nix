@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../shared/nix.nix
+    ../shared
 
     ./system/base.nix
   ];

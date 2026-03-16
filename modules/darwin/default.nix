@@ -2,8 +2,7 @@
 
 {
   imports = [
-    ../shared/nix.nix
-    ../shared/fonts.nix
+    ../shared
 
     ./base.nix
     ./homebrew.nix
