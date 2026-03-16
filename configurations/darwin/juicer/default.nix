@@ -9,8 +9,8 @@ in
 {
   imports = [
     self.darwinModules.default
-    inputs.home-manager.darwinModules.home-manager
     ./applications.nix
+    inputs.home-manager.darwinModules.home-manager
   ];
 
   nixpkgs.hostPlatform = "aarch64-darwin";

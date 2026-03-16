@@ -3,7 +3,7 @@
 {
   programs.tmux = {
     enable = true;
-    prefix = "C-b"; 
+    prefix = "C-b";
     mouse = true;
     terminal = "tmux-256color";
     baseIndex = 1;
@@ -20,6 +20,20 @@
       }
       cpu
       battery
+      {
+        plugin = resurrect;
+        extraConfig = ''
+          set -g @resurrect-capture-pane-contents 'on'
+          set -g @resurrect-strategy-nvim 'session'
+        '';
+      }
+      {
+        plugin = continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '10'
+        '';
+      }
     ];
 
     extraConfig = ''

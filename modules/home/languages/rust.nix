@@ -11,5 +11,7 @@
     cargo-watch
     cargo-expand
     cargo-audit
+    cargo-deny
+    cargo-outdated
   ];
 }
