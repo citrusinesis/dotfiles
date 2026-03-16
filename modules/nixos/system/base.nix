@@ -1,8 +1,6 @@
 { pkgs, lib, ... }:
 
 {
-  time.timeZone = lib.mkDefault "UTC";
-
   networking.networkmanager.enable = lib.mkDefault true;
 
   security.sudo.enable = true;
@@ -25,7 +23,6 @@
 
   programs.command-not-found.enable = true;
   programs.bash.completion.enable = true;
-  programs.zsh.enable = true;
   programs.nix-ld.enable = true;
 
   users.mutableUsers = lib.mkDefault true;

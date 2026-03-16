@@ -15,7 +15,6 @@ in
 
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.overlays = [ self.overlays.default ];
-  nixpkgs.config.allowUnfree = true;
 
   networking.hostName = "juicer";
   networking.knownNetworkServices = [

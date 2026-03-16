@@ -16,9 +16,6 @@ in
     stateVersion = 5;
   };
 
-  time.timeZone = lib.mkDefault "UTC";
-
-  programs.zsh.enable = true;
   programs.bash.enable = true;
 
   environment.systemPackages = with pkgs; [
