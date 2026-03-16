@@ -18,7 +18,7 @@
       "zed"
 
       "claude"
-      
+
       "orbstack"
 
       "tailscale-app"
@@ -26,7 +26,7 @@
       "logi-options+"
     ];
 
-    brews = [ 
+    brews = [
       "mas"
 
       "opencode"

@@ -19,6 +19,9 @@
       duf
       procs
       rsync
+      ast-grep
+      lazygit
+      tldr
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin [
       coreutils

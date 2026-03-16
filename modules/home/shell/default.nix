@@ -6,5 +6,6 @@
     ./starship.nix
     ./fzf.nix
     ./tmux.nix
+    ./zoxide.nix
   ];
 }
