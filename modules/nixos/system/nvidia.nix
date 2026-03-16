@@ -20,11 +20,7 @@
       finegrained = true;
     };
 
-    prime = {
-      offload.enable = true;
-      intelBusId = lib.mkDefault "PCI:0:2:0";
-      nvidiaBusId = lib.mkDefault "PCI:2:0:0";
-    };
+    prime.offload.enable = true;
   };
 
   environment.systemPackages = with pkgs; [

@@ -35,7 +35,8 @@
       "monitorcontrol"
     ];
 
-    brews = [ 
+    brews = [
+      "mas"
       "opencode"
     ];
 

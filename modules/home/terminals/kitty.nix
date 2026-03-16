@@ -8,7 +8,7 @@
       size = 11;
     };
 
-    themeFile = "Catppuccin-Macchiato";
+    themeFile = "Catppuccin-Mocha";
 
     settings = {
       cursor_shape = "block";
