@@ -17,7 +17,7 @@ in
   nixpkgs.overlays = [ self.overlays.default ];
   nixpkgs.config.allowUnfree = true;
 
-  networking.hostName = "squeezer";
+  networking.hostName = "mixer";
   networking.knownNetworkServices = [
     "Wi-Fi"
     "Ethernet"
