@@ -7,6 +7,9 @@
     nerd-fonts.d2coding
     nerd-fonts.jetbrains-mono
     nerd-fonts.fira-code
+
+    noto-fonts-cjk-sans
+    pretendard
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     noto-fonts
     noto-fonts-cjk-sans

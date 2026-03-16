@@ -2,8 +2,14 @@
 
 {
   homebrew = {
+    taps = [
+      "anomalyco/tap"
+    ];
+
     casks = [
       "orion"
+      "helium-browser"
+      "google-chrome"
 
       "slack"
       "notion"
@@ -15,6 +21,13 @@
 
       "zed"
 
+      "claude"
+
+      "lm-studio"
+
+      "dbeaver-community"
+      "orbstack"
+
       "tailscale-app"
       "cloudflare-warp"
 
@@ -22,7 +35,9 @@
       "monitorcontrol"
     ];
 
-    brews = [ ];
+    brews = [ 
+      "opencode"
+    ];
 
     masApps = {
       "KakaoTalk" = 869223134;

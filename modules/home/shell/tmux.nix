@@ -3,7 +3,7 @@
 {
   programs.tmux = {
     enable = true;
-    prefix = "C-a";
+    prefix = "C-b"; 
     mouse = true;
     terminal = "tmux-256color";
     baseIndex = 1;
