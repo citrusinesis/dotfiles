@@ -7,42 +7,33 @@ Personal Nix flake for managing NixOS and macOS systems with Home Manager, power
 | Host | OS | Arch | Home profile | Description |
 |------|----|------|--------------|-------------|
 | **blender** | NixOS | x86_64 | `default` | Desktop with KDE Plasma 6 and NVIDIA GPU |
-| **mixer** | macOS | aarch64 | `default` | Main macOS setup with the smaller app set |
-| **juicer** | macOS | aarch64 | `development` | macOS setup with the broader app set and dev-focused Home Manager profile |
-
-## Quick Start
-
-```bash
-# Activate the current machine (auto-detects hostname)
-nix run .#activate
-
-# Update flake inputs, then activate
-nix run .#update && nix run .#activate
-
-# Validate evaluation and checks
-nix flake check
-```
+| **mixer** | macOS | aarch64 | `default` | Work Mac mini with a smaller app set |
+| **juicer** | macOS | aarch64 | `development` | Personal laptop with the full dev toolchain |
 
 ## New Machine Setup
 
 ```bash
-# 1. Install Nix
-curl -L https://nixos.org/nix/install | sh -s -- --daemon
-
-# 2. Enable flakes
-mkdir -p ~/.config/nix
-printf 'experimental-features = nix-command flakes\n' >> ~/.config/nix/nix.conf
-
-# 3. Clone the repo
+# 1. Clone the repo
 git clone <repo> ~/.config/dotfiles
 cd ~/.config/dotfiles
 
-# 4. Activate a target
+# 2. Run setup (installs Lix + Homebrew on macOS)
+./setup.sh
+
+# 3. Activate
+nix run .#activate
+```
+
+## Usage
+
+```bash
 nix run .#activate          # Match current hostname
 nix run .#activate blender  # NixOS desktop
 nix run .#activate mixer    # macOS default profile
 nix run .#activate juicer   # macOS development profile
-nix run .#activate citrus@  # Home Manager only target
+
+nix run .#update && nix run .#activate  # Update inputs, then activate
+nix flake check                         # Validate evaluation and checks
 ```
 
 ## Structure
@@ -51,6 +42,7 @@ nix run .#activate citrus@  # Home Manager only target
 .
 |- flake.nix                         # Flake entrypoint
 |- personal.nix                      # User identity and shared personal data
+|- setup.sh                          # Bootstrap: Lix + Homebrew
 |- configurations/
 |  |- nixos/blender/                 # nixosConfigurations.blender
 |  |- darwin/mixer/                  # darwinConfigurations.mixer
@@ -60,51 +52,36 @@ nix run .#activate citrus@  # Home Manager only target
 |     |- development/                # homeConfigurations.* using homeModules.development
 |     `- default/                    # homeConfigurations.* using homeModules.default
 `- modules/
-   |- flake/                         # Flake modules: auto-wiring, overlays, hooks
-   |- shared/                        # Cross-platform modules: Nix, fonts
-   |- nixos/                         # NixOS module composition
-   |- darwin/                        # nix-darwin module composition
-   `- home/                          # Home Manager modules by category/profile
+   |- flake/                         # Flake-level: auto-wiring, overlays, git-hooks
+   |- shared/                        # Cross-platform: Nix settings, fonts, timezone, zsh
+   |- nixos/                         # NixOS: minimal -> graphical -> default (+ system/)
+   |- darwin/                        # nix-darwin: base, homebrew, system/{defaults,dock,finder,input,security}
+   `- home/                          # Home Manager: cli, dev, editors, languages, misc, shell, terminals
 ```
 
 ## Profiles
 
-- `minimal`: CLI tools, shell, Ghostty, VSCode, Nix tooling, git, direnv, Teleport
-- `development`: `minimal` plus full dev tooling, editors, and language modules
-- `default`: `development` plus misc desktop apps from `modules/home/misc/apps.nix`
-
-## Module Layout
-
-- `modules/home/cli/`: shell-adjacent CLI tools such as `bat`, `eza`, `fd`, `ripgrep`, `ssh`
-- `modules/home/dev/`: git, direnv, podman, kubernetes, teleport
-- `modules/home/editors/`: Neovim, VSCode, Zed
-- `modules/home/languages/`: language runtimes, LSP servers, formatters, and linters
-- `modules/nixos/`: layered as `minimal -> graphical -> default`
-- `modules/darwin/`: shared Darwin base, Homebrew integration, and system defaults
+| Profile | Contents |
+|---------|----------|
+| `minimal` | CLI tools, shell, Ghostty, VSCode, Nix tooling, git, direnv, Teleport |
+| `development` | `minimal` + full dev tooling, editors (Neovim, Zed), all language modules |
+| `default` | `development` + misc desktop apps |
 
 ## Languages
 
-Each language module installs the runtime when needed, plus the language server and common tooling.
-
 | Language | Runtime | LSP | Tools |
 |----------|---------|-----|-------|
-| Go | `go` | `gopls` | `gofumpt`, `golangci-lint` |
-| Rust | `rustc`, `cargo` | `rust-analyzer` | `clippy`, `rustfmt` |
-| TypeScript | `nodejs` | `typescript-language-server` | `prettier` |
-| Python | `python3` | `pyright` | `ruff` |
-| Nix | - | `nixd` | `nixfmt-rfc-style` |
-| YAML | - | `yaml-language-server` | - |
-| JSON | - | `vscode-langservers-extracted` | - |
-
-## Workflow
-
-- Make changes in the relevant module or host file
-- Run `nix flake check` for evaluation and repo checks
-- Apply with `nix run .#activate` or target a specific host/profile
-- Use the dev shell to install the configured pre-commit hooks automatically
+| Go | `go` | `gopls` | `golangci-lint`, `gotools` |
+| Rust | `rustc`, `cargo` | `rust-analyzer` | `clippy`, `rustfmt`, `cargo-deny`, `cargo-outdated` |
+| TypeScript | `nodejs`, `bun` | `typescript-language-server` | `prettier`, `eslint`, `pnpm` |
+| Python | `python3` | `pyright` | `ruff`, `black`, `uv` |
+| Nix | — | `nixd` | `nixfmt-rfc-style`, `statix`, `deadnix` |
+| YAML | — | `yaml-language-server` | `yamllint`, `yq-go` |
+| JSON | — | `vscode-langservers-extracted` | `jq`, `jless` |
 
 ## Notes
 
-- `flake.nix` delegates most output wiring to `nixos-unified`; `modules/flake/toplevel.nix` enables auto-wiring
+- `flake.nix` delegates output wiring to `nixos-unified`; `modules/flake/toplevel.nix` enables auto-wiring
 - `nixpkgs` tracks `25.11`, with newer packages exposed through `pkgs.unstable.*`
 - Formatting is enforced through `git-hooks.nix` with `nixfmt-rfc-style`
+- Theme convention is Catppuccin Mocha across terminals, editors, and CLI tools
