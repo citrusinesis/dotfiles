@@ -16,8 +16,6 @@ in
     stateVersion = 5;
   };
 
-  programs.bash.enable = true;
-
   environment.systemPackages = with pkgs; [
     coreutils
     container
