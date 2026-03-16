@@ -18,9 +18,16 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
     TERM = "xterm-256color";
+    MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
+    MANROFFOPT = "-c";
   }
   // lib.optionalAttrs pkgs.stdenv.isDarwin {
     CLICOLOR = "1";
+  };
+
+  programs.nix-index = {
+    enable = true;
+    enableZshIntegration = true;
   };
 
   programs.zsh = {
@@ -30,6 +37,7 @@
       strategy = [ "completion" ];
     };
     syntaxHighlighting.enable = true;
+    enableCompletion = true;
 
     shellAliases = {
       ".." = "cd ..";
@@ -45,15 +53,14 @@
 
       update = "git -C \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles add -A && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
       upgrade = "git -C \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles add -A && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#update && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
-      gc = "nix-collect-garbage -d";
+      cleanup = "nix-collect-garbage -d";
 
       df = "df -h";
-      free = "free -m";
       mkdir = "mkdir -pv";
       cp = "cp -iv";
       mv = "mv -iv";
       rm = "rm -v";
-      cat = "${pkgs.bat}/bin/bat";
+      cat = "${pkgs.bat}/bin/bat -p";
 
       grep = "grep --color=auto";
       g = "git";
@@ -73,22 +80,6 @@
       share = true;
     };
 
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "docker"
-        "npm"
-        "yarn"
-        "sudo"
-        "command-not-found"
-        "colored-man-pages"
-        "extract"
-      ];
-      theme = ""; # using starship
-    };
-
-    # mkOrder 550: after plugins loaded
     initContent = lib.mkOrder 550 ''
       ${pkgs.fastfetch}/bin/fastfetch
 
@@ -134,7 +125,16 @@
         file = "zsh-abbr.zsh";
         src = pkgs.zsh-abbr;
       }
+      {
+        name = "sudo";
+        file = "plugins/sudo/sudo.plugin.zsh";
+        src = pkgs.oh-my-zsh;
+      }
+      {
+        name = "extract";
+        file = "plugins/extract/extract.plugin.zsh";
+        src = pkgs.oh-my-zsh;
+      }
     ];
   };
-
 }

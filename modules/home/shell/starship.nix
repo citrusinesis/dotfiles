@@ -55,9 +55,9 @@
       };
 
       directory = {
-        symbol = "󰉋 ";
         truncation_length = 3;
         truncation_symbol = "…/";
+        format = "[󰉋 $path]($style)[$read_only]($read_only_style) ";
       };
 
       git_branch = {
@@ -87,8 +87,7 @@
 
       cmd_duration = {
         min_time = 2000;
-        symbol = "󰔞 ";
-        format = "[$duration]($style) ";
+        format = "[󰔞 $duration]($style) ";
       };
 
       golang.symbol = "󰟓 ";
