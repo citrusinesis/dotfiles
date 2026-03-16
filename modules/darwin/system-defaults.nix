@@ -4,15 +4,15 @@ let
   inherit (flake.inputs) self;
   personal = import (self + /personal.nix);
   username = personal.user.username;
+
+  # hidutil uses USB HID usage codes.
+  # Caps Lock = 0x700000039
+  # F18       = 0x70000006D
   hidutilKeyMapping = builtins.toJSON {
     UserKeyMapping = [
       {
-        HIDKeyboardModifierMappingSrc = 30064771303;
+        HIDKeyboardModifierMappingSrc = 30064771129;
         HIDKeyboardModifierMappingDst = 30064771181;
-      }
-      {
-        HIDKeyboardModifierMappingSrc = 30064771302;
-        HIDKeyboardModifierMappingDst = 1095216660483;
       }
     ];
   };
@@ -24,7 +24,6 @@ in
     stateVersion = 5;
 
     keyboard = {
-      enableKeyMapping = true;
       remapCapsLockToEscape = false;
       swapLeftCommandAndLeftAlt = false;
     };
@@ -73,6 +72,7 @@ in
       CustomUserPreferences = {
         ".GlobalPreferences".AppleSpacesSwitchOnActivate = true;
         NSGlobalDomain.WebKitDeveloperExtras = true;
+
         "com.apple.finder" = {
           ShowExternalHardDrivesOnDesktop = true;
           ShowHardDrivesOnDesktop = false;
@@ -81,22 +81,30 @@ in
           _FXSortFoldersFirst = true;
           FXDefaultSearchScope = "SCcf";
         };
+
         "com.apple.desktopservices" = {
           DSDontWriteNetworkStores = true;
           DSDontWriteUSBStores = true;
         };
+
         "com.apple.screensaver" = {
           askForPassword = 1;
           askForPasswordDelay = 0;
         };
+
         "com.apple.screencapture" = {
           location = "~/Desktop";
           type = "png";
         };
+
         "com.apple.AdLib".allowApplePersonalizedAdvertising = false;
         "com.apple.ImageCapture".disableHotPlug = true;
+
         "com.apple.symbolichotkeys".AppleSymbolicHotKeys = {
+          # Disable the default "previous input source" shortcut.
           "60".enabled = false;
+
+          # Bind "Select the next source in the Input Menu" to F18.
           "61" = {
             enabled = true;
             value = {
@@ -108,8 +116,49 @@ in
               ];
             };
           };
+
+          # Disable Spotlight shortcuts to avoid collisions.
           "64".enabled = false;
           "65".enabled = false;
+
+          # Show Notification Center on F13.
+          "163" = {
+            enabled = true;
+            value = {
+              type = "standard";
+              parameters = [
+                65535
+                105
+                0
+              ];
+            };
+          };
+
+          # Switch desktop/space left on Ctrl+Left.
+          "79" = {
+            enabled = true;
+            value = {
+              type = "standard";
+              parameters = [
+                65535
+                123
+                8650752
+              ];
+            };
+          };
+
+          # Switch desktop/space right on Ctrl+Right.
+          "81" = {
+            enabled = true;
+            value = {
+              type = "standard";
+              parameters = [
+                65535
+                124
+                8650752
+              ];
+            };
+          };
         };
       };
 
