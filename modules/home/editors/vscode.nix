@@ -37,6 +37,7 @@
       remote.SSH.connectTimeout = 60;
       remote.SSH.serverInstallTimeout = 300;
       remote.SSH.showLoginTerminal = true;
+      remote.SSH.useLocalServer = false;
 
       nix.serverPath = "nixd";
       nix.serverSettings = {
