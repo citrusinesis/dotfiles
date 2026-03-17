@@ -21,6 +21,15 @@ in
     "Wi-Fi"
     "Ethernet"
   ];
+
+  pf = {
+    screen-sharing = {
+      enable = true;
+      high-performance = true;
+    };
+    ssh.enable = true;
+  };
+
   time.timeZone = personal.timezone;
 
   users.users.${username} = {
