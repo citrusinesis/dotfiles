@@ -11,6 +11,7 @@
     ./system/dock.nix
     ./system/finder.nix
     ./system/input.nix
+    ./system/pf.nix
     ./system/security.nix
   ];
 }
