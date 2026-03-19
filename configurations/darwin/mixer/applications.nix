@@ -9,6 +9,7 @@
     casks = [
       "helium-browser"
 
+      "slack"
       "obsidian"
       "element"
 
@@ -24,15 +25,17 @@
       "tailscale-app"
 
       "logi-options+"
+
+      "mongodb-compass"
     ];
 
     brews = [
       "mas"
-
       "opencode"
     ];
 
     masApps = {
+      "KakaoTalk" = 869223134;
       "RunCat" = 1429033973;
     };
   };

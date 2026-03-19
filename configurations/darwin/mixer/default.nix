@@ -30,6 +30,19 @@ in
     ssh.enable = true;
   };
 
+  power = {
+    sleep = {
+      computer = "never";
+      display = "never";
+      harddisk = "never";
+
+      allowSleepByPowerButton = true;
+    };
+
+    restartAfterFreeze = true;
+    restartAfterPowerFailure = true;
+  };
+
   time.timeZone = personal.timezone;
 
   users.users.${username} = {

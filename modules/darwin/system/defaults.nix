@@ -39,6 +39,7 @@
       NSGlobalDomain.WebKitDeveloperExtras = true;
       "com.apple.AdLib".allowApplePersonalizedAdvertising = false;
       "com.apple.ImageCapture".disableHotPlug = true;
+      "com.apple.widgets".widgetAppearance = 0;
     };
   };
 }
