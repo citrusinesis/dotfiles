@@ -7,5 +7,6 @@
     ./podman.nix
     ./kubernetes.nix
     ./teleport.nix
+    ./claude.nix
   ];
 }
