@@ -7,7 +7,7 @@
     ];
 
     casks = [
-      "helium-browser"
+      "google-chrome"
 
       "slack"
       "obsidian"
