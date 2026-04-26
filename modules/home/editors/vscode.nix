@@ -61,6 +61,17 @@
       };
 
       claudeCode.useTerminal = true;
+
+      rust-analyzer.check.command = "clippy";
+      rust-analyzer.checkOnSave = true;
+
+      "[rust]" = {
+        editor.defaultFormatter = "rust-lang.rust-analyzer";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "source.fixAll" = "explicit";
+        };
+      };
     };
 
     profiles.default.extensions = with pkgs.vscode-extensions; [
@@ -79,6 +90,8 @@
       gruntfuggly.todo-tree
 
       donjayamanne.githistory
+
+      rust-lang.rust-analyzer
     ];
   };
 }

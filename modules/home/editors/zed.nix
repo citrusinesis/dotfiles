@@ -53,6 +53,20 @@ in
         "nixd"
         "!nil"
       ];
+
+      languages.Rust = {
+        format_on_save = "on";
+        code_actions_on_format = {
+          "source.fixAll" = true;
+        };
+      };
+
+      lsp.rust-analyzer.initialization_options = {
+        check = {
+          command = "clippy";
+        };
+        checkOnSave = true;
+      };
     };
   };
 }
