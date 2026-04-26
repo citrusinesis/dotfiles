@@ -3,7 +3,6 @@
 {
   programs.tmux = {
     enable = true;
-    prefix = "C-b";
     mouse = true;
     terminal = "tmux-256color";
     baseIndex = 1;
@@ -55,9 +54,6 @@
       set -ag status-right "#{E:@catppuccin_status_session}"
       set -ag status-right "#{E:@catppuccin_status_uptime}"
       set -agF status-right "#{E:@catppuccin_status_battery}"
-
-      run-shell ${pkgs.tmuxPlugins.cpu}/share/tmux-plugins/cpu/cpu.tmux
-      run-shell ${pkgs.tmuxPlugins.battery}/share/tmux-plugins/battery/battery.tmux
     '';
   };
 }
