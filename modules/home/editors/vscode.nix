@@ -13,16 +13,20 @@ let
       ".config/Code/User/settings.json";
 in
 {
-  home.file."${config.home.homeDirectory}/${settingsPath}".force = true;
+  home.file."${config.home.homeDirectory}/${settingsPath}" = lib.mkIf config.programs.vscode.enable {
+    force = true;
+  };
 
-  home.activation.vscodeMutableSettings = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-    target="$HOME/${settingsPath}"
-    if [ -L "$target" ]; then
-      src=$(readlink -f "$target")
-      rm "$target"
-      install -m 644 "$src" "$target"
-    fi
-  '';
+  home.activation.vscodeMutableSettings = lib.mkIf config.programs.vscode.enable (
+    lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+      target="$HOME/${settingsPath}"
+      if [ -L "$target" ]; then
+        src=$(readlink -f "$target")
+        rm "$target"
+        install -m 644 "$src" "$target"
+      fi
+    ''
+  );
 
   programs.vscode = {
     enable = true;
@@ -88,8 +92,6 @@ in
         scminput = false;
       };
 
-      claudeCode.useTerminal = true;
-
       rust-analyzer.check.command = "clippy";
       rust-analyzer.checkOnSave = true;
 
@@ -99,6 +101,42 @@ in
         editor.codeActionsOnSave = {
           "source.fixAll" = "explicit";
         };
+      };
+
+      python.languageServer = "Pylance";
+      python.analysis.typeCheckingMode = "strict";
+      python.analysis.autoImportCompletions = true;
+      python.analysis.diagnosticMode = "workspace";
+      python.analysis.inlayHints.functionReturnTypes = true;
+      python.analysis.inlayHints.variableTypes = true;
+      python.defaultInterpreterPath = ".venv/bin/python";
+      python.terminal.activateEnvironment = true;
+      python.testing.pytestEnabled = true;
+      python.testing.unittestEnabled = false;
+
+      "[python]" = {
+        editor.defaultFormatter = "ms-python.black-formatter";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "source.fixAll" = "explicit";
+          "source.organizeImports" = "explicit";
+        };
+        editor.tabSize = 4;
+      };
+
+      black-formatter.args = [
+        "--line-length"
+        "100"
+      ];
+
+      ruff.organizeImports = true;
+      ruff.fixAll = true;
+      ruff.lint.run = "onSave";
+      ruff.importStrategy = "fromEnvironment";
+
+      "[toml]" = {
+        editor.defaultFormatter = "tamasfe.even-better-toml";
+        editor.formatOnSave = true;
       };
     };
 
@@ -147,6 +185,13 @@ in
       ms-vscode.remote-server
 
       redis.redis-for-vscode
+
+      ms-python.python
+      ms-python.vscode-pylance
+      ms-python.debugpy
+      ms-python.black-formatter
+      charliermarsh.ruff
+      ms-toolsai.jupyter
 
       tomoki1207.pdf
     ]);
