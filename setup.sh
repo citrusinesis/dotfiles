@@ -4,13 +4,17 @@ set -euo pipefail
 info() { printf '\033[0;34m==>\033[0m \033[0;32m%s\033[0m\n' "$1"; }
 error() { printf '\033[0;31mError:\033[0m %s\n' "$1" >&2; exit 1; }
 
-# Lix
+# Lix (required — non-Lix Nix forks are rejected)
 if command -v nix &>/dev/null; then
-  info "Lix/Nix already installed: $(nix --version)"
+  if nix --version 2>&1 | grep -qi lix; then
+    info "Lix already installed: $(nix --version)"
+  else
+    error "Existing Nix is not Lix: $(nix --version). Uninstall it first, then re-run."
+  fi
 else
   info "Installing Lix"
   curl -sSf -L https://install.lix.systems/lix | sh -s -- install
-  info "Restart your shell, then re-run this script"
+  info "Lix installed. Restart your shell, then re-run setup.sh to continue."
   exit 0
 fi
 
