@@ -105,18 +105,23 @@ in
     profiles.default.extensions = [
       pkgs.vscode-extensions.mkhl.direnv
     ]
-    ++ (with pkgs.vscode-marketplace; [
+    ++ (with pkgs.vscode-marketplace-release; [
       catppuccin.catppuccin-vsc-icons
       catppuccin.catppuccin-vsc
 
+      github.copilot-chat
+
+      opentofu.vscode-opentofu
+      oven.bun-vscode
+      myriad-dreamin.tinymist
+      nefrob.vscode-just-syntax
+    ])
+    ++ (with pkgs.vscode-marketplace; [
       jnoortheen.nix-ide
       arrterian.nix-env-selector
 
       github.vscode-pull-request-github
       github.vscode-github-actions
-      github.copilot
-      github.copilot-chat
-
       anthropic.claude-code
       openai.chatgpt
 
@@ -131,7 +136,6 @@ in
 
       hashicorp.hcl
       redhat.vscode-yaml
-      opentofu.vscode-opentofu
       mineiros.terramate
 
       ms-azuretools.vscode-containers
@@ -142,11 +146,8 @@ in
       ms-vscode.remote-explorer
       ms-vscode.remote-server
 
-      oven.bun-vscode
       redis.redis-for-vscode
 
-      myriad-dreamin.tinymist
-      nefrob.vscode-just-syntax
       tomoki1207.pdf
     ]);
   };
