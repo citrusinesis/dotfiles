@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   settingsPath =
@@ -8,6 +13,8 @@ let
       ".config/Code/User/settings.json";
 in
 {
+  home.file."${config.home.homeDirectory}/${settingsPath}".force = true;
+
   home.activation.vscodeMutableSettings = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     target="$HOME/${settingsPath}"
     if [ -L "$target" ]; then
