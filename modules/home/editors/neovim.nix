@@ -6,8 +6,10 @@
     defaultEditor = true;
     vimAlias = true;
     viAlias = true;
+    withPython3 = false;
+    withRuby = false;
 
-    extraLuaConfig = ''
+    initLua = ''
       vim.opt.number = true
       vim.opt.relativenumber = true
       vim.opt.expandtab = true
