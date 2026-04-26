@@ -16,7 +16,8 @@
         buildInputs = [ final.makeWrapper ];
         postBuild = ''
           wrapProgram $out/bin/claude \
-            --set CLAUDE_CODE_NO_FLICKER 1
+            --set CLAUDE_CODE_NO_FLICKER 1 \
+            --set DISABLE_AUTOUPDATER 1
         '';
       };
     };
