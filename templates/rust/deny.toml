@@ -1,0 +1,14 @@
+[bans]
+multiple-versions = "warn"
+wildcards = "allow"
+highlight = "all"
+
+deny = [
+  { crate = "native-tls", reason = "Use rustls-based TLS instead of native-tls." },
+  { crate = "async-std", reason = "Use tokio for async runtime support." },
+  { crate = "dotenv", reason = "Use dotenvy for environment variable loading." },
+  # reqwest uses this stack internally; allow that path but reject direct usage.
+  { crate = "hyper-rustls", wrappers = ["reqwest"], reason = "Use reqwest as the HTTP client interface instead of depending on hyper-rustls directly." },
+  { crate = "hyper-util", wrappers = ["reqwest", "hyper-rustls"], reason = "Use reqwest as the HTTP client interface instead of depending on hyper-util directly." },
+  { crate = "hyper", wrappers = ["reqwest", "hyper-rustls", "hyper-util"], reason = "Use reqwest as the HTTP client interface instead of depending on hyper directly." },
+]
