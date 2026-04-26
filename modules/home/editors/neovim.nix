@@ -134,8 +134,26 @@
           vim.lsp.config('ts_ls', {})
           vim.lsp.enable('ts_ls')
 
-          vim.lsp.config('rust_analyzer', {})
+          vim.lsp.config('rust_analyzer', {
+            settings = {
+              ['rust-analyzer'] = {
+                check = { command = 'clippy' },
+                checkOnSave = true,
+              },
+            },
+          })
           vim.lsp.enable('rust_analyzer')
+
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            pattern = '*.rs',
+            callback = function()
+              vim.lsp.buf.code_action({
+                context = { only = { 'source.fixAll' }, diagnostics = {} },
+                apply = true,
+              })
+              vim.lsp.buf.format({ async = false })
+            end,
+          })
 
           vim.lsp.config('pyright', {})
           vim.lsp.enable('pyright')
