@@ -5,9 +5,14 @@
     enable = true;
     package = pkgs.vscode;
 
-    mutableExtensionsDir = true;
+    mutableExtensionsDir = false;
 
     profiles.default.userSettings = {
+      update.mode = "none";
+      update.showReleaseNotes = false;
+      extensions.autoCheckUpdates = false;
+      extensions.autoUpdate = false;
+
       editor.formatOnSaveMode = "modificationsIfAvailable";
       editor.formatOnType = true;
 
