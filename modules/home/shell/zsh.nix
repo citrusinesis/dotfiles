@@ -51,9 +51,11 @@
       lt = "${pkgs.eza}/bin/eza -T --icons --group-directories-first --level=2";
       lta = "${pkgs.eza}/bin/eza -Ta --icons --group-directories-first --level=2";
 
-      update = "git -C \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles add -A && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
-      upgrade = "git -C \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles add -A && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#update && nix run \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles#activate";
-      cleanup = "nix-collect-garbage -d";
+      rb = if pkgs.stdenv.isDarwin then "nh darwin switch" else "nh os switch";
+      rbh = "nh home switch";
+      up = if pkgs.stdenv.isDarwin then "nh darwin switch --update" else "nh os switch --update";
+      bump = "nix flake update --flake $NH_FLAKE";
+      gc = "nh clean all --keep 5 --keep-since 3d";
 
       df = "df -h";
       mkdir = "mkdir -pv";

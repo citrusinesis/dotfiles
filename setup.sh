@@ -28,4 +28,4 @@ if [[ "$(uname)" == "Darwin" ]]; then
   fi
 fi
 
-info "Ready — run 'nix run .#activate' to apply configuration"
+info "Ready — run 'nix run .#activate' to apply configuration (after rebuild, use 'rb' / 'up')"

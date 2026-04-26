@@ -20,20 +20,34 @@ cd ~/.config/dotfiles
 # 2. Run setup (installs Lix + Homebrew on macOS)
 ./setup.sh
 
-# 3. Activate
+# 3. Activate (first run uses nixos-unified app since `nh` is not yet on PATH)
 nix run .#activate
 ```
 
 ## Usage
+
+After the first activation, `nh` and the shell aliases are available.
+
+```bash
+rb              # Rebuild current host (nh darwin/os switch, auto-detect)
+rbh             # Home Manager only
+up              # Flake update + rebuild + diff preview
+bump            # Just bump flake.lock
+gc              # Safer GC (keeps last 5 generations + 3d)
+
+nh search <pkg> # Fast nixpkgs search via nix-index
+
+nix flake check # Validate evaluation and checks
+```
+
+Fallback (no `nh`, e.g. fresh machine or remote): the nixos-unified apps still work.
 
 ```bash
 nix run .#activate          # Match current hostname
 nix run .#activate blender  # NixOS desktop
 nix run .#activate mixer    # macOS default profile
 nix run .#activate juicer   # macOS development profile
-
-nix run .#update && nix run .#activate  # Update inputs, then activate
-nix flake check                         # Validate evaluation and checks
+nix run .#update            # Just bump flake.lock
 ```
 
 ## Structure
