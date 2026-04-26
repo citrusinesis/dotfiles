@@ -44,12 +44,7 @@
       "..." = "cd ../..";
       "...." = "cd ../../..";
 
-      ls = "${pkgs.eza}/bin/eza --icons --group-directories-first";
-      l = "${pkgs.eza}/bin/eza -l --icons --group-directories-first --git";
-      la = "${pkgs.eza}/bin/eza -la --icons --group-directories-first --git";
-      ll = "${pkgs.eza}/bin/eza -l --icons --group-directories-first --git --header";
-      lt = "${pkgs.eza}/bin/eza -T --icons --group-directories-first --level=2";
-      lta = "${pkgs.eza}/bin/eza -Ta --icons --group-directories-first --level=2";
+      lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
       rb = if pkgs.stdenv.isDarwin then "nh darwin switch" else "nh os switch";
       rbh = "nh home switch";
