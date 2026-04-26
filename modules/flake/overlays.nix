@@ -4,6 +4,7 @@
   flake.overlays.default =
     final: prev:
     (inputs.fenix.overlays.default final prev)
+    // (inputs.nix-vscode-extensions.overlays.default final prev)
     // {
       claude-code = final.symlinkJoin {
         name = "claude-code";
