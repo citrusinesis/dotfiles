@@ -9,5 +9,11 @@
     nix-diff
     statix
     deadnix
+    nh
+    nvd
   ];
+
+  home.sessionVariables = {
+    NH_FLAKE = "$HOME/.config/dotfiles";
+  };
 }
