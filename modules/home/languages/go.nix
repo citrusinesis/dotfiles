@@ -1,9 +1,9 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
     go
-    gopls
+    (lib.hiPrio gopls)
     delve
     golangci-lint
     gotools
