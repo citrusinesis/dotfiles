@@ -22,6 +22,9 @@
       ast-grep
       lazygit
       tldr
+
+      gnupg
+      keychain
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin [
       coreutils
