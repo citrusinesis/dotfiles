@@ -40,10 +40,6 @@
     enableCompletion = true;
 
     shellAliases = {
-      ".." = "cd ..";
-      "..." = "cd ../..";
-      "...." = "cd ../../..";
-
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
       rb = if pkgs.stdenv.isDarwin then "nh darwin switch" else "nh os switch";
@@ -65,7 +61,6 @@
       vim = "nvim";
 
       zshrc = "$EDITOR ~/.zshrc";
-      dotfiles = "cd \${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles";
     };
 
     history = {
