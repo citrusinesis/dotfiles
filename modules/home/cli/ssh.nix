@@ -9,7 +9,6 @@
       "*" = {
         extraOptions = {
           AddKeysToAgent = "yes";
-          IdentitiesOnly = "yes";
           ServerAliveInterval = "60";
           ServerAliveCountMax = "30";
           TCPKeepAlive = "yes";
@@ -18,7 +17,6 @@
           ControlPath = "~/.ssh/control/%r@%h:%p";
           ControlPersist = "600";
           StrictHostKeyChecking = "ask";
-          VerifyHostKeyDNS = "yes";
           HashKnownHosts = "yes";
         };
       };
@@ -32,7 +30,5 @@
   home.packages = with pkgs; [
     ssh-audit
     sshpass
-    gnupg
-    keychain
   ];
 }
