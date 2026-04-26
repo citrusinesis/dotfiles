@@ -11,11 +11,6 @@
     ];
   };
 
-  home.sessionVariables = {
-    FZF_TMUX = "1";
-    FZF_TMUX_OPTS = "-p 80%,60%";
-  };
-
   programs.zsh = {
     plugins = [
       {
@@ -37,8 +32,6 @@
       zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.eza}/bin/eza -1 --color=always $realpath'
       zstyle ':fzf-tab:complete:ls:*' fzf-preview '${pkgs.eza}/bin/eza -1 --color=always $realpath'
       zstyle ':fzf-tab:*' switch-group '<' '>'
-      zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-      zstyle ':fzf-tab:*' popup-min-size 80 20
     '';
   };
 }
