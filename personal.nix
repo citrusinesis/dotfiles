@@ -4,7 +4,7 @@
   # Git configuration
   git = {
     userName = "Jiho Song";
-    userEmail = "jihojiho2003@gmail.com";
+    userEmail = "me@citrus.name";
   };
 
   # User information
