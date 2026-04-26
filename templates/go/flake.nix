@@ -1,5 +1,5 @@
 {
-  description = "Go service template with buildGoModule";
+  description = "Go service template (vendored)";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -20,6 +20,7 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
+        inherit (pkgs) lib;
       in
       {
         apps.default = {
@@ -30,21 +31,34 @@
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             go
-            (pkgs.lib.hiPrio gopls)
+            (lib.hiPrio gopls)
             delve
             golangci-lint
-            go-tools
-            gomodifytags
-            gotests
-            gotools
-            impl
+            gofumpt
+            air
+            mockgen
           ];
+
+          shellHook = ''
+            if [ -f go.mod ] && [ ! -d vendor ]; then
+              echo "Initializing vendor/ directory..."
+              go mod vendor
+            fi
+          '';
         };
 
         packages.default = pkgs.buildGoModule {
           inherit pname version;
           src = ./.;
           vendorHash = null;
+
+          preBuild = ''
+            if [ ! -d vendor ]; then
+              echo "ERROR: vendor/ directory required. Run 'go mod vendor'."
+              exit 1
+            fi
+          '';
+
           subPackages = [ "./cmd/${pname}" ];
           ldflags = [
             "-s"
