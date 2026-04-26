@@ -69,22 +69,6 @@ in
       remote.SSH.connectTimeout = 60;
       remote.SSH.serverInstallTimeout = 300;
 
-      nix.serverPath = "nixd";
-      nix.serverSettings = {
-        nil = {
-          formatting = {
-            command = [ "nixfmt" ];
-          };
-          nix = {
-            flake = {
-              nixpkgsInputName = "nixpkgs";
-            };
-          };
-        };
-      };
-      nix.enableLanguageServer = true;
-      nixEnvSelector.useFlakes = true;
-
       github.copilot.enable = {
         "*" = true;
         plaintext = false;
@@ -92,6 +76,28 @@ in
         scminput = false;
       };
 
+      # Nix
+      nix.enableLanguageServer = true;
+      nix.serverPath = "nixd";
+      nix.serverSettings = {
+        nixd = {
+          formatting = {
+            command = [ "nixfmt" ];
+          };
+          options = {
+            nixos.expr = "(builtins.getFlake \"/etc/nixos\").nixosConfigurations.default.options";
+            home-manager.expr = "(builtins.getFlake \"/etc/nixos\").homeConfigurations.default.options";
+          };
+        };
+      };
+      nixEnvSelector.useFlakes = true;
+
+      "[nix]" = {
+        editor.defaultFormatter = "jnoortheen.nix-ide";
+        editor.formatOnSave = true;
+      };
+
+      # Rust
       rust-analyzer.check.command = "clippy";
       rust-analyzer.checkOnSave = true;
 
@@ -103,6 +109,94 @@ in
         };
       };
 
+      "[toml]" = {
+        editor.defaultFormatter = "tamasfe.even-better-toml";
+        editor.formatOnSave = true;
+      };
+
+      # Go
+      go.useLanguageServer = true;
+      go.toolsManagement.autoUpdate = false;
+      go.lintTool = "golangci-lint";
+      go.lintOnSave = "package";
+
+      gopls = {
+        "formatting.gofumpt" = true;
+        "ui.semanticTokens" = true;
+        "ui.completion.usePlaceholders" = true;
+      };
+
+      "[go]" = {
+        editor.defaultFormatter = "golang.go";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "source.organizeImports" = "explicit";
+        };
+        editor.tabSize = 4;
+        editor.insertSpaces = false;
+      };
+
+      "[go.mod]" = {
+        editor.defaultFormatter = "golang.go";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "source.organizeImports" = "explicit";
+        };
+      };
+
+      # Typescript
+      "[javascript]" = {
+        editor.defaultFormatter = "biomejs.biome";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "quickfix.biome" = "explicit";
+          "source.organizeImports.biome" = "explicit";
+        };
+      };
+
+      "[typescript]" = {
+        editor.defaultFormatter = "biomejs.biome";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "quickfix.biome" = "explicit";
+          "source.organizeImports.biome" = "explicit";
+        };
+      };
+
+      "[javascriptreact]" = {
+        editor.defaultFormatter = "biomejs.biome";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "quickfix.biome" = "explicit";
+          "source.organizeImports.biome" = "explicit";
+        };
+      };
+
+      "[typescriptreact]" = {
+        editor.defaultFormatter = "biomejs.biome";
+        editor.formatOnSave = true;
+        editor.codeActionsOnSave = {
+          "quickfix.biome" = "explicit";
+          "source.organizeImports.biome" = "explicit";
+        };
+      };
+
+      "[json]" = {
+        editor.defaultFormatter = "biomejs.biome";
+        editor.formatOnSave = true;
+      };
+
+      "[jsonc]" = {
+        editor.defaultFormatter = "biomejs.biome";
+        editor.formatOnSave = true;
+      };
+
+      "[css]" = {
+        editor.defaultFormatter = "biomejs.biome";
+        editor.formatOnSave = true;
+      };
+
+      # Python
       python.languageServer = "Pylance";
       python.analysis.typeCheckingMode = "strict";
       python.analysis.autoImportCompletions = true;
@@ -133,15 +227,19 @@ in
       ruff.fixAll = true;
       ruff.lint.run = "onSave";
       ruff.importStrategy = "fromEnvironment";
-
-      "[toml]" = {
-        editor.defaultFormatter = "tamasfe.even-better-toml";
-        editor.formatOnSave = true;
-      };
     };
 
     profiles.default.extensions = [
       pkgs.vscode-extensions.mkhl.direnv
+
+      (pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "biome";
+          publisher = "biomejs";
+          version = "2026.3.311859";
+          hash = "sha256-HH+KJYY4J6nuHwQ/+DhEFsJ7P5S97UsNuoc+y7GnE00=";
+        };
+      })
     ]
     ++ (with pkgs.vscode-marketplace-release; [
       catppuccin.catppuccin-vsc-icons
@@ -171,6 +269,8 @@ in
       dustypomerleau.rust-syntax
       fill-labs.dependi
       tamasfe.even-better-toml
+
+      golang.go
 
       hashicorp.hcl
       redhat.vscode-yaml
