@@ -5,8 +5,7 @@
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
-    "target": "ESNext",
-    "types": ["bun-types"]
+    "target": "ESNext"
   },
   "include": ["src/**/*.ts"]
 }
