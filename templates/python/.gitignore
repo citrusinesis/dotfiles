@@ -1,0 +1,12 @@
+.direnv
+result
+.venv
+__pycache__
+*.egg-info
+dist
+build
+.ruff_cache
+.pytest_cache
+.mypy_cache
+.coverage
+.env

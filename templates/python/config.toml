@@ -1,0 +1,6 @@
+[service]
+base_url = "https://example.com"
+timeout_seconds = 10
+
+[logging]
+level = "INFO"
