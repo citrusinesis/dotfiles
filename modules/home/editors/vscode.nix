@@ -1,6 +1,22 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
+let
+  settingsPath =
+    if pkgs.stdenv.isDarwin then
+      "Library/Application Support/Code/User/settings.json"
+    else
+      ".config/Code/User/settings.json";
+in
 {
+  home.activation.vscodeMutableSettings = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    target="$HOME/${settingsPath}"
+    if [ -L "$target" ]; then
+      src=$(readlink -f "$target")
+      rm "$target"
+      install -m 644 "$src" "$target"
+    fi
+  '';
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
