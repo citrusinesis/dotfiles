@@ -95,52 +95,52 @@ in
       };
     };
 
-    profiles.default.extensions =
-      (with pkgs.vscode-extensions; [
-        catppuccin.catppuccin-vsc-icons
-        catppuccin.catppuccin-vsc
+    profiles.default.extensions = [
+      pkgs.vscode-extensions.mkhl.direnv
+    ]
+    ++ (with pkgs.vscode-marketplace; [
+      catppuccin.catppuccin-vsc-icons
+      catppuccin.catppuccin-vsc
 
-        jnoortheen.nix-ide
-        mkhl.direnv
-        arrterian.nix-env-selector
+      jnoortheen.nix-ide
+      arrterian.nix-env-selector
 
-        github.vscode-pull-request-github
-        github.vscode-github-actions
-        github.copilot
-        github.copilot-chat
+      github.vscode-pull-request-github
+      github.vscode-github-actions
+      github.copilot
+      github.copilot-chat
 
-        anthropic.claude-code
+      anthropic.claude-code
+      openai.chatgpt
 
-        usernamehw.errorlens
-        gruntfuggly.todo-tree
-        donjayamanne.githistory
+      usernamehw.errorlens
+      gruntfuggly.todo-tree
+      donjayamanne.githistory
 
-        rust-lang.rust-analyzer
-        fill-labs.dependi
-        tamasfe.even-better-toml
+      rust-lang.rust-analyzer
+      dustypomerleau.rust-syntax
+      fill-labs.dependi
+      tamasfe.even-better-toml
 
-        hashicorp.hcl
-        redhat.vscode-yaml
+      hashicorp.hcl
+      redhat.vscode-yaml
+      opentofu.vscode-opentofu
+      mineiros.terramate
 
-        ms-azuretools.vscode-containers
-        ms-kubernetes-tools.vscode-kubernetes-tools
-        ms-vscode-remote.remote-containers
-        ms-vscode-remote.remote-ssh
-        ms-vscode-remote.remote-ssh-edit
-        ms-vscode.remote-explorer
+      ms-azuretools.vscode-containers
+      ms-kubernetes-tools.vscode-kubernetes-tools
+      ms-vscode-remote.remote-containers
+      ms-vscode-remote.remote-ssh
+      ms-vscode-remote.remote-ssh-edit
+      ms-vscode.remote-explorer
+      ms-vscode.remote-server
 
-        myriad-dreamin.tinymist
-        nefrob.vscode-just-syntax
-        tomoki1207.pdf
-      ])
-      ++ (with pkgs.vscode-marketplace; [
-        dustypomerleau.rust-syntax
-        mineiros.terramate
-        ms-vscode.remote-server
-        openai.chatgpt
-        opentofu.vscode-opentofu
-        oven.bun-vscode
-        redis.redis-for-vscode
-      ]);
+      oven.bun-vscode
+      redis.redis-for-vscode
+
+      myriad-dreamin.tinymist
+      nefrob.vscode-just-syntax
+      tomoki1207.pdf
+    ]);
   };
 }

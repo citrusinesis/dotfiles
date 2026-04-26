@@ -6,6 +6,10 @@
     (inputs.fenix.overlays.default final prev)
     // (inputs.nix-vscode-extensions.overlays.default final prev)
     // {
+      direnv = prev.direnv.overrideAttrs (_: {
+        doCheck = false;
+      });
+
       claude-code = final.symlinkJoin {
         name = "claude-code";
         paths = [ inputs.claude-code.packages.${final.stdenv.hostPlatform.system}.default ];
