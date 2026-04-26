@@ -8,5 +8,12 @@
     "typecheck": "tsc --noEmit --project tsconfig.json",
     "lint": "biome lint .",
     "format": "biome format --write ."
+  },
+  "module": "src/index.ts",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
