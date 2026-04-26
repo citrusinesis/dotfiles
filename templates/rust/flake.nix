@@ -29,6 +29,7 @@
           inherit system;
           overlays = [ fenix.overlays.default ];
         };
+        inherit (pkgs) lib;
         rustToolchain = pkgs.fenix.complete.withComponents [
           "cargo"
           "clippy"
@@ -48,18 +49,28 @@
         };
 
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            rustToolchain
-            pkgs.fenix.rust-analyzer
-            cargo-audit
-            cargo-deny
-            cargo-edit
-            cargo-expand
-            cargo-outdated
-            cargo-watch
-          ];
+          packages =
+            (with pkgs; [
+              rustToolchain
+              pkgs.fenix.rust-analyzer
 
-          RUST_SRC_PATH = "${rustToolchain}/lib/rustlib/src/rust/library";
+              cargo-audit
+              cargo-deny
+              cargo-edit
+              cargo-expand
+              cargo-outdated
+              cargo-watch
+              sccache
+            ])
+            ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.mold ];
+
+          env = {
+            RUST_SRC_PATH = "${rustToolchain}/lib/rustlib/src/rust/library";
+            RUSTC_WRAPPER = "sccache";
+          }
+          // lib.optionalAttrs pkgs.stdenv.isLinux {
+            RUSTFLAGS = "-C link-arg=-fuse-ld=mold";
+          };
         };
 
         packages.default = rustPlatform.buildRustPackage {
