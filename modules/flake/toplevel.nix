@@ -9,7 +9,7 @@
   perSystem =
     { self', pkgs, ... }:
     {
-      formatter = pkgs.nixfmt-rfc-style;
+      formatter = pkgs.nixfmt;
       packages.default = self'.packages.activate;
     };
 }
