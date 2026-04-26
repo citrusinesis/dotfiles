@@ -7,7 +7,7 @@ let
         exec "/Applications/Zed.app/Contents/Resources/app/bin/zed" "$@"
       ''
     else
-      pkgs.unstable.zed-editor;
+      pkgs.zed-editor;
 in
 {
   programs.zed-editor = {

@@ -6,7 +6,7 @@
     [
       slack
       obsidian
-      pkgs.unstable.firefox
+      firefox
     ]
   );
 }
