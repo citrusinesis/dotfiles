@@ -23,8 +23,8 @@
 
       "lm-studio"
 
-      "dbeaver-community"
       "orbstack"
+      "utm"
 
       "tailscale-app"
       "cloudflare-warp"
