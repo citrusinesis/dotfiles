@@ -80,7 +80,7 @@
     };
 
     initContent = lib.mkOrder 550 ''
-      if [[ -o interactive && -t 1 ]]; then
+      if [[ -o login && -o interactive && -t 1 ]]; then
         ${pkgs.fastfetch}/bin/fastfetch
       fi
 
