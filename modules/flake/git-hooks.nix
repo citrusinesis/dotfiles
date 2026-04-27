@@ -7,7 +7,7 @@
     { config, pkgs, ... }:
     {
       pre-commit.settings.hooks = {
-        nixfmt-rfc-style.enable = true;
+        nixfmt.enable = true;
       };
 
       devShells.default = pkgs.mkShell {
