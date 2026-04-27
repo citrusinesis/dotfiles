@@ -17,7 +17,6 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
-    TERM = "xterm-256color";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
     MANROFFOPT = "-c";
   }
@@ -34,7 +33,10 @@
     enable = true;
     autosuggestion = {
       enable = true;
-      strategy = [ "completion" ];
+      strategy = [
+        "history"
+        "completion"
+      ];
     };
     syntaxHighlighting.enable = true;
     enableCompletion = true;
@@ -42,8 +44,7 @@
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
-      rb = if pkgs.stdenv.isDarwin then "nh darwin switch" else "nh os switch";
-      rbh = "nh home switch";
+      sw = if pkgs.stdenv.isDarwin then "nh darwin switch" else "nh os switch";
       up = if pkgs.stdenv.isDarwin then "nh darwin switch --update" else "nh os switch --update";
       bump = "nix flake update --flake $NH_FLAKE";
       gc = "nh clean all --keep 5 --keep-since 3d";
@@ -56,11 +57,17 @@
       cat = "${pkgs.bat}/bin/bat -p";
 
       grep = "grep --color=auto";
-      g = "git";
-      vi = "nvim";
-      vim = "nvim";
 
       zshrc = "$EDITOR ~/.zshrc";
+    }
+    // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      showFiles = "defaults write com.apple.finder AppleShowAllFiles YES; killall Finder";
+      hideFiles = "defaults write com.apple.finder AppleShowAllFiles NO; killall Finder";
+    }
+    // lib.optionalAttrs pkgs.stdenv.isLinux {
+      open = "${pkgs.xdg-utils}/bin/xdg-open";
+      pbcopy = "${pkgs.xclip}/bin/xclip -selection clipboard";
+      pbpaste = "${pkgs.xclip}/bin/xclip -selection clipboard -o";
     };
 
     history = {
@@ -73,7 +80,9 @@
     };
 
     initContent = lib.mkOrder 550 ''
-      ${pkgs.fastfetch}/bin/fastfetch
+      if [[ -o interactive && -t 1 ]]; then
+        ${pkgs.fastfetch}/bin/fastfetch
+      fi
 
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
@@ -94,15 +103,6 @@
 
       if [ -f ~/.zshrc.local ]; then
         source ~/.zshrc.local
-      fi
-
-      if [[ "$(uname)" == "Darwin" ]]; then
-        alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder'
-        alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
-      else
-        alias open='xdg-open'
-        alias pbcopy='xclip -selection clipboard'
-        alias pbpaste='xclip -selection clipboard -o'
       fi
     '';
 
