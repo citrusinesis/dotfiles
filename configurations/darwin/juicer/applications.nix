@@ -20,6 +20,8 @@
       "zed"
 
       "claude"
+      "codex-app"
+      "chatgpt"
 
       "lm-studio"
 
