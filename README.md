@@ -46,8 +46,8 @@ nix run .#update            # Just bump flake.lock
 
 Bootstrap a project from this flake's templates:
 
-e.g. Rust projects
+e.g. Rust project
 ```bash
 mkdir example-rust-service && cd example-rust-service
-nix flake init -t ~/.config/dotfiles#rust
+nix flake init -t github:citrusinesis/dotfiles#rust
 ```
