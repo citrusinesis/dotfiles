@@ -12,26 +12,23 @@
       "slack"
       "obsidian"
       "element"
-
       "raycast"
-      "ghostty"
 
       "zed"
+      "ghostty"
+      "orbstack"
+      "tailscale-app"
+      "mongodb-compass"
 
       "claude"
 
-      "orbstack"
-
-      "tailscale-app"
-
       "logi-options+"
-
-      "mongodb-compass"
     ];
 
     brews = [
       "mas"
       "opencode"
+      "mole"
     ];
 
     masApps = {
