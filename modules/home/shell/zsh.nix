@@ -119,13 +119,13 @@
       }
       {
         name = "sudo";
-        file = "plugins/sudo/sudo.plugin.zsh";
-        src = pkgs.oh-my-zsh;
+        file = "sudo.plugin.zsh";
+        src = "${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/sudo";
       }
       {
         name = "extract";
-        file = "plugins/extract/extract.plugin.zsh";
-        src = pkgs.oh-my-zsh;
+        file = "extract.plugin.zsh";
+        src = "${pkgs.oh-my-zsh}/share/oh-my-zsh/plugins/extract";
       }
     ];
   };
