@@ -37,7 +37,7 @@ in
       ui_font_size = 15;
       colorize_brackets = true;
 
-      load_direnv = "shell_hook";
+      load_direnv = "direct";
 
       terminal = {
         font_family = "Hack Nerd Font Mono";
