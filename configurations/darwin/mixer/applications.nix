@@ -21,6 +21,8 @@
       "mongodb-compass"
 
       "claude"
+      "codex-app"
+      "chatgpt"
 
       "logi-options+"
     ];
