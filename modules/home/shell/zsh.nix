@@ -19,6 +19,7 @@
     VISUAL = "nvim";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
     MANROFFOPT = "-c";
+    TERM = "xterm-256color";
   }
   // lib.optionalAttrs pkgs.stdenv.isDarwin {
     CLICOLOR = "1";
