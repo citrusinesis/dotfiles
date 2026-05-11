@@ -43,8 +43,8 @@
     '';
 
     plugins = with pkgs.vimPlugins; [
-      plenary-nvim
       nvim-web-devicons
+      plenary-nvim
 
       {
         plugin = fzf-lua;
