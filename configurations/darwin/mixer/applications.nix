@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   homebrew = {
@@ -29,7 +29,7 @@
 
     brews = [
       "mas"
-      "opencode"
+      # "opencode"
       "mole"
     ];
 
