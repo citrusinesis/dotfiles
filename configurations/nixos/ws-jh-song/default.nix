@@ -15,6 +15,7 @@ in
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
+    ./capitol-workspace.nix
 
     self.nixosModules.minimal
     inputs.home-manager.nixosModules.home-manager
@@ -25,8 +26,7 @@ in
 
   proxmoxLXC = {
     manageHostName = true;
-    # Keep workspace-specific IP/gateway/DNS outside this Git flake. Capitol
-    # should provide them via Proxmox or /etc/systemd/network/*.network.
+    # Keep the Proxmox-side network definition outside this Git flake.
     manageNetwork = false;
   };
 
@@ -35,7 +35,9 @@ in
   time.timeZone = personal.timezone;
 
   services.tailscale.enable = true;
-  services.openssh.enable = lib.mkForce false;
+
+  # Keep OpenSSH as a break-glass path if Tailscale SSH is unavailable.
+  services.openssh.enable = lib.mkForce true;
   services.openssh.startWhenNeeded = lib.mkForce false;
 
   security.sudo.wheelNeedsPassword = lib.mkForce false;
