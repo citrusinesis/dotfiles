@@ -1,12 +1,6 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  home.packages = lib.optionals pkgs.stdenv.isLinux (
-    with pkgs;
-    [
-      slack
-      obsidian
-      firefox
-    ]
-  );
+  home.packages = with pkgs; [
+  ];
 }
