@@ -32,7 +32,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "bak";
-    users.${username} = import (self + /configurations/home/development);
+    users.${username} = import (self + /configurations/home/default);
     extraSpecialArgs = { inherit flake; };
   };
 }

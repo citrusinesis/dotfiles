@@ -37,7 +37,6 @@
 
     brews = [
       "mas"
-      "opencode"
     ];
 
     masApps = {
