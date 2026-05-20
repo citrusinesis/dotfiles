@@ -21,9 +21,8 @@ nix run .#activate
 After the first activation, `nh` and the shell aliases are available.
 
 ```bash
-rb              # Rebuild current host (nh darwin/os switch, auto-detect)
-rbh             # Home Manager only
-up              # Flake update + rebuild + diff preview
+sw              # Rebuild current host (nh darwin/os switch, auto-detect)
+up              # Flake update + rebuild current host
 bump            # Just bump flake.lock
 gc              # Safer GC (keeps last 5 generations + 3d)
 
