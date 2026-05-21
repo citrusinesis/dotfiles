@@ -6,7 +6,8 @@ in
 {
   nix = {
     optimise.automatic = true;
-    package = pkgs.lixPackageSets.stable.lix;
+    package =
+      if pkgs.stdenv.isDarwin then pkgs.lixPackageSets.latest.lix else pkgs.lixPackageSets.stable.lix;
 
     settings = {
       experimental-features = [
