@@ -5,20 +5,18 @@
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks = {
+    settings = {
       "*" = {
-        extraOptions = {
-          AddKeysToAgent = "yes";
-          ServerAliveInterval = "60";
-          ServerAliveCountMax = "30";
-          TCPKeepAlive = "yes";
-          Compression = "yes";
-          ControlMaster = "auto";
-          ControlPath = "~/.ssh/control/%r@%h:%p";
-          ControlPersist = "600";
-          StrictHostKeyChecking = "ask";
-          HashKnownHosts = "yes";
-        };
+        AddKeysToAgent = "yes";
+        ServerAliveInterval = "60";
+        ServerAliveCountMax = "30";
+        TCPKeepAlive = "yes";
+        Compression = "yes";
+        ControlMaster = "auto";
+        ControlPath = "~/.ssh/control/%r@%h:%p";
+        ControlPersist = "600";
+        StrictHostKeyChecking = "ask";
+        HashKnownHosts = "yes";
       };
     };
 
