@@ -10,7 +10,7 @@ let
   inherit (flake) inputs;
   inherit (inputs) self;
   personal = import (self + /personal.nix);
-  username = personal.user.username;
+  username = "jh-song";
 in
 {
   imports = [
