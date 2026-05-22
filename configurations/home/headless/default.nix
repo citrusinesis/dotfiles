@@ -11,9 +11,7 @@ let
   username = personal.user.username;
 in
 {
-  imports = [ self.homeModules.development ];
-
-  dotfiles.home.gui.enable = true;
+  imports = [ self.homeModules.headless ];
 
   home.username = username;
   home.homeDirectory = lib.mkDefault (

@@ -13,6 +13,8 @@ in
 {
   imports = [ self.homeModules.minimal ];
 
+  dotfiles.home.gui.enable = true;
+
   home.username = username;
   home.homeDirectory = lib.mkDefault (
     if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}"
