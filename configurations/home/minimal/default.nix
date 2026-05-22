@@ -2,22 +2,22 @@
   lib,
   pkgs,
   flake,
+  username,
   ...
 }:
 
 let
   inherit (flake.inputs) self;
-  personal = import (self + /personal.nix);
-  username = personal.user.username;
+  userName = username;
 in
 {
   imports = [ self.homeModules.minimal ];
 
   dotfiles.home.gui.enable = true;
 
-  home.username = username;
+  home.username = userName;
   home.homeDirectory = lib.mkDefault (
-    if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}"
+    if pkgs.stdenv.isDarwin then "/Users/${userName}" else "/home/${userName}"
   );
   home.stateVersion = "25.11";
   programs.home-manager.enable = true;

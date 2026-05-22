@@ -62,7 +62,7 @@ in
     useUserPackages = true;
     backupFileExtension = "backup";
     users.${username} = import (self + /configurations/home/headless);
-    extraSpecialArgs = { inherit flake; };
+    extraSpecialArgs = { inherit flake username; };
   };
 
   system.stateVersion = "25.11";

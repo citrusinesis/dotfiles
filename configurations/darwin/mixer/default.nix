@@ -55,6 +55,6 @@ in
     useUserPackages = true;
     backupFileExtension = "bak";
     users.${username} = import (self + /configurations/home/default);
-    extraSpecialArgs = { inherit flake; };
+    extraSpecialArgs = { inherit flake username; };
   };
 }

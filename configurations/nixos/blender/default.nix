@@ -36,7 +36,7 @@ in
     useUserPackages = true;
     backupFileExtension = "backup";
     users.${username} = import (self + /configurations/home/default);
-    extraSpecialArgs = { inherit flake; };
+    extraSpecialArgs = { inherit flake username; };
   };
 
   fonts.fontDir.enable = true;
