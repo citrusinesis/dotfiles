@@ -61,7 +61,7 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
-    users.${username} = import (self + /configurations/home/default);
+    users.${username} = import (self + /configurations/home/headless);
     extraSpecialArgs = { inherit flake; };
   };
 
