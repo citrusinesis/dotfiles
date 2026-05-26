@@ -5,7 +5,7 @@
     ./cli
     ./shell
 
-    ./editors/neovim.nix
+    ./editors/nixvim.nix
 
     ./languages
 

@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./neovim.nix
+    ./nixvim.nix
     ./vscode.nix
     ./zed.nix
   ];
