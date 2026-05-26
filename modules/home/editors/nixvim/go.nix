@@ -115,17 +115,17 @@
           };
         };
         onAttach.function = ''
-          vim.keymap.set("n", "<leader>dg", function()
+          vim.keymap.set("n", "<leader>dgc", function()
             require("dap").continue()
-          end, { desc = "Go Debug", buffer = bufnr })
+          end, { desc = "Go debug continue", buffer = bufnr })
 
-          vim.keymap.set("n", "<leader>dt", function()
+          vim.keymap.set("n", "<leader>dgt", function()
             require("dap-go").debug_test()
-          end, { desc = "Go Debug Test", buffer = bufnr })
+          end, { desc = "Go debug test", buffer = bufnr })
 
-          vim.keymap.set("n", "<leader>dT", function()
+          vim.keymap.set("n", "<leader>dgT", function()
             require("dap-go").debug_last_test()
-          end, { desc = "Go Debug Last Test", buffer = bufnr })
+          end, { desc = "Go debug last test", buffer = bufnr })
         '';
       };
     };

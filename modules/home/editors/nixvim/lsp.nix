@@ -4,47 +4,6 @@
   programs.nixvim.plugins.lsp = {
     enable = true;
     inlayHints = true;
-    keymaps = {
-      silent = true;
-      diagnostic = {
-        "[d" = "goto_prev";
-        "]d" = "goto_next";
-      };
-      lspBuf = {
-        K = "hover";
-        gD = "declaration";
-        gd = "definition";
-        gi = "implementation";
-        gr = "references";
-        "<leader>cr" = "rename";
-      };
-      extra = [
-        {
-          mode = [
-            "n"
-            "v"
-          ];
-          key = "<leader>ca";
-          action.__raw = "vim.lsp.buf.code_action";
-          options.desc = "Code Action";
-        }
-        {
-          key = "<leader>co";
-          action.__raw = ''
-            function()
-              vim.lsp.buf.code_action({
-                apply = true,
-                context = {
-                  only = { "source.organizeImports" },
-                  diagnostics = {},
-                },
-              })
-            end
-          '';
-          options.desc = "Organize Imports";
-        }
-      ];
-    };
     onAttach = ''
       if client.name == "ruff" then
         client.server_capabilities.hoverProvider = false
