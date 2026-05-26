@@ -49,12 +49,29 @@ in
   boot.specialFileSystems."/sys/kernel/debug".enable = lib.mkForce false;
   boot.specialFileSystems."/sys/kernel/tracing".enable = lib.mkForce false;
 
-  users.groups.${username} = { };
+  users.groups.${username}.gid = 11000;
+  users.groups.shared.gid = 20001;
   users.users.${username} = {
     isNormalUser = true;
+    uid = 11000;
     group = username;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "shared"
+    ];
     shell = pkgs.zsh;
+    subUidRanges = [
+      {
+        startUid = 11001;
+        count = 54535;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 11001;
+        count = 54535;
+      }
+    ];
   };
 
   home-manager = {
