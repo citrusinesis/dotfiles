@@ -104,39 +104,5 @@
       })
     '';
 
-    keymaps = [
-      {
-        mode = "n";
-        key = "<leader>tn";
-        action.__raw = ''
-          function()
-            DotfilesNixvimTabs.new_tab()
-          end
-        '';
-        options.desc = "New tab";
-      }
-      {
-        mode = "n";
-        key = "<leader>tc";
-        action.__raw = ''
-          function()
-            DotfilesNixvimTabs.close_tab()
-          end
-        '';
-        options.desc = "Close tab";
-      }
-      {
-        mode = "n";
-        key = "<leader>th";
-        action = ":tabprevious<CR>";
-        options.desc = "Previous tab";
-      }
-      {
-        mode = "n";
-        key = "<leader>tl";
-        action = ":tabnext<CR>";
-        options.desc = "Next tab";
-      }
-    ];
   };
 }
