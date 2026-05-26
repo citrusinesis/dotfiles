@@ -2,16 +2,22 @@
 
 {
   flake.homeModules = {
-    default = [
-      inputs.nixvim.homeModules.nixvim
-    ];
+    default = {
+      imports = [
+        inputs.nixvim.homeModules.nixvim
+      ];
+    };
 
-    development = [
-      inputs.nixvim.homeModules.nixvim
-    ];
+    development = {
+      imports = [
+        inputs.nixvim.homeModules.nixvim
+      ];
+    };
 
-    headless = [
-      inputs.nixvim.homeModules.nixvim
-    ];
+    headless = {
+      imports = [
+        inputs.nixvim.homeModules.nixvim
+      ];
+    };
   };
 }
