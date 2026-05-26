@@ -46,7 +46,6 @@
   xdg.configFile."containers/storage.conf".text = ''
     [storage]
     driver = "overlay"
-    runroot = "/run/user/1000/containers"
     graphroot = "${config.xdg.dataHome}/containers/storage"
 
     [storage.options]
