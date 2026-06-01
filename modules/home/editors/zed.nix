@@ -45,6 +45,7 @@ in
       };
 
       format_on_save = "on";
+
       inlay_hints = {
         enabled = true;
       };
@@ -54,18 +55,53 @@ in
         "!nil"
       ];
 
+      # Go
+      languages.Go = {
+        formatter = [
+          { code_action = "source.organizeImports"; }
+          "language_server"
+        ];
+      };
+
+      lsp.gopls = {
+        settings = {
+          gofumpt = true;
+          staticcheck = true;
+
+          analyses = {
+            unusedparams = true;
+            shadow = true;
+          };
+        };
+
+        initialization_options = {
+          hints = {
+            assignVariableTypes = true;
+            compositeLiteralFields = true;
+            compositeLiteralTypes = true;
+            constantValues = true;
+            functionTypeParameters = true;
+            parameterNames = true;
+            rangeVariableTypes = true;
+          };
+        };
+      };
+
+      # Rust
       languages.Rust = {
-        format_on_save = "on";
         code_actions_on_format = {
           "source.fixAll" = true;
         };
       };
 
-      lsp.rust-analyzer.initialization_options = {
+      lsp."rust-analyzer".initialization_options = {
         check = {
           command = "clippy";
         };
-        checkOnSave = true;
+
+        rust = {
+          analyzerTargetDir = true;
+        };
       };
     };
   };
