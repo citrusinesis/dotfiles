@@ -66,11 +66,25 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1779876442,
         "narHash": "sha256-O25HomVNmdROO13PEQ3Ran8Hq5EsyLmVn8Gb8JvJtJE=",
+||||||| Stash base
+        "lastModified": 1779790483,
+        "narHash": "sha256-2wCMtmVmkCcyHaH6hkrbx7XdUgLYP5E1wl/jc1YxxTY=",
+=======
+        "lastModified": 1780218205,
+        "narHash": "sha256-c4MSlBQw5MIDRkad9UNUUnBaOHAHnhuCXrDt90FDVrg=",
+>>>>>>> Stashed changes
         "owner": "nix-community",
         "repo": "fenix",
+<<<<<<< Updated upstream
         "rev": "2eff81fc84390a35e1565395ae945d9394856824",
+||||||| Stash base
+        "rev": "6012e5463531342033571efe294ec880bf13dd95",
+=======
+        "rev": "96e0fc9f1a9b37f6477fa11c3fd48575354773ed",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -205,11 +219,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779726696,
-        "narHash": "sha256-/p37CB5n6Wpw250b0Lq0CYwNq2D8uGKzDoBulyLcQqA=",
+        "lastModified": 1780099287,
+        "narHash": "sha256-efIPwVGtIWIjWcznhaop6XN6HxnOL8800hF6CBNvlqQ=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "1a95e2efb477959b70b4a14c51035975c0481df6",
+        "rev": "7d8127d308c3fb9664f7e643eec944be74ebb37d",
         "type": "github"
       },
       "original": {
@@ -230,11 +244,25 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1779868340,
         "narHash": "sha256-TK1oFHU2SPXuB1gUX3SnqNujViWiYIPYTuWxXy1wR6U=",
+||||||| Stash base
+        "lastModified": 1779801808,
+        "narHash": "sha256-jrzX7xyjOLsa7f5+sVoh3jaRum6H0QZ7tB7JMDVEHgA=",
+=======
+        "lastModified": 1780275889,
+        "narHash": "sha256-srcKWB7mBO+mNWsDUmODs5CDDdQ0XjP1NX4iUM45eZo=",
+>>>>>>> Stashed changes
         "owner": "numtide",
         "repo": "llm-agents.nix",
+<<<<<<< Updated upstream
         "rev": "93c592a1bf2bfcb7e72b9a5344611efcf72917db",
+||||||| Stash base
+        "rev": "da9d15d764d8f3b7ffb4be1c7dfedd72ff6049d5",
+=======
+        "rev": "468bacd83af1b3bf36bceb0366967928b98c9e60",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -271,11 +299,25 @@
         ]
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1779941182,
         "narHash": "sha256-kHRla+UhzEhTJ+asG2Z2aAgOEHRFrD0El/0MU5G5Fi0=",
+||||||| Stash base
+        "lastModified": 1779855493,
+        "narHash": "sha256-03zI9JM/tz+APwMvVgKXSeLhAM0oev+58/Xs//4+Bbg=",
+=======
+        "lastModified": 1780201196,
+        "narHash": "sha256-uPuFWteQmf/5yMe0o79EHMZk8yRzai+qENu2zdruYs4=",
+>>>>>>> Stashed changes
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
+<<<<<<< Updated upstream
         "rev": "643933e02c0d2c56e80e2a0c1abd705743de98cf",
+||||||| Stash base
+        "rev": "70518f6c1987061b291bb53abfd7846d6838c23f",
+=======
+        "rev": "6db47539132df7843e36586a0e66edc71a61737f",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -339,11 +381,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1779816597,
-        "narHash": "sha256-Kgod3gZlhSp6WozZ2pFaclXbWpjs6kQLAtldoxb85Lc=",
+        "lastModified": 1780235872,
+        "narHash": "sha256-/TTVFhJQ5StCOrRFO+5NfSkYPSbAAekwymovcQzxNgE=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "297f9341476ba7f821a42d7a2805e206ef8c6ef8",
+        "rev": "e5c7b40dc569f5c97ba2182d409f0fb54c02d7c1",
         "type": "github"
       },
       "original": {
@@ -369,11 +411,25 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1779827300,
         "narHash": "sha256-J6pHxKoZzWCrAvOVInwBcYYWix/NWwM10Ad+i29Qc5s=",
+||||||| Stash base
+        "lastModified": 1779742949,
+        "narHash": "sha256-Dk0hnFTXbmNmigsJyQkCz2NEEgtpe+MN500dPnki9Ic=",
+=======
+        "lastModified": 1780179631,
+        "narHash": "sha256-61A3gj4V1DyPP6lVHTdui4+dvG66pkMZSMd1Kke3Rz8=",
+>>>>>>> Stashed changes
         "owner": "rust-lang",
         "repo": "rust-analyzer",
+<<<<<<< Updated upstream
         "rev": "c3af07ad84d68adc5e652e86f0c20009caa29014",
+||||||| Stash base
+        "rev": "462d95ca60fa7360b44258be94105bc20e203684",
+=======
+        "rev": "cce33f2f1565958787bb763ae751a6a5f56b95e3",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -400,15 +456,16 @@
     },
     "systems_2": {
       "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "lastModified": 1774449309,
+        "narHash": "sha256-brhZ8DmuGtzkCYHJg4HEd602amKm89Y9ytsFZ5uWD1w=",
         "owner": "nix-systems",
         "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "rev": "c29398b59d2048c4ab79345812849c9bd15e9150",
         "type": "github"
       },
       "original": {
         "owner": "nix-systems",
+        "ref": "future-26.11",
         "repo": "default",
         "type": "github"
       }
@@ -421,11 +478,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1775636079,
-        "narHash": "sha256-pc20NRoMdiar8oPQceQT47UUZMBTiMdUuWrYu2obUP0=",
+        "lastModified": 1780220602,
+        "narHash": "sha256-eynAfOmbmxJnkp7YewvCEbShNnnYJ9gLLqkzsYtBPeM=",
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "rev": "790751ff7fd3801feeaf96d7dc416a8d581265ba",
+        "rev": "db947814a175b7ca6ded66e21383d938df01c227",
         "type": "github"
       },
       "original": {
