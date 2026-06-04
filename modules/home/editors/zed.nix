@@ -38,7 +38,40 @@ in
       ui_font_size = 15;
       colorize_brackets = true;
 
+      edit_predictions = {
+        provider = "copilot";
+      };
+
+      notification_panel = {
+        dock = "left";
+      };
+
+      project_panel = {
+        dock = "right";
+      };
+
+      collaboration_panel = {
+        dock = "left";
+      };
+
+      outline_panel = {
+        dock = "right";
+      };
+
+      agent = {
+        dock = "left";
+        favorite_models = [ ];
+        model_parameters = [ ];
+      };
+
+      git_panel = {
+        dock = "right";
+        tree_view = true;
+      };
+
       load_direnv = "direct";
+
+      cli_default_open_behavior = "new_window";
 
       terminal = {
         font_family = "Hack Nerd Font Mono";
