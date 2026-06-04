@@ -23,6 +23,7 @@ in
       "env"
       "toml"
       "dockerfile"
+      "golangci-lint"
 
       "opencode"
     ];
@@ -57,9 +58,25 @@ in
 
       # Go
       languages.Go = {
+        language_servers = [
+          "gopls"
+          "golangci-lint"
+        ];
+
         formatter = [
           { code_action = "source.organizeImports"; }
           "language_server"
+        ];
+      };
+
+      lsp."golangci-lint".initialization_options = {
+        command = [
+          "golangci-lint"
+          "run"
+          "--output.json.path"
+          "stdout"
+          "--show-stats=false"
+          "--output.text.path="
         ];
       };
 
