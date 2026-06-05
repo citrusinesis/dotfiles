@@ -22,6 +22,7 @@ in
 
       "env"
       "toml"
+      "just"
       "dockerfile"
       "golangci-lint"
 
