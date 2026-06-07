@@ -76,6 +76,7 @@ in
 
       terminal = {
         font_family = "Hack Nerd Font Mono";
+        font_fallbacks = [ "D2CodingLigature Nerd Font" ];
         font_size = 14;
       };
 
