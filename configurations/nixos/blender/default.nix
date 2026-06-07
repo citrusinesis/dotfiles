@@ -1,4 +1,9 @@
-{ flake, pkgs, ... }:
+{
+  flake,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (flake) inputs;
@@ -8,8 +13,9 @@ let
 in
 {
   imports = [
-    ./hardware-configuration.nix
-    self.nixosModules.default
+    inputs.nixos-wsl.nixosModules.default
+
+    self.nixosModules.minimal
     inputs.home-manager.nixosModules.home-manager
   ];
 
@@ -17,47 +23,52 @@ in
   nixpkgs.overlays = [ self.overlays.default ];
 
   networking.hostName = "blender";
-  time.timeZone = personal.timezone;
+  networking.networkmanager.enable = lib.mkForce false;
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  wsl = {
+    enable = true;
+    defaultUser = username;
+    startMenuLaunchers = true;
+    useWindowsDriver = true;
+
+    interop.includePath = false;
+
+    wslConf = {
+      boot.systemd = true;
+
+      interop = {
+        enabled = true;
+        appendWindowsPath = false;
+      };
+
+      automount = {
+        enabled = true;
+        root = "/mnt";
+        mountFsTab = false;
+        options = "metadata,uid=1000,gid=100,umask=022,fmask=011";
+      };
+
+      network.hostname = "blender";
+      time.useWindowsTimezone = true;
+    };
+  };
+
+  powerManagement.enable = lib.mkForce false;
+  services.timesyncd.enable = lib.mkForce false;
+  security.sudo.wheelNeedsPassword = lib.mkForce false;
 
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
+    extraGroups = [ "wheel" ];
     shell = pkgs.zsh;
   };
 
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    backupFileExtension = "backup";
-    users.${username} = import (self + /configurations/home/default);
+    backupFileExtension = "bak";
+    users.${username} = import (self + /configurations/home/headless);
     extraSpecialArgs = { inherit flake username; };
-  };
-
-  fonts.fontDir.enable = true;
-  fonts.fontDir.decompressFonts = true;
-  fonts.fontconfig.defaultFonts = {
-    serif = [
-      "Noto Serif CJK KR"
-      "Noto Serif"
-      "Liberation Serif"
-    ];
-    sansSerif = [
-      "Noto Sans CJK KR"
-      "Noto Sans"
-      "Liberation Sans"
-    ];
-    monospace = [
-      "Hack Nerd Font Mono"
-      "GeistMono NF"
-      "Liberation Mono"
-    ];
-    emoji = [ "Noto Color Emoji" ];
   };
 
   system.stateVersion = "25.11";
