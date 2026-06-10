@@ -41,6 +41,20 @@ nix run .#activate juicer   # macOS development profile
 nix run .#update            # Just bump flake.lock
 ```
 
+## Container Runtime
+
+Each darwin host selects exactly one container runtime in its configuration:
+
+```nix
+containerRuntime = "container"; # apple/container | "orbstack" | "podman"
+```
+
+`container` is packaged from the latest GitHub release ([apple/container](https://github.com/apple/container)). `up` bumps it automatically on macOS; to bump it manually:
+
+```bash
+./scripts/update-apple-container.sh
+```
+
 ## Project Templates
 
 Bootstrap a project from this flake's templates:
@@ -49,4 +63,10 @@ e.g. Rust project
 ```bash
 mkdir example-rust-service && cd example-rust-service
 nix flake init -t github:citrusinesis/dotfiles#rust
+```
+
+Template lockfiles are independent from the root flake; refresh them with:
+
+```bash
+./scripts/update-templates.sh
 ```

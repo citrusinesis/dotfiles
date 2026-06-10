@@ -16,11 +16,9 @@ in
     inputs.nixos-wsl.nixosModules.default
 
     self.nixosModules.minimal
-    inputs.home-manager.nixosModules.home-manager
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
-  nixpkgs.overlays = [ self.overlays.default ];
 
   networking.hostName = "blender";
   networking.networkmanager.enable = lib.mkForce false;
@@ -64,11 +62,9 @@ in
   };
 
   home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
     backupFileExtension = "bak";
     users.${username} = import (self + /configurations/home/headless);
-    extraSpecialArgs = { inherit flake username; };
+    extraSpecialArgs = { inherit username; };
   };
 
   system.stateVersion = "25.11";

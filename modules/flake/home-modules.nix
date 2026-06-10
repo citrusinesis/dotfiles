@@ -1,23 +1,9 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 
 {
-  flake.homeModules = {
-    default = {
-      imports = [
-        inputs.nixvim.homeModules.nixvim
-      ];
-    };
-
-    development = {
-      imports = [
-        inputs.nixvim.homeModules.nixvim
-      ];
-    };
-
-    headless = {
-      imports = [
-        inputs.nixvim.homeModules.nixvim
-      ];
-    };
-  };
+  flake.homeModules = lib.genAttrs [ "default" "development" "headless" ] (_: {
+    imports = [
+      inputs.nixvim.homeModules.nixvim
+    ];
+  });
 }
