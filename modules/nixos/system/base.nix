@@ -21,7 +21,9 @@
   powerManagement.enable = true;
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
-  programs.command-not-found.enable = true;
+  # nix-index (home-manager) provides command-not-found handling; the builtin
+  # implementation needs a channel database that flake systems do not have.
+  programs.command-not-found.enable = false;
   programs.bash.completion.enable = true;
   programs.nix-ld.enable = true;
 

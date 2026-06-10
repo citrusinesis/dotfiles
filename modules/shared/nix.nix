@@ -30,9 +30,9 @@ in
   };
 
   nixpkgs = {
+    overlays = [ flake.inputs.self.overlays.default ];
+
     config = {
-      allowBroken = true;
-      allowUnsupportedSystem = true;
       allowUnfree = true;
     };
   };

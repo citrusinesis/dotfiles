@@ -5,6 +5,7 @@
     ../shared
 
     ./base.nix
+    ./container-runtime.nix
     ./homebrew.nix
 
     ./system/defaults.nix
