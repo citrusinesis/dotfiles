@@ -52,7 +52,7 @@ let
     chmod 0440 "/etc/sudoers.d/$CONTAINER_USER"
   '';
 
-  machineInit = pkgs.writeShellScript "nixos-container-machine-init" ''
+  machineInit = pkgs.writeShellScript "apple-container-nixos-machine-init" ''
     set -eu
 
     export container=container
@@ -152,7 +152,7 @@ in
   system.build.containerMachineRootfs =
     pkgs.callPackage "${modulesPath}/../lib/make-system-tarball.nix"
       {
-        fileName = "nixos-container-machine-${pkgs.stdenv.hostPlatform.system}";
+        fileName = "apple-container-nixos-machine-${pkgs.stdenv.hostPlatform.system}";
         extraArgs = "--owner=0";
 
         inherit storeContents;

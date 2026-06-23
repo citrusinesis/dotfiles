@@ -4,6 +4,6 @@
   targetSystem ? null,
 }:
 
-import ../apple-container-machine/rootfs.nix {
+import ../apple-container-nixos-machine/rootfs.nix {
   inherit pkgs lib targetSystem;
 }

@@ -9,7 +9,7 @@
   apple-container ? null,
 }:
 
-import ../apple-container-machine/create.nix {
+import ./create.nix {
   inherit
     lib
     pkgs
