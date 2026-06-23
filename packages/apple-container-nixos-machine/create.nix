@@ -10,7 +10,7 @@
 }:
 
 writeShellApplication {
-  name = "create-nixos-machine";
+  name = "apple-container-nixos-machine";
 
   runtimeInputs = [
     coreutils
@@ -23,7 +23,7 @@ writeShellApplication {
   text = ''
     usage() {
       cat <<'EOF'
-    Usage: create-nixos-machine [options]
+    Usage: apple-container-nixos-machine [options]
 
     Build the NixOS container-machine rootfs, wrap it as an OCI image, and create
     an apple/container machine from it.
@@ -32,7 +32,7 @@ writeShellApplication {
       -n, --name NAME          Machine name (default: nixos)
       -t, --image IMAGE        Local image tag (default: local/nixos-machine:latest)
           --flake FLAKE        Flake ref/path (default: $NH_FLAKE or current directory)
-          --package PACKAGE    Package name to build (default: nixos-container-machine)
+          --package PACKAGE    Package name to build (default: apple-container-nixos-machine-rootfs)
           --platform PLATFORM  OCI platform for container build (default: host Linux arch)
           --build-mode MODE    auto, host, or container (default: auto)
           --replace            Stop and delete an existing machine with the same name
@@ -56,7 +56,7 @@ writeShellApplication {
     machine_name="''${CONTAINER_MACHINE_NAME:-nixos}"
     image_name="''${CONTAINER_MACHINE_IMAGE:-local/nixos-machine:latest}"
     flake_ref="''${NH_FLAKE:-$PWD}"
-    package_name="nixos-container-machine"
+    package_name="apple-container-nixos-machine-rootfs"
     platform="''${CONTAINER_MACHINE_PLATFORM:-$default_platform}"
     build_mode="auto"
     replace=0
@@ -241,7 +241,7 @@ writeShellApplication {
   '';
 
   meta = {
-    description = "Build and create a NixOS apple/container machine";
+    description = "Build and create a NixOS Apple container machine";
     platforms = lib.platforms.darwin;
   };
 }

@@ -22,7 +22,7 @@ let
   };
 in
 nixos.config.system.build.containerMachineRootfs.overrideAttrs (_: {
-  name = "nixos-container-machine-rootfs-${linuxSystem}";
+  name = "apple-container-nixos-machine-rootfs-${linuxSystem}";
 
   passthru = {
     targetSystem = linuxSystem;
@@ -30,7 +30,7 @@ nixos.config.system.build.containerMachineRootfs.overrideAttrs (_: {
   };
 
   meta = {
-    description = "NixOS rootfs tarball for apple/container machine";
+    description = "NixOS rootfs tarball for Apple container machine";
     platforms = lib.platforms.linux;
   };
 })
