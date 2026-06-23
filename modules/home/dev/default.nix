@@ -5,6 +5,7 @@
     ./git.nix
     ./direnv.nix
     ./podman.nix
+    ./apple-container.nix
     ./kubernetes.nix
     ./teleport.nix
     ./agents.nix
