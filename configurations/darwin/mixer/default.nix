@@ -8,7 +8,7 @@
 
   networking.hostName = "mixer";
 
-  containerRuntime = "orbstack";
+  containerRuntime = "container";
 
   pf = {
     screen-sharing = {
