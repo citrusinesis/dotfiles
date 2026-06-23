@@ -55,6 +55,21 @@ containerRuntime = "container"; # apple/container | "orbstack" | "podman"
 ./scripts/update-apple-container.sh
 ```
 
+Build a NixOS-backed `container machine` image and create a machine from this checkout:
+
+```bash
+nix run .#create-nixos-machine -- --name nixos --replace
+```
+
+Or build directly from GitHub:
+
+```bash
+nix run github:citrusinesis/dotfiles#create-nixos-machine -- \
+  --flake github:citrusinesis/dotfiles --name nixos --replace
+```
+
+The rootfs package is available separately as `.#nixos-container-machine`.
+
 ## Project Templates
 
 Bootstrap a project from this flake's templates:
