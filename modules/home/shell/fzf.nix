@@ -9,6 +9,8 @@
       "--border"
       "--info=inline"
     ];
+    # Atuin owns Ctrl-R for history search; disable fzf's competing binding.
+    historyWidget.zsh.command = "";
   };
 
   programs.zsh = {
