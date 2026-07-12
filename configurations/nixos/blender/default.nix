@@ -1,4 +1,5 @@
 {
+  config,
   flake,
   lib,
   pkgs,
@@ -32,6 +33,8 @@ in
 
     interop.includePath = false;
 
+    docker-desktop.enable = true;
+
     wslConf = {
       boot.systemd = true;
 
@@ -52,11 +55,16 @@ in
     };
   };
 
+  programs.nix-ld.libraries = config.hardware.graphics.extraPackages;
+
   powerManagement.enable = lib.mkForce false;
   services.timesyncd.enable = lib.mkForce false;
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     shell = pkgs.zsh;
   };
 
