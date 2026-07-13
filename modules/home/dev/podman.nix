@@ -7,8 +7,6 @@
 }:
 
 let
-  # On darwin, only install podman when the host selected it as its
-  # container runtime (see modules/darwin/container-runtime.nix).
   enabled = !pkgs.stdenv.isDarwin || (osConfig.containerRuntime or null) == "podman";
 in
 {
