@@ -1,57 +1,25 @@
 {
-  lib,
-  stdenvNoCC,
+  container,
   fetchurl,
-  xar,
-  cpio,
+  nix-update-script,
 }:
 
-let
-  source = lib.importJSON ./source.json;
-in
-stdenvNoCC.mkDerivation {
-  pname = "apple-container";
-  inherit (source) version;
-
-  src = fetchurl { inherit (source) url hash; };
-
-  nativeBuildInputs = [
-    xar
-    cpio
-  ];
-
-  unpackPhase = ''
-    runHook preUnpack
-
-    xar -xf $src
-    zcat Payload | cpio -idm
-
-    runHook postUnpack
-  '';
-
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out
-    cp -R bin libexec $out/
-    rm $out/bin/uninstall-container.sh $out/bin/update-container.sh
-
-    runHook postInstall
-  '';
-
-  # Binaries are signed by Apple with virtualization entitlements;
-  # stripping or patching them would invalidate the signature.
-  dontFixup = true;
-
-  meta = {
-    description = "Tool for creating and running Linux containers using lightweight virtual machines on macOS";
-    homepage = "https://github.com/apple/container";
-    license = lib.licenses.asl20;
-    sourceProvenance = [ lib.sourceProvenances.binaryNativeCode ];
-    platforms = [ "aarch64-darwin" ];
-    mainProgram = "container";
+container.overrideAttrs (old: rec {
+  version = "1.1.0";
+  src = fetchurl {
+    url = "https://github.com/apple/container/releases/download/${version}/container-${version}-installer-signed.pkg";
+    hash = "sha256-DKHEKiJpwlV++x2CsbOKxVPmo6PaGxF5xDm87h59ZxQ=";
   };
-}
+
+  passthru = old.passthru // {
+    updateScript = nix-update-script {
+      attrPath = "apple-container";
+      extraArgs = [
+        "--flake"
+        "--override-filename=packages/apple-container/default.nix"
+        "--use-github-releases"
+        "--system=aarch64-darwin"
+      ];
+    };
+  };
+})

@@ -49,11 +49,9 @@ in
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
       sw = if pkgs.stdenv.isDarwin then "nh darwin switch" else "nh os switch";
-      up =
-        if pkgs.stdenv.isDarwin then
-          "$NH_FLAKE/scripts/update-apple-container.sh && nh darwin switch --update"
-        else
-          "nh os switch --update";
+      up = ''(cd "$NH_FLAKE" && nix run .#update-pinned-packages) && ${
+        if pkgs.stdenv.isDarwin then "nh darwin switch --update" else "nh os switch --update"
+      }'';
       bump = "nix flake update --flake $NH_FLAKE";
       gc = "nh clean all --keep 5 --keep-since 3d";
 

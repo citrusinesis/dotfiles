@@ -10,5 +10,8 @@ final: prev:
 // (inputs.llm-agents.overlays.default final prev)
 // (inputs.nixvim.overlays.default final prev)
 // {
-  apple-container = final.callPackage ../packages/apple-container { };
+  # Pin upstream because nixpkgs lags behind releases.
+  container = final.callPackage ../packages/apple-container {
+    inherit (prev) container;
+  };
 }

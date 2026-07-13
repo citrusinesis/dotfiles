@@ -49,26 +49,11 @@ Each darwin host selects exactly one container runtime in its configuration:
 containerRuntime = "container"; # apple/container | "orbstack" | "podman"
 ```
 
-`container` is packaged from the latest GitHub release ([apple/container](https://github.com/apple/container)). `up` bumps it automatically on macOS; to bump it manually:
+`container` reuses the nixpkgs package, while its upstream version and source hash are pinned independently in the overlay because nixpkgs can lag behind [apple/container](https://github.com/apple/container) releases. `up` bumps it automatically on macOS; to bump it manually:
 
 ```bash
-./scripts/update-apple-container.sh
+nix run .#update-pinned-packages
 ```
-
-Build a NixOS-backed `container machine` image and create a machine from this checkout:
-
-```bash
-nix run .#apple-container-nixos-machine -- --name nixos --replace
-```
-
-Or build directly from GitHub:
-
-```bash
-nix run github:citrusinesis/dotfiles#apple-container-nixos-machine -- \
-  --flake github:citrusinesis/dotfiles --name nixos --replace
-```
-
-The rootfs package is available separately as `.#apple-container-nixos-machine-rootfs`.
 
 ## Project Templates
 
