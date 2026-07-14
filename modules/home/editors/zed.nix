@@ -25,6 +25,7 @@ in
       "just"
       "dockerfile"
       "golangci-lint"
+      "biome"
 
       "opencode"
     ];
@@ -86,10 +87,57 @@ in
         enabled = true;
       };
 
-      languages.Nix.language_servers = [
-        "nixd"
-        "!nil"
-      ];
+      languages.Nix = {
+        language_servers = [
+          "nixd"
+          "!nil"
+        ];
+        formatter.external = {
+          command = "nixfmt";
+          arguments = [ ];
+        };
+      };
+
+      lsp.nixd.settings.nixd.formatting.command = [ "nixfmt" ];
+
+      # Python
+      languages.Python = {
+        language_servers = [
+          "basedpyright"
+          "ruff"
+          "!pyright"
+        ];
+        formatter.language_server.name = "ruff";
+      };
+
+      lsp.basedpyright.settings.basedpyright.analysis = {
+        autoSearchPaths = true;
+        diagnosticMode = "workspace";
+        typeCheckingMode = "strict";
+        useLibraryCodeForTypes = true;
+      };
+
+      lsp.ruff.initialization_options.settings = {
+        organizeImports = true;
+        fixAll = true;
+      };
+
+      # TypeScript / JavaScript: the TypeScript server owns types and Biome
+      # owns diagnostics, imports, and formatting.
+      languages.TypeScript = {
+        language_servers = [
+          "typescript-language-server"
+          "biome"
+        ];
+        formatter.language_server.name = "biome";
+      };
+      languages.JavaScript = {
+        language_servers = [
+          "typescript-language-server"
+          "biome"
+        ];
+        formatter.language_server.name = "biome";
+      };
 
       # Go
       languages.Go = {

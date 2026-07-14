@@ -6,6 +6,6 @@ in
 {
   imports = [
     self.homeModules.base
-    self.homeModules.minimal
+    self.homeModules.headless-development
   ];
 }

@@ -20,6 +20,7 @@ in
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
+  dotfiles.primaryUser = username;
 
   proxmoxLXC = {
     manageHostName = true;
@@ -36,8 +37,6 @@ in
   # Keep OpenSSH as a break-glass path if Tailscale SSH is unavailable.
   services.openssh.enable = lib.mkForce true;
   services.openssh.startWhenNeeded = lib.mkForce false;
-
-  security.sudo.wheelNeedsPassword = lib.mkForce false;
 
   powerManagement.enable = lib.mkForce false;
 
@@ -71,10 +70,27 @@ in
     ];
   };
 
+  security.sudo.extraRules = [
+    {
+      users = [ username ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
   home-manager = {
     backupFileExtension = "backup";
-    users.${username} = import (self + /configurations/home/headless);
-    extraSpecialArgs = { inherit username; };
+    users.${username} = {
+      imports = [
+        self.homeModules.base
+        self.homeModules.headless-development
+      ];
+      dotfiles.home.username = username;
+    };
   };
 
   system.stateVersion = "25.11";

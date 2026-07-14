@@ -50,6 +50,9 @@ in
       "*.log"
       "*.bak"
       "tmp"
+      ".env"
+      ".env.*"
+      "!.env.example"
     ];
   };
 

@@ -1,19 +1,9 @@
-{ ... }:
+{ flake, ... }:
 
 {
   imports = [
-    ./cli
-    ./shell
-
+    flake.inputs.nixvim.homeModules.nixvim
+    ./minimal.nix
     ./editors/nixvim
-
-    ./languages
-
-    ./dev/agents.nix
-    ./dev/direnv.nix
-    ./dev/git.nix
-    ./dev/kubernetes.nix
-    ./dev/podman.nix
-    ./dev/teleport.nix
   ];
 }

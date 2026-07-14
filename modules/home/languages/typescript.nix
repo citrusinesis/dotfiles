@@ -6,8 +6,7 @@
     bun
     typescript-language-server
     typescript
-    prettier
-    eslint
+    biome
     pnpm
   ];
 }

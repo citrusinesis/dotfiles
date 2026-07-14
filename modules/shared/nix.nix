@@ -1,10 +1,22 @@
-{ flake, pkgs, ... }:
+{
+  config,
+  flake,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   personal = import (flake.inputs.self + /personal.nix);
 in
 {
-  nix = {
+  options.dotfiles.primaryUser = lib.mkOption {
+    type = lib.types.str;
+    default = personal.user.username;
+    description = "Unprivileged account allowed to manage this Nix installation.";
+  };
+
+  config.nix = {
     optimise.automatic = true;
     package = pkgs.lixPackageSets.latest.lix;
 
@@ -17,9 +29,9 @@ in
       max-jobs = "auto";
       cores = 0;
 
-      trusted-users = [
+      trusted-users = lib.mkForce [
         "root"
-        (if pkgs.stdenv.isDarwin then personal.user.username else "@wheel")
+        config.dotfiles.primaryUser
       ];
     };
 
@@ -29,7 +41,7 @@ in
     };
   };
 
-  nixpkgs = {
+  config.nixpkgs = {
     overlays = [ flake.inputs.self.overlays.default ];
 
     config = {

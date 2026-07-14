@@ -3,6 +3,5 @@
 {
   imports = [
     ./development.nix
-    ./misc
   ];
 }
