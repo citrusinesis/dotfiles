@@ -53,6 +53,12 @@ in
         "Hack Nerd Font Mono, GeistMono NF Medium, D2CodingLigature Nerd Font, monospace";
       "editor.fontSize" = 15;
       "terminal.integrated.fontSize" = 14;
+      "terminal.integrated.env.linux" = {
+        TERM = "xterm-256color";
+      };
+      "terminal.integrated.env.osx" = {
+        TERM = "xterm-256color";
+      };
 
       "editor.formatOnPaste" = true;
       "editor.formatOnSave" = true;

@@ -10,6 +10,7 @@
       font-family = "Hack Nerd Font"
       font-size = 14
 
+      term = xterm-256color
       shell-integration = zsh
 
       cursor-style = block

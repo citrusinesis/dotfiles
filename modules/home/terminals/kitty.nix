@@ -10,6 +10,10 @@
 
     themeFile = "Catppuccin-Mocha";
 
+    extraConfig = ''
+      env TERM=xterm-256color
+    '';
+
     settings = {
       cursor_shape = "block";
       cursor_beam_thickness = "1.5";

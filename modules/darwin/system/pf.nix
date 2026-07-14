@@ -8,20 +8,7 @@
 let
   cfg = config.pf;
   anyRulesEnabled = cfg."screen-sharing".enable || cfg.ssh.enable;
-  anchorPath = "/etc/pf.anchors/${cfg.anchorName}";
-
-  pfConfText = ''
-    # Keep Apple's dynamic anchors intact and add one private anchor.
-    scrub-anchor "com.apple/*"
-    nat-anchor "com.apple/*"
-    rdr-anchor "com.apple/*"
-    dummynet-anchor "com.apple/*"
-    anchor "com.apple/*"
-    load anchor "com.apple" from "/etc/pf.anchors/com.apple"
-
-    anchor "${cfg.anchorName}"
-    load anchor "${cfg.anchorName}" from "${anchorPath}"
-  '';
+  runtimeAnchorName = "com.apple/${cfg.anchorName}";
 
   passRules = lib.concatStringsSep "\n" (
     lib.optional cfg."screen-sharing".enable ''
@@ -66,6 +53,28 @@ let
   updateRules = pkgs.writeShellScript "update-tailscale-pf-rules" ''
     set -eu
     umask 077
+
+    load_anchor() {
+      if ! pfctl_output=$(
+        /sbin/pfctl \
+          -a ${lib.escapeShellArg runtimeAnchorName} \
+          -R \
+          -o none \
+          -f "$1" 2>&1
+      ); then
+        /usr/bin/printf '%s\n' "$pfctl_output" >&2
+        return 1
+      fi
+
+      # Apple's pfctl emits this main-ruleset warning even for an isolated
+      # anchor transaction. Keep every other successful diagnostic visible.
+      /usr/bin/printf '%s\n' "$pfctl_output" | /usr/bin/awk '
+        $0 == "pfctl: Use of -f option, could result in flushing of rules" { next }
+        $0 == "present in the main ruleset added by the system at startup." { next }
+        $0 == "See /etc/pf.conf for further details." { next }
+        NF { print > "/dev/stderr" }
+      '
+    }
 
     temporary_dir=$(/usr/bin/mktemp -d /var/run/tailscale-pf.XXXXXX)
     anchor_candidate="$temporary_dir/anchor"
@@ -112,10 +121,9 @@ let
       /usr/bin/printf '%s\n' ${lib.escapeShellArg blockRules}
     } > "$anchor_candidate"
 
-    # Anchor replacement is a PF transaction and does not disturb Apple's
-    # dynamic rules in the main ruleset.
-    /sbin/pfctl -nf "$anchor_candidate"
-    /sbin/pfctl -a ${lib.escapeShellArg cfg.anchorName} -f "$anchor_candidate"
+    # The existing com.apple/* hook evaluates this direct child anchor. Loading
+    # filter rules only avoids both the main ruleset and unsupported ALTQ.
+    load_anchor "$anchor_candidate"
 
     if ! /sbin/pfctl -s info | /usr/bin/grep -q '^Status: Enabled'; then
       /sbin/pfctl -E
@@ -169,16 +177,26 @@ in
 
   config = lib.mkIf anyRulesEnabled {
     environment.etc."pf.anchors/${cfg.anchorName}".text = denyOnlyRules;
-    environment.etc."pf.conf.local".text = pfConfText;
+    environment.etc."newsyslog.d/pf-tailscale.conf".text = ''
+      # logfilename                 owner:group  mode  count  size  when  flags
+      /var/log/pf-tailscale.log     root:wheel   640   5      1024  *     NJ
+    '';
 
-    # Wiring the main anchor can flush dynamic main-ruleset entries, so do it
-    # once per system activation. The recurring job only swaps this anchor.
+    # Load the new nested anchor before clearing rules from the legacy top-level
+    # anchor. Exit 75 means deny-only rules were installed while Tailscale was
+    # unavailable, so activation can safely continue and launchd will retry.
     system.activationScripts.postActivation.text = ''
-      /sbin/pfctl -nf /etc/pf.conf.local
-      /sbin/pfctl -f /etc/pf.conf.local
-      if ! /sbin/pfctl -s info | /usr/bin/grep -q '^Status: Enabled'; then
-        /sbin/pfctl -E
+      if ${updateRules}; then
+        update_status=0
+      else
+        update_status=$?
       fi
+
+      if [ "$update_status" -ne 0 ] && [ "$update_status" -ne 75 ]; then
+        exit "$update_status"
+      fi
+
+      /sbin/pfctl -a ${lib.escapeShellArg cfg.anchorName} -F rules
     '';
 
     launchd.daemons.pf-tailscale.serviceConfig = {

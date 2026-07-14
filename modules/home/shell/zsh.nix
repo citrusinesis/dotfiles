@@ -41,8 +41,8 @@ in
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
-      sw = ''nix run "path:$NH_FLAKE#activate"'';
-      up = ''(cd "$NH_FLAKE" && nix run "path:$PWD#update-pinned-packages" && nix flake update && nix flake check "path:$PWD") && nix run "path:$NH_FLAKE#activate"'';
+      sw = ''nh darwin switch "$NH_FLAKE"'';
+      up = ''(cd "$NH_FLAKE" && nix run ".#update-pinned-packages" && nix flake update && nix flake check . && nh darwin switch "$NH_FLAKE")'';
       bump = "nix flake update --flake $NH_FLAKE";
       gc = "nh clean all --keep 5 --keep-since 3d";
 
