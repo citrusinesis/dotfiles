@@ -1,12 +1,13 @@
 # Python Service Template
 
-uv-managed Python service template with the conventions used in this repository.
+uv2nix-managed Python service template with the conventions used in this repository.
 
 ## Included
 
-- `python3.12` toolchain pinned via Nix flake
-- `uv` for dependency management with `.venv` at project root
-- `pyproject.toml` with `black`, `ruff`, `pyright`, and `pytest` dev tooling
+- `python3.13` toolchain pinned via Nix flake
+- one `uv.lock` dependency graph for development, checks, and the Nix package
+- `uv2nix` and `pyproject.nix` for reproducible Python packaging
+- `pyproject.toml` with Ruff, BasedPyright, and pytest dev tooling
 - `python-dotenv` + `os.getenv("VAR", "default")` for env loading
 - `pathlib` everywhere instead of `os.path`
 - Stdlib `tomllib` for config loading via `Config.from_path`
@@ -34,17 +35,22 @@ uv-managed Python service template with the conventions used in this repository.
 
 ```bash
 nix develop
-uv sync
-uv run black src tests
-uv run ruff check src tests
-uv run pyright
-uv run pytest
-uv run python -m python_service --config config.toml
+ruff check src tests
+ruff format --check src tests
+basedpyright
+pytest
+python-service --config config.toml
 nix build
+nix run
 ```
 
-Set `UV_CACHE_DIR` to a path on the shared disk so the cache is reused across
-projects:
+Before the first commit, replace `python-service` and `python_service` in
+`flake.nix`, `pyproject.toml`, `src/`, and `tests/`.
+
+The development shell is supplied by Nix from `uv.lock`; do not run `uv sync`
+or `uv run` inside it. Use `uv add`, `uv remove`, and `uv lock` only when
+changing the dependency graph. `UV_CACHE_DIR` can still point to a shared disk
+for those update operations:
 
 ```bash
 export UV_CACHE_DIR=/path/to/shared/uv-cache

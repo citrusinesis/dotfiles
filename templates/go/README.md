@@ -17,5 +17,7 @@ go test -cover ./...
 nix build
 ```
 
-When you add external modules, replace `vendorHash = null;` with the hash suggested by
+Before the first commit, replace `go-service` and `example.com/go-service` in
+`flake.nix`, `go.mod`, `cmd/`, and the source package imports. When external
+modules are added, replace `vendorHash = null;` with the hash suggested by
 `nix build`.

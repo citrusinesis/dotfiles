@@ -1,11 +1,16 @@
 type Healthcheck = {
   service: string;
-  status: "ok";
+  status: 'ok';
 };
 
+type RuntimeGlobals = typeof globalThis & {
+  process?: { env?: Record<string, string | undefined> };
+};
+
+const runtime = globalThis as RuntimeGlobals;
 const healthcheck: Healthcheck = {
-  service: "node-app",
-  status: "ok",
+  service: runtime.process?.env?.SERVICE_NAME ?? 'node-app',
+  status: 'ok',
 };
 
 console.log(JSON.stringify(healthcheck, null, 2));

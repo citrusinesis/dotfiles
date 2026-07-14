@@ -8,6 +8,7 @@ import (
 	"example.com/go-service/internal/service"
 )
 
+//nolint:unused // Populated through ldflags for future version reporting.
 var version = "unknown"
 
 func main() {
