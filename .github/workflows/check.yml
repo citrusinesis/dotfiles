@@ -1,0 +1,94 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  root:
+    name: Root (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            profile: headless-development
+          - os: macos-15
+            profile: development
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    steps:
+      - name: Check out the full repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install Nix
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+      - name: Check root flake
+        run: nix flake check --print-build-logs
+      - name: Build representative Home profile
+        run: nix build --no-link --print-build-logs ".#homeConfigurations.${{ matrix.profile }}.activationPackage"
+
+  templates:
+    name: ${{ matrix.template }} (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+        template:
+          - go
+          - python
+          - rust
+          - typescript-bun
+          - typescript-node
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - name: Install Nix
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+      - name: Evaluate every supported output
+        run: nix flake show --all-systems "path:$PWD/templates/${{ matrix.template }}"
+      - name: Build and check template
+        run: nix flake check --print-build-logs "path:$PWD/templates/${{ matrix.template }}"
+      - name: Smoke-test default app
+        shell: bash
+        run: |
+          if [[ "${{ matrix.template }}" == python ]]; then
+            nix run "path:$PWD/templates/python" -- --config "$PWD/templates/python/config.toml"
+          else
+            nix run "path:$PWD/templates/${{ matrix.template }}"
+          fi
+
+  secrets:
+    name: Full-history secret scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install Nix
+        uses: cachix/install-nix-action@ab739621df7a23f52766f9ccc97f38da6b7af14f # v31.10.5
+      - name: Scan with gitleaks from the locked nixpkgs revision
+        shell: bash
+        run: |
+          nixpkgs_rev="$(jq -r '.nodes.nixpkgs.locked.rev' flake.lock)"
+          [[ "$nixpkgs_rev" =~ ^[0-9a-f]{40}$ ]]
+          nix shell "github:NixOS/nixpkgs/$nixpkgs_rev#gitleaks" \
+            --command gitleaks git --redact --verbose .

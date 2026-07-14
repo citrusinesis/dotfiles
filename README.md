@@ -18,12 +18,12 @@ nix run .#activate
 
 ## Usage
 
-After the first activation, `nh` and the shell aliases are available.
+After the first activation, the shell aliases and `nh` utilities are available.
 
 ```bash
-sw              # Rebuild current host (nh darwin/os switch, auto-detect)
-up              # Flake update + rebuild current host
-bump            # Just bump flake.lock
+sw              # Rebuild and switch the current host
+up              # Update pins/locks, check, and switch the current host
+bump            # Update flake.lock without switching
 gc              # Safer GC (keeps last 5 generations + 3d)
 
 nh search <pkg> # Fast nixpkgs search via nix-index
@@ -31,14 +31,14 @@ nh search <pkg> # Fast nixpkgs search via nix-index
 nix flake check # Validate evaluation and checks
 ```
 
-These are fallback command.
+Equivalent explicit commands:
 
 ```bash
 nix run .#activate          # Match current hostname
-nix run .#activate blender  # NixOS desktop
+nix run .#activate blender  # NixOS WSL host
 nix run .#activate mixer    # macOS default profile
 nix run .#activate juicer   # macOS development profile
-nix run .#update            # Just bump flake.lock
+nix run .#update            # Update nixpkgs, Home Manager, and nix-darwin only
 ```
 
 ## Container Runtime
@@ -65,8 +65,19 @@ mkdir example-rust-service && cd example-rust-service
 nix flake init -t github:citrusinesis/dotfiles#rust
 ```
 
-Template lockfiles are independent from the root flake; refresh them with:
+All templates expose `packages.default`, `apps.default`, `checks`, and a
+`devShell`. Their Nix locks and language dependencies are intentionally updated
+separately:
 
 ```bash
-./scripts/update-templates.sh
+./scripts/update-templates.sh              # Nix flake locks only
+./scripts/update-template-dependencies.sh  # Language dependency locks
 ```
+
+## Home profiles
+
+- `minimal`: CLI, shell, Git, direnv, and Nix tooling
+- `headless`: minimal plus Nixvim
+- `headless-development`: headless plus languages, containers, Kubernetes, and agents
+- `development`: headless-development plus GUI editors, terminals, and desktop tools
+- `default`: alias of development
