@@ -4,7 +4,7 @@
   programs.tmux = {
     enable = true;
     mouse = true;
-    terminal = "tmux-256color";
+    terminal = "xterm-256color";
     escapeTime = 0;
     historyLimit = 10000;
 
@@ -34,7 +34,6 @@
 
     extraConfig = ''
       set -as terminal-features ',xterm-256color:RGB'
-      set -as terminal-features ',tmux-256color:RGB'
 
       set -g extended-keys on
       set -g extended-keys-format csi-u

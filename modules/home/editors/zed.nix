@@ -76,6 +76,9 @@ in
       cli_default_open_behavior = "new_window";
 
       terminal = {
+        env = {
+          TERM = "xterm-256color";
+        };
         font_family = "Hack Nerd Font Mono";
         font_fallbacks = [ "D2CodingLigature Nerd Font" ];
         font_size = 14;
