@@ -1,5 +1,5 @@
 {
-  description = "Go service template (vendored)";
+  description = "Go service template";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -16,56 +16,86 @@
       pname = "go-service";
       version = "0.1.0";
     in
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-        inherit (pkgs) lib;
-      in
-      {
-        apps.default = {
-          type = "app";
-          program = "${self.packages.${system}.default}/bin/${pname}";
-        };
+    flake-utils.lib.eachSystem
+      [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ]
+      (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+          inherit (pkgs) lib;
+          package = pkgs.buildGoModule {
+            inherit pname version;
+            src = ./.;
+            vendorHash = null;
+            subPackages = [ "./cmd/${pname}" ];
+            ldflags = [
+              "-s"
+              "-w"
+              "-X main.version=${version}"
+            ];
+          };
+        in
+        {
+          apps.default = {
+            type = "app";
+            program = "${self.packages.${system}.default}/bin/${pname}";
+          };
 
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            go
-            (lib.hiPrio gopls)
-            delve
-            golangci-lint
-            gofumpt
-            air
-            mockgen
-          ];
+          devShells.default = pkgs.mkShell {
+            packages = with pkgs; [
+              go
+              (lib.hiPrio gopls)
+              delve
+              golangci-lint
+              gofumpt
+              air
+              mockgen
+            ];
+          };
 
-          shellHook = ''
-            if [ -f go.mod ] && [ ! -d vendor ]; then
-              echo "Initializing vendor/ directory..."
-              go mod vendor
-            fi
-          '';
-        };
+          packages.default = package;
 
-        packages.default = pkgs.buildGoModule {
-          inherit pname version;
-          src = ./.;
-          vendorHash = null;
-
-          preBuild = ''
-            if [ ! -d vendor ]; then
-              echo "ERROR: vendor/ directory required. Run 'go mod vendor'."
-              exit 1
-            fi
-          '';
-
-          subPackages = [ "./cmd/${pname}" ];
-          ldflags = [
-            "-s"
-            "-w"
-            "-X main.version=${version}"
-          ];
-        };
-      }
-    );
+          checks = {
+            default = package;
+            formatting = pkgs.runCommand "${pname}-formatting" { nativeBuildInputs = [ pkgs.go ]; } ''
+              unformatted="$(gofmt -l ${./.})"
+              if [ -n "$unformatted" ]; then
+                printf 'Unformatted Go files:\n%s\n' "$unformatted" >&2
+                exit 1
+              fi
+              touch "$out"
+            '';
+            tests = pkgs.runCommand "${pname}-tests" { nativeBuildInputs = [ pkgs.go ]; } ''
+              cp -R ${./.} source
+              chmod -R u+w source
+              cd source
+              export HOME="$TMPDIR"
+              export GOCACHE="$TMPDIR/go-cache"
+              go test ./...
+              touch "$out"
+            '';
+            lint =
+              pkgs.runCommand "${pname}-lint"
+                {
+                  nativeBuildInputs = [
+                    pkgs.go
+                    pkgs.golangci-lint
+                  ];
+                }
+                ''
+                  cp -R ${./.} source
+                  chmod -R u+w source
+                  cd source
+                  export HOME="$TMPDIR"
+                  export GOCACHE="$TMPDIR/go-cache"
+                  export GOLANGCI_LINT_CACHE="$TMPDIR/golangci-lint-cache"
+                  golangci-lint run ./...
+                      touch "$out"
+                '';
+          };
+        }
+      );
 }

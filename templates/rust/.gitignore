@@ -1,3 +1,6 @@
 .direnv
 result
 target
+.env
+.env.*
+!.env.example
