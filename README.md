@@ -23,6 +23,7 @@ After the first activation, the shell aliases and `nh` utilities are available.
 ```bash
 sw              # Rebuild and switch the current host
 up              # Update pins/locks, check, and switch the current host
+act [host]      # Activate through nixos-unified (also supports remote hosts)
 bump            # Update flake.lock without switching
 gc              # Safer GC (keeps last 5 generations + 3d)
 
