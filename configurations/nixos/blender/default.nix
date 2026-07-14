@@ -19,6 +19,7 @@ in
   ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
+  dotfiles.primaryUser = username;
 
   networking.hostName = "blender";
   networking.networkmanager.enable = lib.mkForce false;
@@ -53,18 +54,33 @@ in
 
   powerManagement.enable = lib.mkForce false;
   services.timesyncd.enable = lib.mkForce false;
-  security.sudo.wheelNeedsPassword = lib.mkForce false;
-
   users.users.${username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     shell = pkgs.zsh;
   };
 
+  security.sudo.extraRules = [
+    {
+      users = [ username ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
   home-manager = {
     backupFileExtension = "bak";
-    users.${username} = import (self + /configurations/home/headless);
-    extraSpecialArgs = { inherit username; };
+    users.${username} = {
+      imports = [
+        self.homeModules.base
+        self.homeModules.headless-development
+      ];
+      dotfiles.home.username = username;
+    };
   };
 
   system.stateVersion = "25.11";

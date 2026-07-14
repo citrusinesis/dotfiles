@@ -47,8 +47,13 @@ in
 
   home-manager = {
     backupFileExtension = "bak";
-    users.${username} = import (self + /configurations/home/default);
-    extraSpecialArgs = { inherit username; };
+    users.${username} = {
+      imports = [
+        self.homeModules.base
+        self.homeModules.default
+      ];
+      dotfiles.home.username = username;
+    };
   };
 
   environment.systemPackages = with pkgs; [

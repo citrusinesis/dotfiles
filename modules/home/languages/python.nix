@@ -5,9 +5,8 @@
     python3
     python3Packages.pip
     python3Packages.ipython
-    pyright
+    basedpyright
     ruff
-    black
     uv
   ];
 }

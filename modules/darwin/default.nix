@@ -3,10 +3,11 @@
 {
   imports = [
     ../shared
+    ../shared/fonts.nix
 
-    ./base.nix
-    ./container-runtime.nix
-    ./homebrew.nix
+    ./system/base.nix
+    ./system/container-runtime.nix
+    ./system/homebrew.nix
 
     ./system/defaults.nix
     ./system/dock.nix

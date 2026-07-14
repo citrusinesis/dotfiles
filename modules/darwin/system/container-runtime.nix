@@ -24,7 +24,7 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf (cfg == "container") {
-      environment.systemPackages = [ pkgs.container ];
+      environment.systemPackages = [ pkgs.dotfilesPackages.apple-container ];
       # The CLI resolves plugins relative to its install root.
       environment.pathsToLink = [ "/libexec" ];
     })

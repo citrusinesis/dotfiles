@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   programs.ssh = {
@@ -13,7 +18,7 @@
         TCPKeepAlive = "yes";
         Compression = "yes";
         ControlMaster = "auto";
-        ControlPath = "~/.ssh/control/%r@%h:%p";
+        ControlPath = "~/.ssh/control/%C";
         ControlPersist = "600";
         StrictHostKeyChecking = "ask";
         HashKnownHosts = "yes";
@@ -23,7 +28,9 @@
     includes = [ "~/.ssh/config.local" ];
   };
 
-  home.file.".ssh/control/.keep".text = "";
+  home.activation.sshControlPermissions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${pkgs.coreutils}/bin/install -d -m 0700 ${lib.escapeShellArg "${config.home.homeDirectory}/.ssh/control"}
+  '';
 
   home.packages = with pkgs; [
     ssh-audit

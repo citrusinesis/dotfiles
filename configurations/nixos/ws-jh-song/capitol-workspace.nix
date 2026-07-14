@@ -11,11 +11,6 @@
   services.resolved.enable = lib.mkForce false;
   environment.etc."resolv.conf".enable = lib.mkForce false;
 
-  # Keep the Capitol-provisioned workspace user passwordless without embedding
-  # private network facts in this module. The init script adds jh-song to
-  # wheel when passwordless_sudo is enabled.
-  security.sudo.wheelNeedsPassword = lib.mkForce false;
-
   boot.specialFileSystems."/sys/kernel/debug".enable = lib.mkForce false;
   boot.specialFileSystems."/sys/kernel/tracing".enable = lib.mkForce false;
   systemd.suppressedSystemUnits = [

@@ -23,29 +23,31 @@ in
     xdg.configFile."containers/policy.json".text = builtins.toJSON {
       default = [
         {
-          type = "insecureAcceptAnything";
+          type = "reject";
         }
       ];
       transports = {
+        docker = {
+          "" = [ { type = "insecureAcceptAnything"; } ];
+        };
         docker-daemon = {
-          "" = [
-            {
-              type = "insecureAcceptAnything";
-            }
-          ];
+          "" = [ { type = "insecureAcceptAnything"; } ];
+        };
+        containers-storage = {
+          "" = [ { type = "insecureAcceptAnything"; } ];
+        };
+        docker-archive = {
+          "" = [ { type = "insecureAcceptAnything"; } ];
+        };
+        oci-archive = {
+          "" = [ { type = "insecureAcceptAnything"; } ];
         };
       };
     };
 
     xdg.configFile."containers/registries.conf".text = ''
-      [registries.search]
-      registries = ["docker.io", "registry.fedoraproject.org", "quay.io", "registry.redhat.io", "registry.centos.org"]
-
-      [registries.insecure]
-      registries = []
-
-      [registries.block]
-      registries = []
+      unqualified-search-registries = ["docker.io"]
+      short-name-mode = "enforcing"
     '';
 
     xdg.configFile."containers/storage.conf".text = ''

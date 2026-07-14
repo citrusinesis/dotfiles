@@ -9,15 +9,27 @@
 
   perSystem =
     {
+      config,
       lib,
       self',
-      pkgs,
+      system,
       ...
     }:
     let
+      pkgs = import inputs.nixpkgs {
+        inherit system;
+        overlays = [ inputs.self.overlays.default ];
+        config.allowUnfree = true;
+      };
+
+      packageCandidates = self'.packages // pkgs.dotfilesPackages;
+
       updatablePackages = lib.filterAttrs (
-        _name: package: lib.isDerivation package && package ? updateScript
-      ) self'.packages;
+        _name: package:
+        lib.isDerivation package
+        && lib.meta.availableOn pkgs.stdenv.hostPlatform package
+        && package ? updateScript
+      ) packageCandidates;
 
       updatePackage = name: package: ''
         echo "==> Updating ${name}"
@@ -30,11 +42,23 @@
       };
     in
     {
+      _module.args.pkgs = pkgs;
+
       formatter = pkgs.nixfmt;
+      legacyPackages = pkgs.dotfilesPackages;
       packages.default = self'.packages.activate;
       apps.update-pinned-packages = {
         type = "app";
         program = lib.getExe updatePinnedPackages;
+      };
+
+      devShells.default = pkgs.mkShell {
+        packages = with pkgs; [
+          bash
+          gitleaks
+          shellcheck
+        ];
+        shellHook = config.pre-commit.installationScript;
       };
     };
 }

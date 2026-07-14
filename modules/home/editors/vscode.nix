@@ -35,41 +35,42 @@ in
     mutableExtensionsDir = false;
 
     profiles.default.userSettings = {
-      update.mode = "none";
-      update.showReleaseNotes = false;
-      extensions.autoCheckUpdates = false;
-      extensions.autoUpdate = false;
+      "update.mode" = "none";
+      "update.showReleaseNotes" = false;
+      "extensions.autoCheckUpdates" = false;
+      "extensions.autoUpdate" = false;
 
-      editor.formatOnSaveMode = "modificationsIfAvailable";
-      editor.formatOnType = true;
+      "editor.formatOnSaveMode" = "modificationsIfAvailable";
+      "editor.formatOnType" = true;
 
-      editor.smoothScrolling = true;
-      editor.cursorSmoothCaretAnimation = "on";
-      editor.cursorBlinking = "smooth";
-      workbench.list.smoothScrolling = true;
-      terminal.integrated.smoothScrolling = true;
+      "editor.smoothScrolling" = true;
+      "editor.cursorSmoothCaretAnimation" = "on";
+      "editor.cursorBlinking" = "smooth";
+      "workbench.list.smoothScrolling" = true;
+      "terminal.integrated.smoothScrolling" = true;
 
-      editor.fontFamily = "Hack Nerd Font Mono, GeistMono NF Medium, D2CodingLigature Nerd Font, monospace";
-      editor.fontSize = 15;
-      terminal.integrated.fontSize = 14;
+      "editor.fontFamily" =
+        "Hack Nerd Font Mono, GeistMono NF Medium, D2CodingLigature Nerd Font, monospace";
+      "editor.fontSize" = 15;
+      "terminal.integrated.fontSize" = 14;
 
-      editor.formatOnPaste = true;
-      editor.formatOnSave = true;
+      "editor.formatOnPaste" = true;
+      "editor.formatOnSave" = true;
 
-      terminal.integrated.enableMultiLinePasteWarning = "never";
+      "terminal.integrated.enableMultiLinePasteWarning" = "auto";
 
-      workbench.iconTheme = "catppuccin-mocha";
-      workbench.colorTheme = "Catppuccin Mocha";
+      "workbench.iconTheme" = "catppuccin-mocha";
+      "workbench.colorTheme" = "Catppuccin Mocha";
 
-      workbench.sideBar.location = "right";
-      workbench.activityBar.location = "top";
+      "workbench.sideBar.location" = "right";
+      "workbench.activityBar.location" = "top";
 
-      git.autofetch = true;
+      "git.autofetch" = true;
 
-      remote.SSH.connectTimeout = 60;
-      remote.SSH.serverInstallTimeout = 300;
+      "remote.SSH.connectTimeout" = 60;
+      "remote.SSH.serverInstallTimeout" = 300;
 
-      github.copilot.enable = {
+      "github.copilot.enable" = {
         "*" = true;
         plaintext = false;
         markdown = false;
@@ -77,48 +78,44 @@ in
       };
 
       # Nix
-      nix.enableLanguageServer = true;
-      nix.serverPath = "nixd";
-      nix.serverSettings = {
+      "nix.enableLanguageServer" = true;
+      "nix.serverPath" = "nixd";
+      "nix.serverSettings" = {
         nixd = {
           formatting = {
             command = [ "nixfmt" ];
           };
-          options = {
-            nixos.expr = "(builtins.getFlake \"/etc/nixos\").nixosConfigurations.default.options";
-            home-manager.expr = "(builtins.getFlake \"/etc/nixos\").homeConfigurations.default.options";
-          };
         };
       };
-      nixEnvSelector.useFlakes = true;
+      "nixEnvSelector.useFlakes" = true;
 
       "[nix]" = {
-        editor.defaultFormatter = "jnoortheen.nix-ide";
-        editor.formatOnSave = true;
+        "editor.defaultFormatter" = "jnoortheen.nix-ide";
+        "editor.formatOnSave" = true;
       };
 
       # Rust
-      rust-analyzer.check.command = "clippy";
-      rust-analyzer.checkOnSave = true;
+      "rust-analyzer.check.command" = "clippy";
+      "rust-analyzer.checkOnSave" = true;
 
       "[rust]" = {
-        editor.defaultFormatter = "rust-lang.rust-analyzer";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
+        "editor.defaultFormatter" = "rust-lang.rust-analyzer";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
           "source.fixAll" = "explicit";
         };
       };
 
       "[toml]" = {
-        editor.defaultFormatter = "tamasfe.even-better-toml";
-        editor.formatOnSave = true;
+        "editor.defaultFormatter" = "tamasfe.even-better-toml";
+        "editor.formatOnSave" = true;
       };
 
       # Go
-      go.useLanguageServer = true;
-      go.toolsManagement.autoUpdate = false;
-      go.lintTool = "golangci-lint";
-      go.lintOnSave = "package";
+      "go.useLanguageServer" = true;
+      "go.toolsManagement.autoUpdate" = false;
+      "go.lintTool" = "golangci-lint";
+      "go.lintOnSave" = "package";
 
       gopls = {
         "formatting.gofumpt" = true;
@@ -127,106 +124,101 @@ in
       };
 
       "[go]" = {
-        editor.defaultFormatter = "golang.go";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
+        "editor.defaultFormatter" = "golang.go";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
           "source.organizeImports" = "explicit";
         };
-        editor.tabSize = 4;
-        editor.insertSpaces = false;
+        "editor.tabSize" = 4;
+        "editor.insertSpaces" = false;
       };
 
       "[go.mod]" = {
-        editor.defaultFormatter = "golang.go";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
+        "editor.defaultFormatter" = "golang.go";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
           "source.organizeImports" = "explicit";
         };
       };
 
       # Typescript
       "[javascript]" = {
-        editor.defaultFormatter = "biomejs.biome";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
           "quickfix.biome" = "explicit";
           "source.organizeImports.biome" = "explicit";
         };
       };
 
       "[typescript]" = {
-        editor.defaultFormatter = "biomejs.biome";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
           "quickfix.biome" = "explicit";
           "source.organizeImports.biome" = "explicit";
         };
       };
 
       "[javascriptreact]" = {
-        editor.defaultFormatter = "biomejs.biome";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
           "quickfix.biome" = "explicit";
           "source.organizeImports.biome" = "explicit";
         };
       };
 
       "[typescriptreact]" = {
-        editor.defaultFormatter = "biomejs.biome";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
           "quickfix.biome" = "explicit";
           "source.organizeImports.biome" = "explicit";
         };
       };
 
       "[json]" = {
-        editor.defaultFormatter = "biomejs.biome";
-        editor.formatOnSave = true;
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
       };
 
       "[jsonc]" = {
-        editor.defaultFormatter = "biomejs.biome";
-        editor.formatOnSave = true;
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
       };
 
       "[css]" = {
-        editor.defaultFormatter = "biomejs.biome";
-        editor.formatOnSave = true;
+        "editor.defaultFormatter" = "biomejs.biome";
+        "editor.formatOnSave" = true;
       };
 
       # Python
-      python.languageServer = "Pylance";
-      python.analysis.typeCheckingMode = "strict";
-      python.analysis.autoImportCompletions = true;
-      python.analysis.diagnosticMode = "workspace";
-      python.analysis.inlayHints.functionReturnTypes = true;
-      python.analysis.inlayHints.variableTypes = true;
-      python.defaultInterpreterPath = ".venv/bin/python";
-      python.terminal.activateEnvironment = true;
-      python.testing.pytestEnabled = true;
-      python.testing.unittestEnabled = false;
+      "python.languageServer" = "None";
+      "python.defaultInterpreterPath" = ".venv/bin/python";
+      "python.terminal.activateEnvironment" = true;
+      "python.testing.pytestEnabled" = true;
+      "python.testing.unittestEnabled" = false;
+      "basedpyright.analysis.typeCheckingMode" = "strict";
+      "basedpyright.analysis.autoImportCompletions" = true;
+      "basedpyright.analysis.diagnosticMode" = "workspace";
+      "basedpyright.analysis.inlayHints.functionReturnTypes" = true;
+      "basedpyright.analysis.inlayHints.variableTypes" = true;
 
       "[python]" = {
-        editor.defaultFormatter = "ms-python.black-formatter";
-        editor.formatOnSave = true;
-        editor.codeActionsOnSave = {
-          "source.fixAll" = "explicit";
-          "source.organizeImports" = "explicit";
+        "editor.defaultFormatter" = "charliermarsh.ruff";
+        "editor.formatOnSave" = true;
+        "editor.codeActionsOnSave" = {
+          "source.fixAll.ruff" = "explicit";
+          "source.organizeImports.ruff" = "explicit";
         };
-        editor.tabSize = 4;
+        "editor.tabSize" = 4;
       };
 
-      black-formatter.args = [
-        "--line-length"
-        "100"
-      ];
-
-      ruff.organizeImports = true;
-      ruff.fixAll = true;
-      ruff.lint.run = "onSave";
-      ruff.importStrategy = "fromEnvironment";
+      "ruff.organizeImports" = true;
+      "ruff.fixAll" = true;
+      "ruff.lint.run" = "onSave";
+      "ruff.importStrategy" = "fromEnvironment";
     };
 
     profiles.default.extensions = [
@@ -250,7 +242,7 @@ in
       opentofu.vscode-opentofu
       oven.bun-vscode
       myriad-dreamin.tinymist
-      nefrob.vscode-just-syntax
+      skellock.just
     ])
     ++ (with pkgs.vscode-marketplace; [
       jnoortheen.nix-ide
@@ -276,7 +268,7 @@ in
       redhat.vscode-yaml
       mineiros.terramate
 
-      ms-azuretools.vscode-containers
+      # ms-azuretools.vscode-containers
       ms-kubernetes-tools.vscode-kubernetes-tools
       ms-vscode-remote.remote-containers
       ms-vscode-remote.remote-ssh
@@ -287,9 +279,8 @@ in
       redis.redis-for-vscode
 
       ms-python.python
-      ms-python.vscode-pylance
       ms-python.debugpy
-      ms-python.black-formatter
+      detachhead.basedpyright
       charliermarsh.ruff
       ms-toolsai.jupyter
 

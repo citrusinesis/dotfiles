@@ -11,18 +11,11 @@ in
 {
   home.sessionPath = [
     "$HOME/.local/bin"
-  ]
-  ++ lib.optionals pkgs.stdenv.isDarwin [
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
   ];
 
   home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
     MANROFFOPT = "-c";
-    TERM = "xterm-256color";
   }
   // lib.optionalAttrs pkgs.stdenv.isDarwin {
     CLICOLOR = "1";
@@ -48,12 +41,15 @@ in
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
-      sw = if pkgs.stdenv.isDarwin then "nh darwin switch" else "nh os switch";
-      up = ''(cd "$NH_FLAKE" && nix run .#update-pinned-packages) && ${
-        if pkgs.stdenv.isDarwin then "nh darwin switch --update" else "nh os switch --update"
-      }'';
+      sw = ''nix run "path:$NH_FLAKE#activate"'';
+      up = ''(cd "$NH_FLAKE" && nix run "path:$PWD#update-pinned-packages" && nix flake update && nix flake check "path:$PWD") && nix run "path:$NH_FLAKE#activate"'';
       bump = "nix flake update --flake $NH_FLAKE";
       gc = "nh clean all --keep 5 --keep-since 3d";
+
+      nb = "nom build";
+      nd = "nom develop";
+      nr = "nom run";
+      ns = "nom shell";
 
       df = "df -h";
       mkdir = "mkdir -pv";
@@ -86,26 +82,20 @@ in
     };
 
     initContent = lib.mkOrder 550 ''
-      if [[ -o login && -o interactive && -t 1 ]]; then
+      if [[ -o login && -o interactive && -t 1 && -z ''${SSH_CONNECTION:-} && -z ''${CI:-} ]]; then
         ${pkgs.fastfetch}/bin/fastfetch
       fi
 
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
 
-      nix() {
-        case "$1" in
-          build|run|flake)
-            command nix "$@" --log-format internal-json -v |& ${pkgs.nix-output-monitor}/bin/nom --json
-            ;;
-          shell|develop)
-            ${pkgs.nix-output-monitor}/bin/nom "$@"
-            ;;
-          *)
-            command nix "$@"
-            ;;
-        esac
-      }
+      ${lib.optionalString pkgs.stdenv.isDarwin ''
+        # GUI apps can still find Homebrew, but Nix-provided tools win.
+        path=("''${(@)path:#/opt/homebrew/bin}")
+        path=("''${(@)path:#/opt/homebrew/sbin}")
+        path+=(/opt/homebrew/bin /opt/homebrew/sbin)
+        typeset -U path
+      ''}
 
       if [ -f ~/.zshrc.local ]; then
         source ~/.zshrc.local
