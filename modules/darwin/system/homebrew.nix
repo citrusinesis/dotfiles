@@ -37,7 +37,7 @@
 
     masApps = {
       "KakaoTalk" = 869223134;
-      "RunCat" = 1429033973;
+      "RunCat Neo" = 6757801838;
     };
   };
 }

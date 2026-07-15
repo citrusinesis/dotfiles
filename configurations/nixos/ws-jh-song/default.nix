@@ -15,6 +15,7 @@ in
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
     ./capitol-workspace.nix
+    ./nvidia.nix
 
     self.nixosModules.minimal
   ];
