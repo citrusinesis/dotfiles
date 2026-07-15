@@ -20,15 +20,10 @@
       "helium-browser"
 
       "slack"
-      "obsidian"
-      "element"
 
       "raycast"
-      "ghostty"
-      "zed"
 
       "claude"
-      "codex-app"
       "chatgpt"
 
       "tailscale-app"
