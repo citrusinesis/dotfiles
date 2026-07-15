@@ -1,14 +1,13 @@
-{ ... }:
+{ config, pkgs, ... }:
 
 {
   homebrew = {
-    casks = [
-      "mongodb-compass"
-      "monitorcontrol"
-    ];
-
     brews = [
       "mole"
     ];
   };
+
+  home-manager.users.${config.system.primaryUser}.home.packages = with pkgs; [
+    mongodb-compass
+  ];
 }

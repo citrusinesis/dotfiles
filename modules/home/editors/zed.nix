@@ -1,18 +1,9 @@
 { pkgs, ... }:
 
-let
-  zedPackage =
-    if pkgs.stdenv.isDarwin then
-      pkgs.writeShellScriptBin "zed" ''
-        exec "/Applications/Zed.app/Contents/Resources/app/bin/zed" "$@"
-      ''
-    else
-      pkgs.zed-editor;
-in
 {
   programs.zed-editor = {
     enable = true;
-    package = zedPackage;
+    package = pkgs.zed-editor;
 
     extensions = [
       "catppuccin"
@@ -31,6 +22,8 @@ in
     ];
 
     userSettings = {
+      auto_update = false;
+
       theme = "Catppuccin Mocha - No Italics";
       icon_theme = "Catppuccin Mocha";
 
