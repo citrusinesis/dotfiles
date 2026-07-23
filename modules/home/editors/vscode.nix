@@ -29,7 +29,7 @@ in
   );
 
   programs.vscode = {
-    enable = true;
+    enable = false;
     package = pkgs.vscode;
 
     mutableExtensionsDir = false;
