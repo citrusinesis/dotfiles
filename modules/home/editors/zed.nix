@@ -8,17 +8,38 @@
     extensions = [
       "catppuccin"
       "catppuccin-icons"
+      "codebook"
 
       "nix"
+      "dependi"
+
+      "git-firefly"
+
+      "golangci-lint"
+      "gosum"
+      "proto"
+
+      "sql"
+      "dockerfile"
+      "opentofu"
+
+      "html"
+      "astro"
+      "prisma"
+
+      "latex"
+      "typst"
 
       "env"
+      "csv"
+      "jsonl"
       "toml"
-      "just"
-      "dockerfile"
-      "golangci-lint"
-      "biome"
 
-      "opencode"
+      "just"
+      "make"
+
+      "log"
+      "ssh-config"
     ];
 
     userSettings = {
@@ -116,23 +137,6 @@
       lsp.ruff.initialization_options.settings = {
         organizeImports = true;
         fixAll = true;
-      };
-
-      # TypeScript / JavaScript: the TypeScript server owns types and Biome
-      # owns diagnostics, imports, and formatting.
-      languages.TypeScript = {
-        language_servers = [
-          "typescript-language-server"
-          "biome"
-        ];
-        formatter.language_server.name = "biome";
-      };
-      languages.JavaScript = {
-        language_servers = [
-          "typescript-language-server"
-          "biome"
-        ];
-        formatter.language_server.name = "biome";
       };
 
       # Go
