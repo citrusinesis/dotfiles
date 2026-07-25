@@ -41,11 +41,25 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1784017020,
         "narHash": "sha256-49WO85egjNtN1vMgJ3zUjDh5IqO+ou4zZY80WQ6EKGg=",
+||||||| Stash base
+        "lastModified": 1782131086,
+        "narHash": "sha256-M73jIp606F878X6bq/dQ11IRmAwd+/ssdK+7qvr50vo=",
+=======
+        "lastModified": 1783844668,
+        "narHash": "sha256-3MOpw4y3reoErRLvFBDz0t9aG6FWXUj7leKvUns5eQA=",
+>>>>>>> Stashed changes
         "owner": "nix-community",
         "repo": "fenix",
+<<<<<<< Updated upstream
         "rev": "fa2a0be0f712d7147d1677d33d15ea7b0589cdb4",
+||||||| Stash base
+        "rev": "309fb007facc8caa25c99413502b38fddb3ffdc2",
+=======
+        "rev": "4e49ef62eedaa5c149d62b63b3f53844e1cc45d7",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -174,11 +188,25 @@
         ]
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1784690067,
         "narHash": "sha256-t86pRs7IPs3RTMPueWvvdcxyTFrctHAv2Jl7jnjsSf8=",
+||||||| Stash base
+        "lastModified": 1782166451,
+        "narHash": "sha256-SA7LyrayyZBvtzZnesnSLV7haciFuVLeZaX2hd5v4j4=",
+=======
+        "lastModified": 1784913159,
+        "narHash": "sha256-JWq0BfjO4ktpH5USfQNQzdvHpIDT8fSKD5K7LvdMRFs=",
+>>>>>>> Stashed changes
         "owner": "nix-community",
         "repo": "home-manager",
+<<<<<<< Updated upstream
         "rev": "6d8d61567802997f9ec3086b2a837e3ef31fac16",
+||||||| Stash base
+        "rev": "471a1d2f840eb7fcbdfd541d99c13a64096f46db",
+=======
+        "rev": "079a3b5d1aa6a719920a51316253b7d6dd22738d",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -198,11 +226,25 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1784012825,
         "narHash": "sha256-lbdkOH57StVOFMEpFASzEmi+GlK3iX6Uu7Y2zGUgVFE=",
+||||||| Stash base
+        "lastModified": 1782180246,
+        "narHash": "sha256-jDXyzgRtViPSj38evX6dkqMXISulDrx8aTVLTxHQnYI=",
+=======
+        "lastModified": 1783894722,
+        "narHash": "sha256-XyPTs8RQ5sa28KlNCB+QRGvyNivmgxQLuykn4SHkhVo=",
+>>>>>>> Stashed changes
         "owner": "numtide",
         "repo": "llm-agents.nix",
+<<<<<<< Updated upstream
         "rev": "5c73869318afcf796a7a465b4b5e31b27f0819d4",
+||||||| Stash base
+        "rev": "d4bdfa7950b2e27b553f8c1fd92f6f44b926f776",
+=======
+        "rev": "eacaf2df85462b8637506345b29e60ee8fa06c6c",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -239,11 +281,25 @@
         ]
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1783997659,
         "narHash": "sha256-JbjWx3EfJxRBUhMlgwOi4hblgC9bUyJYR8beF2lfZtQ=",
+||||||| Stash base
+        "lastModified": 1782104473,
+        "narHash": "sha256-n96VM4h18yA1ih7f3CuVvmIyCIDtFlgX8OaKnIVSoL4=",
+=======
+        "lastModified": 1783826883,
+        "narHash": "sha256-I2CTStJ2N/FCFKhTOnX3VmVPdKc+I1+SpXYY5dcN9CI=",
+>>>>>>> Stashed changes
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
+<<<<<<< Updated upstream
         "rev": "e58f630efacbb99d2d2b60b83da8f57ba2a773f5",
+||||||| Stash base
+        "rev": "f99979a1f1d367dd4ccd0e744c31f3e3ae062c32",
+=======
+        "rev": "2b6ad58e598c40e718a3faf4196411a37db80f97",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -291,11 +347,25 @@
     },
     "nixpkgs": {
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1784497964,
         "narHash": "sha256-vlHUuqAcbcH2RKmHbPiuQzbv1pnzzavXnI62RD0bqCU=",
+||||||| Stash base
+        "lastModified": 1781577229,
+        "narHash": "sha256-lrp67w8AulE9Ks53n27I45ADSzbOCn4H+CNW1Ck8B+8=",
+=======
+        "lastModified": 1784796856,
+        "narHash": "sha256-wWFrV5/Qbm+lyt5x20E/bSbfJiGKMo4RCxZV8cl/WZI=",
+>>>>>>> Stashed changes
         "owner": "nixos",
         "repo": "nixpkgs",
+<<<<<<< Updated upstream
         "rev": "241313f4e8e508cb9b13278c2b0fa25b9ca27163",
+||||||| Stash base
+        "rev": "567a49d1913ce81ac6e9582e3553dd90a955875f",
+=======
+        "rev": "e2587caef70cea85dd97d7daab492899902dbf5d",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -329,11 +399,25 @@
         "systems": "systems_2"
       },
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1783980039,
         "narHash": "sha256-QjM3pLJraSzvUlEwz1Jcl25Hpwe7JKZA6tQJ6DAEUMw=",
+||||||| Stash base
+        "lastModified": 1782176672,
+        "narHash": "sha256-8gNmp6mdko4/ALHsiewq4t/I3OvX4nbjAIoz5uyn1p4=",
+=======
+        "lastModified": 1783869492,
+        "narHash": "sha256-47qs7UofgjxU6m7c90RycaHjvEXnVM5DeVEAtaPVPUA=",
+>>>>>>> Stashed changes
         "owner": "nix-community",
         "repo": "nixvim",
+<<<<<<< Updated upstream
         "rev": "7a7643e253afd119d69c8e8bb2a3385c346f3a40",
+||||||| Stash base
+        "rev": "91df3d9f91c2b6e4c07541903b9d7f80a5b857e1",
+=======
+        "rev": "4ef28e447b9003b67ff7fa9488a3be93c43312db",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
@@ -360,11 +444,25 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
+<<<<<<< Updated upstream
         "lastModified": 1783975201,
         "narHash": "sha256-oyHWTfKWk06nTynCO8ByEAx/KEARvOOyTVnwinOmK3Q=",
+||||||| Stash base
+        "lastModified": 1782030001,
+        "narHash": "sha256-1JBvwtGyIsEBIemJBi6syH7iQ+pct7i+HNa1WSZfozs=",
+=======
+        "lastModified": 1783779020,
+        "narHash": "sha256-vpm418WZa9l1KUl6HRs+Ga+SIfE+D2/sV4olwTlilYc=",
+>>>>>>> Stashed changes
         "owner": "rust-lang",
         "repo": "rust-analyzer",
+<<<<<<< Updated upstream
         "rev": "63a6f0d4bcfd3bbcf36383fcbcbcd93456ed1653",
+||||||| Stash base
+        "rev": "69ccffdb5b3570c6c14c5780bf2e8836f2209d90",
+=======
+        "rev": "5be5e89cf0145d73a85c805726821b4adfc3af48",
+>>>>>>> Stashed changes
         "type": "github"
       },
       "original": {
