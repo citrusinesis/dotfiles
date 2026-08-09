@@ -7,6 +7,7 @@
     ./languages/nix.nix
     ./dev/direnv.nix
     ./dev/git.nix
+    ./dev/gpg.nix
   ];
 
   home.packages = [ (lib.lowPrio pkgs.vim) ];

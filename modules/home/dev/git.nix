@@ -11,6 +11,11 @@ in
   programs.git = {
     enable = true;
 
+    signing = {
+      format = "openpgp";
+      signByDefault = true;
+    };
+
     settings = {
       user = {
         email = personal.git.userEmail;
