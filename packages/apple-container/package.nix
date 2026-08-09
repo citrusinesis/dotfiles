@@ -6,10 +6,10 @@
 }:
 
 container.overrideAttrs (old: rec {
-  version = "1.1.0";
+  version = "1.2.2";
   src = fetchurl {
     url = "https://github.com/apple/container/releases/download/${version}/container-${version}-installer-signed.pkg";
-    hash = "sha256-DKHEKiJpwlV++x2CsbOKxVPmo6PaGxF5xDm87h59ZxQ=";
+    hash = "sha256-9MfnP3IDclo1Emdt/Z7GxqmKNwk7b9ShsP3PyyJ+IRg=";
   };
 
   postInstall = (old.postInstall or "") + ''
