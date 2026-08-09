@@ -18,6 +18,7 @@
     # configurations/darwin/<host>/applications.nix.
     casks = [
       "helium-browser"
+      "spotify"
 
       "slack"
 
@@ -25,6 +26,8 @@
 
       "claude"
       "chatgpt"
+
+      "linear"
 
       "tailscale-app"
 
