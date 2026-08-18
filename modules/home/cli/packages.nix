@@ -7,7 +7,6 @@
       curl
       wget
       jq
-      less
       watch
       unzip
 
@@ -20,7 +19,6 @@
       procs
       rsync
       ast-grep
-      lazygit
       tldr
 
       keychain
@@ -28,4 +26,18 @@
     ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       coreutils
     ];
+
+  programs.less = {
+    enable = true;
+    options = {
+      RAW-CONTROL-CHARS = true;
+      mouse = true;
+      wheel-lines = 3;
+    };
+  };
+
+  programs.lazygit = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 }
