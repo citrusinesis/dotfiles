@@ -81,7 +81,7 @@ in
         fi
 
         if [[ -L ${lib.escapeShellArg configPath} ]] \
-          || ! ${pkgs.coreutils}/bin/cmp --silent ${configSource} ${lib.escapeShellArg configPath}; then
+          || ! ${pkgs.diffutils}/bin/cmp --silent ${configSource} ${lib.escapeShellArg configPath}; then
           run /bin/mkdir -p ${lib.escapeShellArg (dirOf configPath)}
           run /bin/rm -f ${lib.escapeShellArg configPath}
           run /usr/bin/install -m 0644 ${configSource} ${lib.escapeShellArg configPath}
