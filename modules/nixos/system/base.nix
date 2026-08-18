@@ -30,6 +30,7 @@
   users.mutableUsers = lib.mkDefault true;
 
   environment.systemPackages = with pkgs; [
+    ghostty.terminfo
     curl
     wget
     htop
