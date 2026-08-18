@@ -18,6 +18,7 @@
       "golangci-lint"
       "gosum"
       "proto"
+      "capnp"
 
       "sql"
       "dockerfile"
