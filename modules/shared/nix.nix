@@ -19,19 +19,8 @@ in
 
   config.nix = {
     optimise.automatic = true;
-    package =
-      if pkgs.stdenv.hostPlatform.isDarwin then
-        # Lix's install-check environment pulls in pyxattr, whose Python 3.14
-        # wheel build currently crashes in libffi under the macOS sandbox.
-        lix.overrideAttrs (old: {
-          doInstallCheck = false;
-          mesonFlags = map (lib.replaceStrings
-            [ "-Denable-tests=true" ]
-            [ "-Denable-tests=false" ]
-          ) old.mesonFlags;
-        })
-      else
-        lix;
+    channel.enable = false;
+    package = lix;
 
     settings = {
       experimental-features = [
