@@ -75,13 +75,13 @@
                 cargo-watch
                 sccache
               ])
-              ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.mold ];
+              ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.mold ];
 
             env = {
               RUST_SRC_PATH = "${developmentToolchain}/lib/rustlib/src/rust/library";
               RUSTC_WRAPPER = "sccache";
             }
-            // lib.optionalAttrs pkgs.stdenv.isLinux {
+            // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
               RUSTFLAGS = "-C link-arg=-fuse-ld=mold";
             };
           };

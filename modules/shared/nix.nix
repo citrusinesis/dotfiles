@@ -20,7 +20,7 @@ in
   config.nix = {
     optimise.automatic = true;
     package =
-      if pkgs.stdenv.isDarwin then
+      if pkgs.stdenv.hostPlatform.isDarwin then
         # Lix's install-check environment pulls in pyxattr, whose Python 3.14
         # wheel build currently crashes in libffi under the macOS sandbox.
         lix.overrideAttrs (old: {

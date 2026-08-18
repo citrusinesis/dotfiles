@@ -24,7 +24,7 @@ in
     home.username = cfg.username;
     home.stateVersion = "25.11";
     programs.home-manager.enable = true;
-    targets.darwin.linkApps.enable = lib.mkIf pkgs.stdenv.isDarwin true;
-    targets.darwin.copyApps.enable = lib.mkIf pkgs.stdenv.isDarwin false;
+    targets.darwin.linkApps.enable = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin true;
+    targets.darwin.copyApps.enable = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin false;
   };
 }

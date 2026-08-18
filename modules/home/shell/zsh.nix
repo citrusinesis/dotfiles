@@ -10,7 +10,7 @@ let
   nh = lib.getExe pkgs.nh;
   nom = lib.getExe pkgs.nix-output-monitor;
   switchCommand =
-    if pkgs.stdenv.isDarwin then
+    if pkgs.stdenv.hostPlatform.isDarwin then
       ''${nh} darwin switch "$NH_FLAKE"''
     else
       ''${nh} os switch "$NH_FLAKE"'';
@@ -25,7 +25,7 @@ in
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
     MANROFFOPT = "-c";
   }
-  // lib.optionalAttrs pkgs.stdenv.isDarwin {
+  // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
     CLICOLOR = "1";
   };
 
@@ -71,11 +71,11 @@ in
 
       zshrc = "$EDITOR ~/.zshrc";
     }
-    // lib.optionalAttrs pkgs.stdenv.isDarwin {
+    // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       showFiles = "defaults write com.apple.finder AppleShowAllFiles YES; killall Finder";
       hideFiles = "defaults write com.apple.finder AppleShowAllFiles NO; killall Finder";
     }
-    // lib.optionalAttrs (pkgs.stdenv.isLinux && cfg.gui.enable) {
+    // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isLinux && cfg.gui.enable) {
       open = "${pkgs.xdg-utils}/bin/xdg-open";
       pbcopy = "${pkgs.xclip}/bin/xclip -selection clipboard";
       pbpaste = "${pkgs.xclip}/bin/xclip -selection clipboard -o";
@@ -98,7 +98,7 @@ in
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
 
-      ${lib.optionalString pkgs.stdenv.isDarwin ''
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
         # GUI apps can still find Homebrew, but Nix-provided tools win.
         path=("''${(@)path:#/opt/homebrew/bin}")
         path=("''${(@)path:#/opt/homebrew/sbin}")

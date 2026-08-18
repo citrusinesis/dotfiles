@@ -13,7 +13,7 @@
       noto-fonts-cjk-sans
       pretendard
     ]
-    ++ lib.optionals pkgs.stdenv.isLinux [
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
       noto-fonts
       noto-fonts-cjk-sans
       noto-fonts-color-emoji

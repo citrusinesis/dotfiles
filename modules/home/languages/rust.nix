@@ -12,7 +12,7 @@ let
   # Darwin's cctools linker crashes while linking cargo-watch. Use LLVM's
   # Mach-O linker for this package and leave other Rust packages unchanged.
   cargoWatch =
-    if pkgs.stdenv.isDarwin then
+    if pkgs.stdenv.hostPlatform.isDarwin then
       pkgs.cargo-watch.override {
         rustPlatform = pkgs.rustPlatform // {
           buildRustPackage =

@@ -7,7 +7,7 @@
 }:
 
 let
-  enabled = !pkgs.stdenv.isDarwin || (osConfig.containerRuntime or null) == "podman";
+  enabled = !pkgs.stdenv.hostPlatform.isDarwin || (osConfig.containerRuntime or null) == "podman";
 in
 {
   config = lib.mkIf enabled {
@@ -16,7 +16,7 @@ in
       [
         podman
       ]
-      ++ lib.optionals pkgs.stdenv.isLinux [
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         containerd
       ];
 

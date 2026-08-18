@@ -9,7 +9,7 @@
 let
   runtimeManagedByDarwin = osConfig ? containerRuntime;
   runtime = osConfig.containerRuntime or null;
-  enabled = pkgs.stdenv.isDarwin && runtime == "container";
+  enabled = pkgs.stdenv.hostPlatform.isDarwin && runtime == "container";
   configSource = ./apple-container.toml;
   configPath = "${config.xdg.configHome}/container/config.toml";
   logDir = "${config.xdg.stateHome}/container";
@@ -50,7 +50,7 @@ let
 in
 {
   config = lib.mkMerge [
-    (lib.mkIf (pkgs.stdenv.isDarwin && runtimeManagedByDarwin) {
+    (lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin && runtimeManagedByDarwin) {
       # One-time migration from the pre-Home-Manager launchd job. Only remove
       # Nix-managed symlinks; user-owned files at these paths are preserved.
       home.activation.migrateAppleContainer = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -106,7 +106,7 @@ in
     })
 
     # Deregister Apple-managed jobs when switching runtimes.
-    (lib.mkIf (pkgs.stdenv.isDarwin && runtimeManagedByDarwin && !enabled) {
+    (lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin && runtimeManagedByDarwin && !enabled) {
       home.activation.stopAppleContainer = lib.hm.dag.entryAfter [ "setupLaunchAgents" ] ''
         if ${pkgs.dotfilesPackages.apple-container}/bin/container system status >/dev/null 2>&1; then
           echo "Stopping apple/container services"

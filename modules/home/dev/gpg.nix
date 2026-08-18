@@ -15,6 +15,7 @@
     enableZshIntegration = true;
     defaultCacheTtl = 3600;
     maxCacheTtl = 14400;
-    pinentry.package = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-curses;
+    pinentry.package =
+      if pkgs.stdenv.hostPlatform.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-curses;
   };
 }
