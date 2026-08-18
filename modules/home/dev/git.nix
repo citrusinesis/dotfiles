@@ -1,13 +1,9 @@
-{ pkgs, flake, ... }:
+{ flake, ... }:
 
 let
   personal = import (flake.inputs.self + /personal.nix);
 in
 {
-  home.packages = with pkgs; [
-    gh
-  ];
-
   programs.git = {
     enable = true;
 
@@ -60,6 +56,15 @@ in
       "!.env.example"
     ];
   };
+
+  programs.gh = {
+    enable = true;
+    settings = {
+      git_protocol = "ssh";
+    };
+  };
+
+  xdg.configFile."gh/config.yml".force = true;
 
   programs.delta = {
     enable = true;
