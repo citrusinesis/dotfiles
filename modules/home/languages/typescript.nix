@@ -3,10 +3,14 @@
 {
   home.packages = with pkgs; [
     nodejs
-    bun
     typescript-language-server
     typescript
     biome
     pnpm
   ];
+
+  programs.bun = {
+    enable = true;
+    enableGitIntegration = true;
+  };
 }
