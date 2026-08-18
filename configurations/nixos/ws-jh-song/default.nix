@@ -55,6 +55,7 @@ in
     extraGroups = [
       "wheel"
       "shared"
+      "docker"
     ];
     shell = pkgs.zsh;
     subUidRanges = [
@@ -69,6 +70,13 @@ in
         count = 54535;
       }
     ];
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    # The ZFS-backed root would make the daemon auto-select the zfs storage
+    # driver, which cannot manage datasets inside an unprivileged LXC.
+    storageDriver = "overlay2";
   };
 
   security.sudo.extraRules = [
