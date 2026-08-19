@@ -11,6 +11,10 @@
   services.resolved.enable = lib.mkForce false;
   environment.etc."resolv.conf".enable = lib.mkForce false;
 
+  # Proxmox supplies eth0 and Capitol configures it directly below; networkd
+  # has no .network unit to wait for and would always time out after 120s.
+  systemd.network.wait-online.enable = lib.mkForce false;
+
   boot.specialFileSystems."/sys/kernel/debug".enable = lib.mkForce false;
   boot.specialFileSystems."/sys/kernel/tracing".enable = lib.mkForce false;
   systemd.suppressedSystemUnits = [
@@ -20,7 +24,10 @@
 
   systemd.services.capitol-static-network = {
     description = "Apply Capitol workspace static network";
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [
+      "multi-user.target"
+      "network-online.target"
+    ];
     before = [
       "tailscaled.service"
       "network-online.target"
