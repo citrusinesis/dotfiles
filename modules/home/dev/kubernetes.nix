@@ -9,9 +9,10 @@
     helmfile
 
     kustomize
-    k9s
     stern
 
     fluxcd
   ];
+
+  programs.k9s.enable = true;
 }

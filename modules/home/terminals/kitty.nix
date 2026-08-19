@@ -8,8 +8,6 @@
       size = 11;
     };
 
-    themeFile = "Catppuccin-Mocha";
-
     settings = {
       cursor_shape = "block";
       cursor_beam_thickness = "1.5";

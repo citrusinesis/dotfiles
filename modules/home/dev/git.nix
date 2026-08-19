@@ -70,9 +70,7 @@ in
     enableGitIntegration = true;
     options = {
       navigate = true;
-      light = false;
       line-numbers = true;
-      syntax-theme = "ansi";
     };
   };
 }

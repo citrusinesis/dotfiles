@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   programs.nixvim = {
@@ -20,7 +20,7 @@
     colorscheme = "catppuccin";
     colorschemes.catppuccin = {
       enable = true;
-      settings.flavour = "mocha";
+      settings.flavour = config.catppuccin.flavor;
     };
 
     globals = {

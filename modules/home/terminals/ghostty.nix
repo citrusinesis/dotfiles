@@ -1,11 +1,11 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
   xdg.configFile."ghostty/config" = {
     force = true;
 
     text = ''
-      theme = Catppuccin Mocha
+      theme = Catppuccin ${lib.toSentenceCase config.catppuccin.flavor}
 
       font-family = "Hack Nerd Font"
       font-size = 14

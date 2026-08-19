@@ -10,13 +10,6 @@
 
     plugins = with pkgs.tmuxPlugins; [
       {
-        plugin = catppuccin;
-        extraConfig = ''
-          set -g @catppuccin_flavor "mocha"
-          set -g @catppuccin_window_status_style "rounded"
-        '';
-      }
-      {
         plugin = resurrect;
         extraConfig = ''
           set -g @resurrect-capture-pane-contents 'off'
