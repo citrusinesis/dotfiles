@@ -8,8 +8,6 @@
 let
   cfg = config.dotfiles.home;
   nom = lib.getExe pkgs.nix-output-monitor;
-  activateCommand = ''nix run "path:$NH_FLAKE#activate" --'';
-  checkCommand = "(set -o pipefail; nix flake check . --log-format internal-json -v |& ${nom} --json)";
 in
 {
   home.sessionPath = [
@@ -41,18 +39,29 @@ in
     syntaxHighlighting.enable = true;
     enableCompletion = true;
 
+    siteFunctions.__run_with_nom = ''
+      setopt localoptions pipefail
+      nix --log-format internal-json -v "$@" |& ${nom} --json
+    '';
+
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
-      sw = activateCommand;
-      up = ''(cd "$NH_FLAKE" && nix run ".#update-pinned-packages" && nix run ".#update" && ${checkCommand} && ${activateCommand})'';
-      bump = "nix flake update --flake $NH_FLAKE";
+      sw = ''__run_with_nom run "path:$NH_FLAKE#activate" --'';
+      up = ''
+        (cd "$NH_FLAKE" &&
+          __run_with_nom run ".#update-pinned-packages" &&
+          __run_with_nom run ".#update" &&
+          __run_with_nom flake check . &&
+          __run_with_nom run "path:$NH_FLAKE#activate" --)
+      '';
+      bump = ''__run_with_nom flake update --flake "$NH_FLAKE"'';
       gc = "nh clean all --keep 5 --keep-since 3d";
 
-      nb = "nom build";
-      nd = "nom develop";
-      nr = "nix run";
-      ns = "nom shell";
+      nb = "__run_with_nom build";
+      nd = "__run_with_nom develop";
+      nr = "__run_with_nom run";
+      ns = "__run_with_nom shell";
 
       df = "df -h";
       mkdir = "mkdir -pv";
@@ -97,7 +106,6 @@ in
         path=("''${(@)path:#/opt/homebrew/bin}")
         path=("''${(@)path:#/opt/homebrew/sbin}")
         path+=(/opt/homebrew/bin /opt/homebrew/sbin)
-        typeset -U path
       ''}
 
       if [ -f ~/.zshrc.local ]; then
