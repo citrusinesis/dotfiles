@@ -39,29 +39,29 @@ in
     syntaxHighlighting.enable = true;
     enableCompletion = true;
 
-    siteFunctions.__run_with_nom = ''
+    siteFunctions.__nix_run_with_nom = ''
       setopt localoptions pipefail
-      nix --log-format internal-json -v "$@" |& ${nom} --json
+      nix --log-format internal-json -v run "$@" |& ${nom} --json
     '';
 
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
-      sw = ''__run_with_nom run "$NH_FLAKE#activate" --'';
+      sw = ''__nix_run_with_nom "$NH_FLAKE#activate" --'';
       up = ''
         (cd "$NH_FLAKE" &&
-          __run_with_nom run ".#update-pinned-packages" &&
-          __run_with_nom run ".#update" &&
-          __run_with_nom flake check . &&
-          __run_with_nom run "$NH_FLAKE#activate" --)
+          __nix_run_with_nom ".#update-pinned-packages" &&
+          __nix_run_with_nom ".#update" &&
+          ${nom} flake check . &&
+          __nix_run_with_nom "$NH_FLAKE#activate" --)
       '';
-      bump = ''__run_with_nom flake update --flake "$NH_FLAKE"'';
+      bump = ''${nom} flake update --flake "$NH_FLAKE"'';
       gc = "nh clean all --keep 5 --keep-since 3d";
 
-      nb = "__run_with_nom build";
-      nd = "__run_with_nom develop";
-      nr = "__run_with_nom run";
-      ns = "__run_with_nom shell";
+      nb = "${nom} build";
+      nd = "${nom} develop";
+      nr = "nix run";
+      ns = "${nom} shell";
 
       df = "df -h";
       mkdir = "mkdir -pv";
