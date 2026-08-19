@@ -7,7 +7,8 @@
     text = ''
       theme = Catppuccin ${lib.toSentenceCase config.catppuccin.flavor}
 
-      font-family = "Hack Nerd Font"
+      font-family = "Hack Nerd Font Mono"
+      font-family = "Noto Sans Mono CJK KR"
       font-size = 14
 
       shell-integration = zsh
