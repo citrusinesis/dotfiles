@@ -50,12 +50,18 @@
 
   outputs =
     inputs:
-    inputs.nixos-unified.lib.mkFlake {
-      inherit inputs;
-      root = ./.;
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "aarch64-darwin"
         "x86_64-linux"
       ];
+
+      _module.args.root = ./.;
+
+      imports =
+        let
+          flakeModules = ./modules/flake;
+        in
+        map (name: flakeModules + "/${name}") (builtins.attrNames (builtins.readDir flakeModules));
     };
 }

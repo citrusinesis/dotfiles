@@ -56,24 +56,12 @@ containerRuntime = "container"; # apple/container | "orbstack" | "podman"
 nix run .#update-pinned-packages
 ```
 
-## Project Templates
+## Homebrew Policy
 
-Bootstrap a project from this flake's templates:
-
-e.g. Rust project
-```bash
-mkdir example-rust-service && cd example-rust-service
-nix flake init -t github:citrusinesis/dotfiles#rust
-```
-
-All templates expose `packages.default`, `apps.default`, `checks`, and a
-`devShell`. Their Nix locks and language dependencies are intentionally updated
-separately:
-
-```bash
-./scripts/update-templates.sh              # Nix flake locks only
-./scripts/update-template-dependencies.sh  # Language dependency locks
-```
+Homebrew is fully declarative on macOS. Activation uses `cleanup = "zap"`, so
+formulae and casks not declared in the Nix configuration are removed, including
+files associated with undeclared casks. Add software to the relevant Darwin
+configuration before the next `sw`; the destructive cleanup is intentional.
 
 ## Home profiles
 
