@@ -7,13 +7,8 @@
 
 let
   cfg = config.dotfiles.home;
-  nh = lib.getExe pkgs.nh;
   nom = lib.getExe pkgs.nix-output-monitor;
-  switchCommand =
-    if pkgs.stdenv.hostPlatform.isDarwin then
-      ''${nh} darwin switch "$NH_FLAKE"''
-    else
-      ''${nh} os switch "$NH_FLAKE"'';
+  activateCommand = ''nix run "path:$NH_FLAKE#activate" --'';
   checkCommand = "(set -o pipefail; nix flake check . --log-format internal-json -v |& ${nom} --json)";
 in
 {
@@ -49,9 +44,8 @@ in
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
-      sw = switchCommand;
-      up = ''(cd "$NH_FLAKE" && nix run ".#update-pinned-packages" && nix run ".#update" && ${checkCommand} && ${switchCommand})'';
-      act = ''nix run "path:$NH_FLAKE#activate" --'';
+      sw = activateCommand;
+      up = ''(cd "$NH_FLAKE" && nix run ".#update-pinned-packages" && nix run ".#update" && ${checkCommand} && ${activateCommand})'';
       bump = "nix flake update --flake $NH_FLAKE";
       gc = "nh clean all --keep 5 --keep-since 3d";
 

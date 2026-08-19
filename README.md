@@ -12,7 +12,7 @@ cd ~/.config/dotfiles
 # 2. Run setup (installs Lix + Homebrew on macOS)
 ./scripts/bootstrap.sh
 
-# 3. Activate (first run uses nixos-unified app since `nh` is not yet on PATH)
+# 3. Activate through nixos-unified
 nix run .#activate
 ```
 
