@@ -57,5 +57,6 @@ in
 
   environment.systemPackages = with pkgs; [
     coreutils
+    ghostty-bin.terminfo
   ];
 }
