@@ -47,13 +47,13 @@ in
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
 
-      sw = ''__run_with_nom run "path:$NH_FLAKE#activate" --'';
+      sw = ''__run_with_nom run "$NH_FLAKE#activate" --'';
       up = ''
         (cd "$NH_FLAKE" &&
           __run_with_nom run ".#update-pinned-packages" &&
           __run_with_nom run ".#update" &&
           __run_with_nom flake check . &&
-          __run_with_nom run "path:$NH_FLAKE#activate" --)
+          __run_with_nom run "$NH_FLAKE#activate" --)
       '';
       bump = ''__run_with_nom flake update --flake "$NH_FLAKE"'';
       gc = "nh clean all --keep 5 --keep-since 3d";
