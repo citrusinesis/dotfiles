@@ -50,7 +50,10 @@
       icon_theme = "Catppuccin Mocha";
 
       buffer_font_family = "Hack Nerd Font Mono";
-      buffer_font_fallbacks = [ "D2CodingLigature Nerd Font" ];
+      buffer_font_fallbacks = [
+        "D2KodingLigature Nerd Font"
+        "Noto Sans CJK KR"
+      ];
       buffer_font_size = 15;
       ui_font_size = 15;
       colorize_brackets = true;
@@ -95,7 +98,10 @@
           TERM = "xterm-256color";
         };
         font_family = "Hack Nerd Font Mono";
-        font_fallbacks = [ "D2CodingLigature Nerd Font" ];
+        font_fallbacks = [
+          "D2KodingLigature Nerd Font"
+          "Noto Sans CJK KR"
+        ];
         font_size = 14;
       };
 
