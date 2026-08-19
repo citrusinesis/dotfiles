@@ -23,11 +23,10 @@ After the first activation, the shell aliases and `nh` utilities are available.
 ```bash
 sw              # Rebuild and switch the current host
 up              # Update pins/locks, check, and switch the current host
-act [host]      # Activate through nixos-unified (also supports remote hosts)
 bump            # Update flake.lock without switching
 gc              # Safer GC (keeps last 5 generations + 3d)
 
-nh search <pkg> # Fast nixpkgs search via nix-index
+nh search <pkg> # Fast nixpkgs search via search.nixos.org
 
 nix flake check # Validate evaluation and checks
 ```
@@ -42,18 +41,26 @@ nix run .#activate juicer   # macOS development profile
 nix run .#update            # Update nixpkgs, Home Manager, and nix-darwin only
 ```
 
-## Container Runtime
+## Apple Container
 
-Each darwin host selects exactly one container runtime in its configuration:
+Apple Container is opt-in per Home Manager profile:
 
 ```nix
-containerRuntime = "container"; # apple/container | "orbstack" | "podman"
+home-manager.users.${config.system.primaryUser}.dotfiles.home.appleContainer.enable = true;
 ```
 
-`container` reuses the nixpkgs package, while its upstream version and source hash are pinned independently in the overlay because nixpkgs can lag behind [apple/container](https://github.com/apple/container) releases. `up` bumps it automatically on macOS; to bump it manually:
+Its upstream version and source hash are pinned independently in the overlay
+because nixpkgs can lag behind [apple/container](https://github.com/apple/container)
+releases. `up` bumps it automatically on macOS; to bump it manually:
 
 ```bash
 nix run .#update-pinned-packages
+```
+
+Podman is also opt-in per Home Manager profile:
+
+```nix
+dotfiles.home.podman.enable = true;
 ```
 
 ## Homebrew Policy
