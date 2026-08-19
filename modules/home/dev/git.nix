@@ -28,7 +28,6 @@ in
         l = "log";
         unstage = "reset HEAD --";
         last = "log -1 HEAD";
-        visual = "!gitk";
         lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
       };
 

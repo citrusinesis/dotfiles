@@ -4,7 +4,7 @@
   programs.tmux = {
     enable = true;
     mouse = true;
-    terminal = "xterm-256color";
+    terminal = "tmux-256color";
     escapeTime = 0;
     historyLimit = 10000;
 
