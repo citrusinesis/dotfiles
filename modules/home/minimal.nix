@@ -1,7 +1,14 @@
-{ lib, pkgs, ... }:
+{
+  flake,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
+    flake.inputs.nix-index-database.homeModules.default
+
     ./cli/module.nix
     ./shell/module.nix
     ./languages/nix.nix
