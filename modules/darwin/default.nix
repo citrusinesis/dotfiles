@@ -6,7 +6,6 @@
     ../shared/fonts.nix
 
     ./system/base.nix
-    ./system/container-runtime.nix
     ./system/homebrew.nix
 
     ./system/defaults.nix

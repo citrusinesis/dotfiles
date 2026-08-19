@@ -2,23 +2,24 @@
   config,
   lib,
   pkgs,
-  osConfig ? { },
   ...
 }:
 
 let
-  enabled = !pkgs.stdenv.hostPlatform.isDarwin || (osConfig.containerRuntime or null) == "podman";
+  cfg = config.dotfiles.home.podman;
 in
 {
-  config = lib.mkIf enabled {
-    home.packages =
-      with pkgs;
-      [
-        podman
-      ]
-      ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
-        containerd
-      ];
+  options.dotfiles.home.podman.enable = lib.mkOption {
+    type = lib.types.bool;
+    default = false;
+    description = ''
+      Whether to install and configure the Podman client for this Home Manager profile.
+      This is opt-in and must be enabled explicitly for each Home Manager profile.
+    '';
+  };
+
+  config = lib.mkIf cfg.enable {
+    home.packages = [ pkgs.podman ];
 
     xdg.configFile."containers/policy.json".text = builtins.toJSON {
       default = [

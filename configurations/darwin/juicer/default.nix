@@ -1,4 +1,4 @@
-{ flake, ... }:
+{ config, flake, ... }:
 
 {
   imports = [
@@ -8,5 +8,5 @@
 
   networking.hostName = "juicer";
 
-  containerRuntime = "container";
+  home-manager.users.${config.system.primaryUser}.dotfiles.home.appleContainer.enable = true;
 }

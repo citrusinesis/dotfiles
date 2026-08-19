@@ -1,4 +1,4 @@
-{ flake, ... }:
+{ config, flake, ... }:
 
 {
   imports = [
@@ -8,7 +8,7 @@
 
   networking.hostName = "mixer";
 
-  containerRuntime = "container";
+  home-manager.users.${config.system.primaryUser}.dotfiles.home.appleContainer.enable = true;
 
   pf = {
     screen-sharing = {
