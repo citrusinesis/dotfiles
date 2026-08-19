@@ -46,7 +46,6 @@ in
   };
 
   home-manager = {
-    backupFileExtension = "bak";
     users.${username} = {
       imports = [
         self.homeModules.base
