@@ -6,6 +6,8 @@
 }:
 
 {
+  services.ssh-agent.enable = pkgs.stdenv.hostPlatform.isLinux;
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;

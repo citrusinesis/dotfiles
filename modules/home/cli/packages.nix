@@ -20,8 +20,6 @@
       rsync
       ast-grep
       tldr
-
-      keychain
     ]
     ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
       coreutils
