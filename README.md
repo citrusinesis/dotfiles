@@ -2,65 +2,34 @@
 
 Personal Nix flake for managing personal devices with Home Manager, powered by [nixos-unified](https://github.com/srid/nixos-unified).
 
-## New Machine Setup
+## Setup
 
 ```bash
-# 1. Clone the repo
-git clone <repo> ~/.config/dotfiles
+git clone git@github.com:citrusinesis/dotfiles.git ~/.config/dotfiles
 cd ~/.config/dotfiles
-
-# 2. Run setup (installs Lix + Homebrew on macOS)
 ./scripts/bootstrap.sh
-
-# 3. Activate through nixos-unified
 nix run .#activate
 ```
 
 ## Usage
 
-After the first activation, the shell aliases and `nh` utilities are available.
+After the first activation, these shell aliases are available:
 
 ```bash
 sw              # Rebuild and switch the current host
 up              # Update pins/locks, check, and switch the current host
 bump            # Update flake.lock without switching
 gc              # Safer GC (keeps last 5 generations + 3d)
-
-nh search <pkg> # Fast nixpkgs search via search.nixos.org
-
-nix flake check # Validate evaluation and checks
 ```
 
-Equivalent explicit commands:
+`activate` follows the nixos-unified selector format:
 
 ```bash
-nix run .#activate          # Match current hostname
-nix run .#activate blender  # NixOS WSL host
-nix run .#activate mixer    # macOS default profile
-nix run .#activate juicer   # macOS development profile
-nix run .#update            # Update nixpkgs, Home Manager, and nix-darwin only
-```
-
-## Apple Container
-
-Apple Container is opt-in per Home Manager profile:
-
-```nix
-home-manager.users.${config.system.primaryUser}.dotfiles.home.appleContainer.enable = true;
-```
-
-Its upstream version and source hash are pinned independently in the overlay
-because nixpkgs can lag behind [apple/container](https://github.com/apple/container)
-releases. `up` bumps it automatically on macOS; to bump it manually:
-
-```bash
-nix run .#update-pinned-packages
-```
-
-Podman is also opt-in per Home Manager profile:
-
-```nix
-dotfiles.home.podman.enable = true;
+nix run .#activate                         # Current NixOS or nix-darwin host
+nix run .#activate -- '<host>'             # Named system configuration
+nix run .#activate -- '<user>@'            # Local Home Manager configuration
+nix run .#activate -- '<user>@<host>'      # Remote Home Manager configuration
+nix run .#update                           # Update primary flake inputs
 ```
 
 ## Homebrew Policy
