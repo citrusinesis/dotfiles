@@ -9,6 +9,7 @@ in
 
     signing = {
       format = "openpgp";
+      key = personal.git.signingKey;
       signByDefault = true;
     };
 
