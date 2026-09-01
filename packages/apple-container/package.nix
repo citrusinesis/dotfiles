@@ -13,8 +13,14 @@ container.overrideAttrs (old: rec {
   };
 
   postInstall = (old.postInstall or "") + ''
-    # These upstream helpers bypass the pinned package and mutate /usr/local.
     rm -f "$out/bin/update-container.sh" "$out/bin/uninstall-container.sh"
+  '';
+
+  postFixup = (old.postFixup or "") + ''
+    for resource in init create-user.sh; do
+      script="$out/libexec/container/plugins/machine-apiserver/resources/$resource"
+      sed -i '1s|^#!.*|#!/bin/sh|' "$script"
+    done
   '';
 
   meta = (old.meta or { }) // {
