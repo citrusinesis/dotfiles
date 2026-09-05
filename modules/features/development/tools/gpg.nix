@@ -16,6 +16,7 @@
     defaultCacheTtl = 28800;
     maxCacheTtl = 86400;
     pinentry.package =
+      # Native authentication helper: the explicit exception to cask-owned GUI apps.
       if pkgs.stdenv.hostPlatform.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-curses;
   };
 }

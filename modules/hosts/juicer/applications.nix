@@ -1,16 +1,12 @@
-{ config, pkgs, ... }:
-
 {
   homebrew = {
     casks = [
       "notion"
 
       "cloudflare-warp"
+      "lm-studio"
+      "utm"
     ];
   };
 
-  home-manager.users.${config.system.primaryUser}.home.packages = with pkgs; [
-    lmstudio
-    utm
-  ];
 }

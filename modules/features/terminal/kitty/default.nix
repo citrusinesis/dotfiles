@@ -4,6 +4,7 @@ let
 in
 {
   dotfiles.aspects.features.provides.kitty = {
+    darwin = ./darwin.nix;
     homeManager = ./home.nix;
     includes = [ features.theme ];
   };

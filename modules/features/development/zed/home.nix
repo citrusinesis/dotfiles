@@ -3,7 +3,7 @@
 {
   programs.zed-editor = {
     enable = true;
-    package = pkgs.zed-editor;
+    package = if pkgs.stdenv.hostPlatform.isDarwin then null else pkgs.zed-editor;
 
     extensions = [
       "catppuccin"

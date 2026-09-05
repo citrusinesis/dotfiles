@@ -30,7 +30,7 @@ in
 
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
+    package = if pkgs.stdenv.hostPlatform.isDarwin then null else pkgs.vscode;
 
     mutableExtensionsDir = false;
 

@@ -15,6 +15,6 @@
     "/usr/local/bin"
   ];
 
-  targets.darwin.linkApps.enable = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin true;
+  targets.darwin.linkApps.enable = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin false;
   targets.darwin.copyApps.enable = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin false;
 }

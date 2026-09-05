@@ -1,7 +1,5 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    winbox
-  ];
+  home.packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.winbox ];
 }
