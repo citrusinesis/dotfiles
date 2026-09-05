@@ -38,24 +38,8 @@ in
     syntaxHighlighting.enable = true;
     enableCompletion = true;
 
-    siteFunctions.__nix_run_with_nom = ''
-      setopt localoptions pipefail
-      nix --log-format internal-json -v run "$@" |& ${nom} --json
-    '';
-
     shellAliases = {
       lta = "${pkgs.eza}/bin/eza -Ta --level=2";
-
-      sw = ''__nix_run_with_nom "$NH_FLAKE#activate" --'';
-      up = ''
-        (cd "$NH_FLAKE" &&
-          __nix_run_with_nom ".#update-pinned-packages" &&
-          __nix_run_with_nom ".#update" &&
-          ${nom} flake check . &&
-          __nix_run_with_nom "$NH_FLAKE#activate" --)
-      '';
-      bump = ''${nom} flake update --flake "$NH_FLAKE"'';
-      gc = "nh clean all --keep 5 --keep-since 3d";
 
       nb = "${nom} build";
       nd = "${nom} develop";
