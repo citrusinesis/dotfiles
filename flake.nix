@@ -10,6 +10,7 @@
     };
 
     flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-aspects.url = "github:denful/flake-aspects";
     nixos-unified.url = "github:srid/nixos-unified";
 
     nixos-wsl = {

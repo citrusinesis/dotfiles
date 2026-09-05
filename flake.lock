@@ -74,6 +74,21 @@
         "type": "github"
       }
     },
+    "flake-aspects": {
+      "locked": {
+        "lastModified": 1788209328,
+        "narHash": "sha256-LTU8Ea+VbDtPtOFOAufZHe+cW1ISdEt96Au0+cIUZ4Y=",
+        "owner": "denful",
+        "repo": "flake-aspects",
+        "rev": "e5bbf7be955e8289d545c783673808b18d48c780",
+        "type": "github"
+      },
+      "original": {
+        "owner": "denful",
+        "repo": "flake-aspects",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -386,6 +401,7 @@
       "inputs": {
         "catppuccin": "catppuccin",
         "fenix": "fenix",
+        "flake-aspects": "flake-aspects",
         "flake-parts": "flake-parts",
         "git-hooks": "git-hooks",
         "home-manager": "home-manager",
