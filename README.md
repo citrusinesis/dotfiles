@@ -166,6 +166,12 @@ The common casks are `helium-browser`, `spotify`, `slack`, `raycast`, `claude`,
 KakaoTalk (`869223134`) and RunCat Neo (`6757801838`) use `masApps`. The `mas`
 formula is common, and mixer also installs `mole`.
 
+Before enabling an optional cask, check it with `brew info --cask <name>`.
+The installed Homebrew may need an explicit `brew update` to understand a newer
+cask definition. During migration, the optional Kitty cask reported an unsupported
+`command_wrapper` method with Homebrew 6.0.10; it remains unselected. This is a
+Homebrew runtime compatibility issue, separate from its Home Manager settings check.
+
 GUI features own both their cask and Home Manager settings. On Darwin, Zed,
 Kitty, and VS Code use `package = null` for settings-only management; on Linux
 they use Nix packages. Kitty and VS Code casks appear only when their features
