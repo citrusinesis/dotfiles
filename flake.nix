@@ -11,7 +11,6 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-aspects.url = "github:denful/flake-aspects";
-    nixos-unified.url = "github:srid/nixos-unified";
 
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
@@ -67,12 +66,6 @@
         "x86_64-linux"
       ];
 
-      _module.args.root = ./.;
-
-      imports =
-        let
-          flakeModules = ./modules/flake;
-        in
-        map (name: flakeModules + "/${name}") (builtins.attrNames (builtins.readDir flakeModules));
+      imports = [ ./modules ];
     };
 }

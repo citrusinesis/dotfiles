@@ -14,13 +14,6 @@
           printf '%s\n' "$evaluated" > "$out"
         '';
 
-      homeChecks = lib.mapAttrs' (
-        name: configuration:
-        lib.nameValuePair "home-${name}-evaluation" (
-          evaluationCheck "home-${name}-evaluation" configuration.activationPackage.drvPath
-        )
-      ) self.legacyPackages.${system}.homeConfigurations;
-
       darwinChecks = lib.optionalAttrs (system == "aarch64-darwin") (
         lib.mapAttrs' (
           name: configuration:
@@ -40,6 +33,6 @@
       );
     in
     {
-      checks = homeChecks // darwinChecks // nixosChecks;
+      checks = darwinChecks // nixosChecks;
     };
 }
