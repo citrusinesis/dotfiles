@@ -63,6 +63,9 @@ nh darwin build . -H juicer      # Use `nh os build` on NixOS
 nh darwin switch . -H juicer     # Apply after reviewing the changes
 ```
 
+The local package updater only processes packages available on the current
+platform. Run the Apple Container update on aarch64-darwin.
+
 `nh ... switch --update` updates flake inputs before switching, but does not run
 the local package updater, flake checks, or Homebrew updates. There are no legacy
 activation/update wrappers or standalone Home Manager outputs. Home Manager is
@@ -223,6 +226,9 @@ Nix evaluation/builds do not install casks, authenticate the App Store, or test
 GUI launch behavior. These checks therefore belong to the first real activation.
 
 ## Validation
+
+See the [migration validation record](docs/aspect-migration-validation.md) for
+the baseline comparison, platform-specific results, and first-activation limits.
 
 ```bash
 nix flake check --all-systems --no-build
