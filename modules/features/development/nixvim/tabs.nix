@@ -7,25 +7,10 @@
 
       local tabs = DotfilesNixvimTabs
 
-      local function snacks()
-        local snacks_mod = rawget(_G, "Snacks")
-        if snacks_mod then
-          return snacks_mod
-        end
-
-        local ok, module = pcall(require, "snacks")
-        if ok then
-          return module
-        end
-      end
+      local snacks = require("snacks")
 
       function tabs.current_tab_has_explorer()
-        local snacks_mod = snacks()
-        if not snacks_mod or not snacks_mod.picker then
-          return false
-        end
-
-        return #snacks_mod.picker.get({ source = "explorer" }) > 0
+        return #snacks.picker.get({ source = "explorer" }) > 0
       end
 
       function tabs.ensure_explorer()
@@ -35,11 +20,6 @@
 
         vim.schedule(function()
           if not vim.g.dotfiles_snacks_explorer_persistent then
-            return
-          end
-
-          local snacks_mod = snacks()
-          if not snacks_mod or not snacks_mod.picker or not snacks_mod.explorer then
             return
           end
 
@@ -53,7 +33,7 @@
             return
           end
 
-          snacks_mod.explorer()
+          snacks.explorer()
           if vim.api.nvim_win_is_valid(win) then
             pcall(vim.api.nvim_set_current_win, win)
           end
@@ -61,13 +41,8 @@
       end
 
       function tabs.toggle_explorer()
-        local snacks_mod = snacks()
-        if not snacks_mod or not snacks_mod.explorer then
-          return
-        end
-
         vim.g.dotfiles_snacks_explorer_persistent = not tabs.current_tab_has_explorer()
-        snacks_mod.explorer()
+        snacks.explorer()
       end
 
       function tabs.new_tab()
