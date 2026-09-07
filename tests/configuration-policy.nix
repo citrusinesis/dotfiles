@@ -95,7 +95,7 @@ let
         && !(h.dotfiles.home.podman.enable or false)
         && !(builtins.elem "podman" packages);
       "${name}/workstation-selection" = h.programs.zed-editor.enable == isDarwin;
-      "${name}/apple-container" = (h.dotfiles.home.appleContainer.enable or false) == isDarwin;
+      "${name}/apple-container" = (c.services.containerization.enable or false) == isDarwin;
       "${name}/gui-apps-not-installed-by-nix" =
         !lib.any primaryDesktop (h.home.packages ++ c.environment.systemPackages);
       "${name}/gpg-helper" =
@@ -151,12 +151,13 @@ lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
     && !(self ? darwinModules)
     && (self.nixosModules or { }) == { };
   no-home-only =
-    !(self ? homeConfigurations) && !(self.legacyPackages.${system} ? homeConfigurations);
+    !(self ? homeConfigurations) && !((self.legacyPackages.${system} or { }) ? homeConfigurations);
   no-activation-wrappers =
     lib.all
       (
         name:
-        !(builtins.hasAttr name self.packages.${system}) && !(builtins.hasAttr name self.apps.${system})
+        !(builtins.hasAttr name self.packages.${system})
+        && !(builtins.hasAttr name (self.apps.${system} or { }))
       )
       [
         "activate"
@@ -164,5 +165,5 @@ lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
         "default"
       ];
   pinned-nh = self.packages.${system} ? nh;
-  local-updater = self.apps.${system} ? update-pinned-packages;
+  no-local-updater = !((self.apps.${system} or { }) ? update-pinned-packages);
 } (builtins.attrNames configurations)

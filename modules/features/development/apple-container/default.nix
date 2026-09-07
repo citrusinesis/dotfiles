@@ -1,5 +1,5 @@
 {
   dotfiles.aspects.features.provides.apple-container = {
-    homeManager = ./home.nix;
+    darwin = ./darwin.nix;
   };
 }

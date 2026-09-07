@@ -247,6 +247,26 @@
         "type": "github"
       }
     },
+    "nix-apple-container": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788351720,
+        "narHash": "sha256-Kanh2iYY69TJNu7IWyioaUHqEZdVnWiCTxwmJ5qFcoU=",
+        "owner": "halfwhey",
+        "repo": "nix-apple-container",
+        "rev": "b7ecb6880de985c6fee25ca0088f50ae901f49ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "halfwhey",
+        "repo": "nix-apple-container",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -392,6 +412,7 @@
         "git-hooks": "git-hooks",
         "home-manager": "home-manager",
         "llm-agents": "llm-agents",
+        "nix-apple-container": "nix-apple-container",
         "nix-darwin": "nix-darwin",
         "nix-index-database": "nix-index-database",
         "nix-vscode-extensions": "nix-vscode-extensions",
