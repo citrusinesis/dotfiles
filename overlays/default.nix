@@ -5,13 +5,6 @@ final: prev:
 // (inputs.llm-agents.overlays.shared-nixpkgs final prev)
 // (inputs.nixvim.overlays.default final prev)
 // {
-  # Compatibility for inputs that still access the deprecated platform aliases.
-  # The pinned nixvim input still uses these aliases.
-  stdenv = prev.stdenv // {
-    isDarwin = prev.stdenv.hostPlatform.isDarwin;
-    isLinux = prev.stdenv.hostPlatform.isLinux;
-  };
-
   dotfilesPackages = {
     apple-container = final.callPackage ../packages/apple-container/package.nix {
       inherit (prev) container;
