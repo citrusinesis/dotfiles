@@ -1,5 +1,8 @@
 # Aspect migration validation
 
+The later [User / Host / Account migration](account-migration-validation.md)
+extends this structure with standalone Home outputs and records its own baseline.
+
 Validation dates: 2026-09-05–06. Implementation branch: `aspect`.
 Baseline: clean `main` at `84a954f`. Configuration code: `202578a`;
 subsequent changes are documentation only.
@@ -124,3 +127,48 @@ Its Home Manager settings-only evaluation passed independently.
 Cask installation, GUI launch, the native GPG prompt, CLI paths after activation,
 and removal of the old Home Manager application link remain first-activation
 checks, documented in the [README](../README.md#first-application-after-migration).
+
+## Live Darwin application audit — 2026-09-07
+
+The earlier execution limits above describe the initial migration validation.
+After subsequent activation and a reboot, `juicer`'s installed casks matched all
+19 declarations, and `mas list` showed the declared KakaoTalk and RunCat Neo apps.
+The desktop bundles were real applications under `/Applications`. The active
+system and Home Manager application environments contained no desktop bundles,
+and `/Applications/Nix Apps` was empty. A fresh login shell resolved `zed` to
+`/opt/homebrew/bin/zed` and `ghostty` to the Homebrew-installed app executable.
+
+Both Darwin configurations evaluated with Home Manager application linking and
+copying disabled. This verifies `mixer`'s declaration, not its installed state:
+the live SSH check timed out.
+
+An older standalone Home Manager profile from August 3 remained at
+`~/.local/state/nix/profiles/home-manager`, referencing a different generation
+from the active integrated Home Manager GC root. It retained six former Nix
+desktop apps: Element, Ghostty, MonitorControl, Obsidian, WinBox, and Zed. These
+were retained store dependencies, not the active desktop application installation.
+The audit did not remove that profile.
+
+The user's `nh clean all` failed while deleting a separate obsolete WinBox 4.3
+store path. Its bundle had no immutable flags or ACL. macOS logs at 02:38:19 KST
+explicitly reported `kTCCServiceSystemPolicyAppBundles denied by TCC for nix`,
+identifying App Management permission as the deletion blocker. The failed path
+was already absent from the store database but remained on disk; a read-only
+`nix-store --gc --print-dead` scan still included it. No store permission or
+extended-attribute workaround was applied during diagnosis.
+
+The user approved a temporary App Management grant for the daemon's real `nix`
+binary. System Settings authenticated the change but disabled the Open button
+for that standalone executable, so the addition was cancelled. The permission
+list remained unchanged, with only Ghostty and Zed enabled. Computer Use then
+refused access to Ghostty for safety reasons. The user subsequently ran the
+local-store GC from Ghostty and reported success: 53,351 store paths deleted and
+282,270.63 MiB freed (approximately 275.65 GiB). Follow-up checks confirmed that
+the failing WinBox store directory was gone, the Homebrew WinBox bundle remained,
+and the Nix daemon still responded.
+
+The installed automatic GC job is scheduled for Sunday at 03:15 and invokes
+`nix-collect-garbage --delete-older-than 14d`. Its post-reboot launchd state showed
+zero runs, which describes only the current job lifetime, not historical GC
+success. Its plist has no dedicated standard-output or standard-error log paths.
+The old standalone Home Manager profile remained a GC root after cleanup.
