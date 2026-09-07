@@ -1,7 +1,10 @@
 { cfg, lib }:
 
 let
-  runtimeAnchorName = "com.apple/${cfg.anchorName}";
+  anchorName = "com.local.tailscale-only";
+  tailscaleIPv4 = "100.64.0.0/10";
+  tailscaleIPv6 = "fd7a:115c:a1e0::/48";
+  runtimeAnchorName = "com.apple/${anchorName}";
 
   passRules = lib.concatStringsSep "\n" (
     lib.optional cfg."screen-sharing".enable ''
@@ -16,8 +19,8 @@ let
     ''
     ++ lib.optional cfg.ssh.enable ''
       # SSH.
-      pass in quick on $tailscale_if inet proto tcp from $tailscale_v4 to any port ${toString cfg.ssh.port} keep state
-      pass in quick on $tailscale_if inet6 proto tcp from $tailscale_v6 to any port ${toString cfg.ssh.port} keep state
+      pass in quick on $tailscale_if inet proto tcp from $tailscale_v4 to any port 22 keep state
+      pass in quick on $tailscale_if inet6 proto tcp from $tailscale_v6 to any port 22 keep state
     ''
   );
 
@@ -29,7 +32,7 @@ let
       block drop in quick proto udp from any to any port 5900:5902
     ''
     ++ lib.optional cfg.ssh.enable ''
-      block drop in quick proto tcp from any to any port ${toString cfg.ssh.port}
+      block drop in quick proto tcp from any to any port 22
     ''
   );
 
@@ -45,6 +48,9 @@ let
 in
 {
   inherit
+    anchorName
+    tailscaleIPv4
+    tailscaleIPv6
     applePfConf
     blockRules
     passRules
@@ -53,8 +59,8 @@ in
 
   denyOnlyRules = ''
     tailscale_if = "lo0"
-    tailscale_v4 = "${cfg.tailscaleIPv4}"
-    tailscale_v6 = "${cfg.tailscaleIPv6}"
+    tailscale_v4 = "${tailscaleIPv4}"
+    tailscale_v6 = "${tailscaleIPv6}"
 
     # Safe boot-time default. The launchd job replaces this anchor only after
     # it discovers an interface with a real Tailscale address.
@@ -67,6 +73,6 @@ in
     ${applePfConf}
 
     # Fail closed at boot, before the Tailscale interface is available.
-    load anchor "${runtimeAnchorName}" from "/etc/pf.anchors/${cfg.anchorName}"
+    load anchor "${runtimeAnchorName}" from "/etc/pf.anchors/${anchorName}"
   '';
 }

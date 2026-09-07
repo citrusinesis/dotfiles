@@ -39,8 +39,8 @@ let
   updateArguments = [
     "${updateRules}"
     rules.runtimeAnchorName
-    cfg.tailscaleIPv4
-    cfg.tailscaleIPv6
+    rules.tailscaleIPv4
+    rules.tailscaleIPv6
     "${passRulesFile}"
     "${blockRulesFile}"
     activationLockFile
@@ -56,24 +56,6 @@ let
 in
 {
   options.pf = {
-    anchorName = lib.mkOption {
-      type = lib.types.strMatching "^[A-Za-z0-9_.-]+$";
-      default = "com.local.tailscale-only";
-      description = "PF anchor name used for Tailscale-only access rules.";
-    };
-
-    tailscaleIPv4 = lib.mkOption {
-      type = lib.types.strMatching "^[0-9.]+/[0-9]+$";
-      default = "100.64.0.0/10";
-      description = "Tailscale IPv4 CGNAT range allowed by PF rules.";
-    };
-
-    tailscaleIPv6 = lib.mkOption {
-      type = lib.types.strMatching "^[0-9A-Fa-f:]+/[0-9]+$";
-      default = "fd7a:115c:a1e0::/48";
-      description = "Tailscale IPv6 ULA range allowed by PF rules.";
-    };
-
     screen-sharing = {
       enable = lib.mkEnableOption "restrict Screen Sharing to the Tailscale interface";
 
@@ -84,15 +66,7 @@ in
       };
     };
 
-    ssh = {
-      enable = lib.mkEnableOption "restrict SSH to the Tailscale interface";
-
-      port = lib.mkOption {
-        type = lib.types.port;
-        default = 22;
-        description = "SSH TCP port restricted by the PF rules.";
-      };
-    };
+    ssh.enable = lib.mkEnableOption "restrict SSH to the Tailscale interface";
   };
 
   config = lib.mkMerge [
@@ -105,7 +79,7 @@ in
             ${lib.escapeShellArgs [
               "${prepareState}"
               managedStateFile
-              cfg.anchorName
+              rules.anchorName
             ]}
             ${lib.escapeShellArgs loadBootArguments}
 
@@ -120,7 +94,7 @@ in
             fi
 
             # Remove rules left by versions that used a top-level anchor.
-            /sbin/pfctl -a ${lib.escapeShellArg cfg.anchorName} -F rules
+            /sbin/pfctl -a ${lib.escapeShellArg rules.anchorName} -F rules
           ''
         else
           ''
@@ -130,7 +104,7 @@ in
 
     (lib.mkIf anyRulesEnabled {
       environment.etc."pf.conf".text = rules.pfConf;
-      environment.etc."pf.anchors/${cfg.anchorName}".text = rules.denyOnlyRules;
+      environment.etc."pf.anchors/${rules.anchorName}".text = rules.denyOnlyRules;
       environment.etc."newsyslog.d/pf-tailscale.conf".text = ''
         # logfilename                 owner:group  mode  count  size  when  flags
         /var/log/pf-tailscale.log     root:wheel   640   5      1024  *     NJ
