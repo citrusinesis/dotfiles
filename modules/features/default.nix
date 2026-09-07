@@ -14,6 +14,7 @@
     ./development/apple-container
     ./development/podman
     ./desktop/fonts
+    ./desktop/darwin-preferences
     ./desktop/theme
     ./desktop/applications
     ./desktop/winbox

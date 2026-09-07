@@ -2,9 +2,11 @@
 {
   imports = [
     ((inputs.flake-aspects.lib lib).new-scope "dotfiles")
+    ./inventory.nix
     ./flake
     ./features
-    ./profiles
+    ./users
     ./hosts
+    ./accounts
   ];
 }

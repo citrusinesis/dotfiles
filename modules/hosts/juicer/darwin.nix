@@ -1,9 +1,8 @@
 {
   imports = [
-    ./applications.nix
     ./nix-store.nix
   ];
 
-  networking.hostName = "juicer";
+  time.timeZone = "Asia/Seoul";
 
 }

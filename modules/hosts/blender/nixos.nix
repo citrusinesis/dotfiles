@@ -2,7 +2,6 @@
   config,
   inputs,
   lib,
-  pkgs,
   ...
 }:
 
@@ -14,10 +13,7 @@ in
     inputs.nixos-wsl.nixosModules.default
   ];
 
-  nixpkgs.hostPlatform = "x86_64-linux";
-
-  networking.hostName = "blender";
-  networking.networkmanager.enable = lib.mkForce false;
+  networking.networkmanager.enable = false;
 
   wsl = {
     enable = true;
@@ -51,28 +47,7 @@ in
 
   programs.nix-ld.libraries = config.hardware.graphics.extraPackages;
 
-  powerManagement.enable = lib.mkForce false;
+  powerManagement.enable = false;
   services.timesyncd.enable = lib.mkForce false;
-  users.users.${username} = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"
-      "docker"
-    ];
-    shell = pkgs.zsh;
-  };
-
-  security.sudo.extraRules = [
-    {
-      users = [ username ];
-      commands = [
-        {
-          command = "ALL";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
-
   system.stateVersion = "25.11";
 }

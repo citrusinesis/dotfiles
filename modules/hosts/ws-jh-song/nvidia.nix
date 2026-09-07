@@ -21,7 +21,6 @@ let
 in
 {
   dotfiles.nvidiaLxc = {
-    enable = true;
     driverPackage = hostNvidiaDriver;
   };
 }

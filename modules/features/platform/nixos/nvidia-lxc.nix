@@ -10,8 +10,6 @@ let
 in
 {
   options.dotfiles.nvidiaLxc = {
-    enable = lib.mkEnableOption "NVIDIA devices passed through to an LXC container";
-
     driverPackage = lib.mkOption {
       type = lib.types.package;
       description = ''
@@ -21,7 +19,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     # /dev/nvidia* is owned by the host. Only expose matching user-space
     # libraries; loading a kernel module from the container is neither needed
     # nor possible.
@@ -35,9 +33,5 @@ in
       pkgs.nvtopPackages.nvidia
     ];
 
-    users.users.${config.dotfiles.primaryUser}.extraGroups = [
-      "video"
-      "render"
-    ];
   };
 }

@@ -1,23 +1,11 @@
 {
-  config,
-  inputs,
   lib,
   pkgs,
   ...
 }:
 
-let
-  personal = import (inputs.self + /personal.nix);
-  username = config.dotfiles.primaryUser;
-in
-
 {
-  nixpkgs.hostPlatform = lib.mkDefault "aarch64-darwin";
-
-  system = {
-    primaryUser = username;
-    stateVersion = 5;
-  };
+  system.stateVersion = 5;
 
   # nix-darwin's pinned nixos-render-docs invocation (`manual html --toc-depth`)
   # is incompatible with the version shipped by current nixpkgs, which removed
@@ -33,17 +21,10 @@ in
   # to avoid pulling it in.
   system.tools.darwin-uninstaller.enable = false;
 
-  time.timeZone = personal.timezone;
-
   networking.knownNetworkServices = lib.mkDefault [
     "Wi-Fi"
     "Ethernet"
   ];
-
-  users.users.${username} = {
-    name = username;
-    home = "/Users/${username}";
-  };
 
   environment.systemPackages = with pkgs; [
     coreutils

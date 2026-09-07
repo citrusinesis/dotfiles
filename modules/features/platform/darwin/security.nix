@@ -1,14 +1,7 @@
 { ... }:
 
 {
-  system.defaults = {
-    loginwindow.GuestEnabled = false;
-
-    screensaver = {
-      askForPassword = true;
-      askForPasswordDelay = 0;
-    };
-  };
+  system.defaults.loginwindow.GuestEnabled = false;
 
   security.pam.services.sudo_local.touchIdAuth = true;
 }

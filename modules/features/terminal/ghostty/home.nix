@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  osConfig,
   ...
 }:
 
@@ -10,12 +9,7 @@
   home.packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.ghostty ];
   # The cask installs the app but does not link a `ghostty` executable into bin.
   home.sessionPath = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
-    "${
-      if osConfig.homebrew.caskArgs.appdir == null then
-        "/Applications"
-      else
-        osConfig.homebrew.caskArgs.appdir
-    }/Ghostty.app/Contents/MacOS"
+    "/Applications/Ghostty.app/Contents/MacOS"
   ];
 
   xdg.configFile."ghostty/config" = {

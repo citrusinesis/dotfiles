@@ -5,11 +5,12 @@
     ./base.nix
     ./homebrew.nix
     ./launchd.nix
-    ./defaults.nix
-    ./dock.nix
-    ./finder.nix
-    ./input.nix
     ./pf
     ./security.nix
   ];
+
+  system.keyboard = {
+    remapCapsLockToEscape = false;
+    swapLeftCommandAndLeftAlt = false;
+  };
 }

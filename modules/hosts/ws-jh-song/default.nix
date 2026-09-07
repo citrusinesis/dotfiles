@@ -1,16 +1,19 @@
 { config, ... }:
 let
   features = config.dotfiles.aspects.features.provides;
-  profiles = config.dotfiles.aspects.profiles.provides;
 in
 {
-  dotfiles.aspects.hosts.provides.ws-jh-song = {
-    includes = [
-      features.core
-      features.nixos
-      profiles.developer
-      features.nvidia-lxc
-    ];
-    nixos = ./nixos.nix;
+  dotfiles.inventory.hosts.ws-jh-song = {
+    system = "x86_64-linux";
+    backend = "nixos";
+    primaryAccount = "jh-song@ws-jh-song";
+    aspect = {
+      includes = [
+        features.core
+        features.nixos
+        features.nvidia-lxc
+      ];
+      nixos = ./nixos.nix;
+    };
   };
 }

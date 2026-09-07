@@ -45,29 +45,54 @@
 
       configurations =
         if pkgs.stdenv.hostPlatform.isDarwin then self.darwinConfigurations else self.nixosConfigurations;
-      homeChecks = lib.mapAttrs' (
-        name: configuration:
-        let
-          c = configuration.config;
-          h = c.home-manager.users.${c.dotfiles.primaryUser};
-        in
-        lib.nameValuePair "home-${name}-evaluation" (
-          evaluationCheck "home-${name}-evaluation" h.home.activationPackage.drvPath
+      homeChecks = lib.foldlAttrs (
+        checks: host: configuration:
+        checks
+        // lib.mapAttrs' (
+          user: h:
+          lib.nameValuePair "home-integrated-${user}@${host}-evaluation" (
+            evaluationCheck "home-integrated-${user}@${host}-evaluation" h.home.activationPackage.drvPath
+          )
+        ) (configuration.config.home-manager.users or { })
+      ) { } configurations;
+      standaloneChecks = lib.mapAttrs' (
+        name: h:
+        lib.nameValuePair "home-standalone-${name}-evaluation" (
+          evaluationCheck "home-standalone-${name}-evaluation" h.activationPackage.drvPath
         )
-      ) configurations;
+      ) (lib.filterAttrs (_: h: h.pkgs.stdenv.hostPlatform.system == system) self.homeConfigurations);
+
+      accounts = import ../../tests/account-composition.nix {
+        inherit
+          inputs
+          lib
+          system
+          features
+          ;
+      };
 
       optionalEditors = import ../../tests/optional-editors.nix { inherit features lib self; };
-      applicationEnvironments = lib.concatMap (c: [
-        c.config.system.build.applications
-        c.config.home-manager.users.${c.config.system.primaryUser}.home.path
-      ]) (builtins.attrValues self.darwinConfigurations);
+      applicationEnvironments =
+        lib.concatMap (
+          c:
+          [ c.config.system.build.applications ]
+          ++ map (h: h.home.path) (builtins.attrValues (c.config.home-manager.users or { }))
+        ) (builtins.attrValues self.darwinConfigurations)
+        ++ map (h: h.config.home.path) (
+          builtins.attrValues (
+            lib.filterAttrs (_: h: h.pkgs.stdenv.hostPlatform.isDarwin) self.homeConfigurations
+          )
+        );
     in
     {
       checks =
         darwinChecks
         // nixosChecks
         // homeChecks
+        // standaloneChecks
+        // lib.mapAttrs (name: drv: evaluationCheck name drv) accounts.evaluations
         // {
+          account-composition = verify "account-composition" accounts.checks;
           aspect-resolution = verify "aspect-resolution" (
             import ../../tests/aspect-resolution.nix { inherit inputs lib; }
           );
@@ -76,6 +101,11 @@
           );
         }
         // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+          key-remapping-migration = import ../../tests/key-remapping-migration.nix {
+            inherit pkgs lib;
+            script =
+              self.homeConfigurations."citrus@juicer".config.home.activation.migrateLegacyKeyRemapping.data;
+          };
           optional-editors-policy = verify "optional-editors-policy" optionalEditors.checks;
           optional-editors-evaluation = evaluationCheck "optional-editors-evaluation" optionalEditors.activation;
           darwin-gui-ownership = pkgs.runCommand "darwin-gui-ownership" { } ''

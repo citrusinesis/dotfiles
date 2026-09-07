@@ -7,55 +7,29 @@ let
   isDarwin = system == "aarch64-darwin";
   configurations = if isDarwin then self.darwinConfigurations else self.nixosConfigurations;
   sort = lib.sort builtins.lessThan;
-  commonCasks = [
-    "helium-browser"
-    "spotify"
-    "slack"
-    "raycast"
-    "claude"
-    "chatgpt"
-    "linear"
-    "tailscale-app"
-    "logi-options+"
-    "element"
-    "ghostty"
-    "monitorcontrol"
-    "obsidian"
-    "zed"
-    "winbox"
-  ];
-  extraCasks = {
-    juicer = [
-      "notion"
-      "cloudflare-warp"
-      "lm-studio"
-      "utm"
-    ];
-    mixer = [ "mongodb-compass" ];
-  };
-  desktopPackages = [
-    "element-desktop"
-    "ghostty-bin"
-    "ghostty"
-    "monitorcontrol"
-    "obsidian"
-    "zed-editor"
-    "winbox"
-    "lmstudio"
-    "utm"
-    "mongodb-compass"
-    "kitty"
-    "vscode"
-  ];
+  # HM supplies its standalone CLI, profile-specific session variables, and
+  # NixOS font-cache placeholders through its integration adapters.
+  applicationPackages =
+    packages:
+    sort (
+      map toString (
+        lib.filter (
+          p:
+          !(builtins.elem (lib.getName p) [
+            "home-manager"
+            "hm-session-vars.sh"
+            "dummy-fc-dir1"
+            "dummy-fc-dir2"
+          ])
+        ) packages
+      )
+    );
   hostChecks =
     name: configuration:
     let
       c = configuration.config;
       username = if name == "ws-jh-song" then "jh-song" else "citrus";
       h = c.home-manager.users.${username};
-      packages = map lib.getName h.home.packages;
-      primaryDesktop =
-        p: builtins.elem (lib.getName p) desktopPackages && (p.outputName or "out") == "out";
     in
     {
       "${name}/identity" =
@@ -64,66 +38,64 @@ let
         && c.nixpkgs.hostPlatform.system == system
         && h.home.username == username
         && h.home.homeDirectory == (if isDarwin then "/Users/${username}" else "/home/${username}");
-      "${name}/state-versions" =
-        c.system.stateVersion == (if isDarwin then 5 else "25.11") && h.home.stateVersion == "25.11";
       "${name}/embedded-home" =
         c.home-manager.useGlobalPkgs
         && c.home-manager.useUserPackages
         && c.home-manager.backupCommand != null;
-      "${name}/developer-profile" =
-        h.programs.nixvim.enable
-        && h.programs.zsh.enable
-        && h.programs.git.enable
-        && h.programs.direnv.enable
-        && h.programs.gpg.enable;
       "${name}/nh" =
         h.programs.nh.enable
         && !h.programs.nh.clean.enable
         && h.programs.nh.flake == "${h.xdg.configHome}/dotfiles"
         && h.home.sessionVariables.NH_FLAKE == h.programs.nh.flake;
-      "${name}/no-legacy-aliases" =
-        lib.all (alias: !(builtins.hasAttr alias h.programs.zsh.shellAliases)) [
-          "sw"
-          "up"
-          "bump"
-          "gc"
-        ]
-        && !(h.programs.zsh.siteFunctions ? __nix_run_with_nom);
-      "${name}/optional-features-off" =
-        !h.programs.kitty.enable
-        && !h.programs.vscode.enable
-        && !(h.dotfiles.home.podman.enable or false)
-        && !(builtins.elem "podman" packages);
-      "${name}/workstation-selection" = h.programs.zed-editor.enable == isDarwin;
-      "${name}/apple-container" = (c.services.containerization.enable or false) == isDarwin;
-      "${name}/gui-apps-not-installed-by-nix" =
-        !lib.any primaryDesktop (h.home.packages ++ c.environment.systemPackages);
-      "${name}/gpg-helper" =
-        lib.getName h.services.gpg-agent.pinentry.package
-        == (if isDarwin then "pinentry-mac" else "pinentry-curses");
-      "${name}/nix-policy" =
-        lib.getName c.nix.package == "lix"
-        && c.nix.gc.automatic
-        && c.nix.gc.options == "--delete-older-than 14d"
-        &&
-          c.nix.settings.trusted-users == [
-            "root"
-            username
-          ];
     }
     // lib.optionalAttrs isDarwin {
-      "${name}/casks" =
-        sort (map (x: x.name) c.homebrew.casks) == sort (commonCasks ++ extraCasks.${name});
-      "${name}/mas" =
-        c.homebrew.masApps == {
-          KakaoTalk = 869223134;
-          "RunCat Neo" = 6757801838;
-        };
-      "${name}/brew-policy" =
-        c.homebrew.enable
-        && !c.homebrew.onActivation.autoUpdate
-        && !c.homebrew.onActivation.upgrade
-        && c.homebrew.onActivation.cleanup == "zap";
+      "${name}/nh-hostname" = c.networking.localHostName == name;
+      "${name}/key-remapping-migration-order" =
+        builtins.elem "writeBoundary" h.home.activation.migrateLegacyKeyRemapping.after
+        && builtins.elem "setupLaunchAgents" h.home.activation.migrateLegacyKeyRemapping.before
+        &&
+          h.home.activation.migrateLegacyKeyRemapping
+          == self.homeConfigurations."${username}@${name}".config.home.activation.migrateLegacyKeyRemapping;
+      "${name}/user-defaults-ownership" =
+        lib.all (value: value == null) (
+          builtins.attrValues (builtins.removeAttrs c.system.defaults.dock [ "expose-group-by-app" ])
+        )
+        && !(c.launchd.agents ? key-remapping)
+        && h.targets.darwin.defaults."com.apple.dock".tilesize == 50
+        && h.targets.darwin.defaults.".GlobalPreferences".AppleMetricUnits == 1
+        &&
+          h.targets.darwin.defaults."com.apple.AppleMultitouchTrackpad"
+          == h.targets.darwin.defaults."com.apple.driver.AppleBluetoothMultitouch.trackpad"
+        && h.launchd.agents.key-remapping.config.Label == "com.local.KeyRemapping"
+        && builtins.elem "setDarwinDefaults" h.home.activation.restartDock.after;
+      "${name}/gpg-on-demand" = h.services.gpg-agent.enable && !h.launchd.agents.gpg-agent.enable;
+      "${name}/boot-safe-launchers" =
+        lib.all
+          (
+            service:
+            let
+              daemon = c.launchd.daemons.${service};
+              args = daemon.serviceConfig.ProgramArguments;
+            in
+            lib.hasPrefix "/Library/Scripts/nix-darwin/nix-" (builtins.head args)
+            && builtins.elemAt args 1 == "-c"
+            && builtins.elemAt args 2 == "/bin/wait4path /nix/store && exec ${daemon.command}"
+          )
+          [
+            "activate-system"
+            "nix-daemon"
+            "nix-gc"
+            "nix-optimise"
+          ];
+      "${name}/nix-store-mount" =
+        if name == "juicer" then
+          c.launchd.daemons.darwin-store.serviceConfig.ProgramArguments == [
+            "/Library/Scripts/nix-darwin/nix-store-mount"
+          ]
+          && c.launchd.daemons.darwin-store.serviceConfig.RunAtLoad
+          && c.launchd.daemons.darwin-store.serviceConfig.KeepAlive.SuccessfulExit == false
+        else
+          !(c.launchd.daemons ? darwin-store);
       "${name}/settings-only" =
         h.programs.zed-editor.package == null
         && !h.targets.darwin.linkApps.enable
@@ -150,8 +122,33 @@ lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
     && !(self ? homeModules)
     && !(self ? darwinModules)
     && (self.nixosModules or { }) == { };
-  no-home-only =
-    !(self ? homeConfigurations) && !((self.legacyPackages.${system} or { }) ? homeConfigurations);
+  canonical-home-outputs =
+    builtins.attrNames self.homeConfigurations == [
+      "citrus@blender"
+      "citrus@juicer"
+      "citrus@mixer"
+      "jh-song@ws-jh-song"
+    ];
+  standalone-account-parity = lib.all (
+    name:
+    let
+      c = configurations.${name}.config;
+      user = c.dotfiles.primaryUser;
+      integrated = c.home-manager.users.${user};
+      standalone = self.homeConfigurations."${user}@${name}".config;
+    in
+    integrated.home.username == standalone.home.username
+    && integrated.home.homeDirectory == standalone.home.homeDirectory
+    && integrated.home.stateVersion == standalone.home.stateVersion
+    && integrated.programs.git.settings.user == standalone.programs.git.settings.user
+    && applicationPackages integrated.home.packages == applicationPackages standalone.home.packages
+    && builtins.head integrated.home.sessionPath == "${integrated.home.profileDirectory}/bin"
+    && builtins.head standalone.home.sessionPath == "${standalone.home.profileDirectory}/bin"
+    && builtins.tail integrated.home.sessionPath == builtins.tail standalone.home.sessionPath
+    && standalone.home.sessionVariables.NH_FLAKE == "${standalone.xdg.configHome}/dotfiles"
+    && integrated.home.activation.configureBackup == standalone.home.activation.configureBackup
+    && lib.hasInfix (builtins.unsafeDiscardStringContext c.home-manager.backupCommand) standalone.home.activation.configureBackup.data
+  ) (builtins.attrNames configurations);
   no-activation-wrappers =
     lib.all
       (
@@ -165,5 +162,6 @@ lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
         "default"
       ];
   pinned-nh = self.packages.${system} ? nh;
+  no-local-container-pin = !((self.legacyPackages.${system} or { }) ? apple-container);
   no-local-updater = !((self.apps.${system} or { }) ? update-pinned-packages);
 } (builtins.attrNames configurations)

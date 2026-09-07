@@ -1,7 +1,5 @@
 {
-  imports = [ ./applications.nix ];
-
-  networking.hostName = "mixer";
+  time.timeZone = "Asia/Seoul";
 
   pf = {
     screen-sharing = {

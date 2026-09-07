@@ -1,24 +1,8 @@
-{ inputs, ... }:
-
-let
-  personal = import (inputs.self + /personal.nix);
-in
 {
   programs.git = {
     enable = true;
 
-    signing = {
-      format = "openpgp";
-      key = personal.git.signingKey;
-      signByDefault = true;
-    };
-
     settings = {
-      user = {
-        email = personal.git.userEmail;
-        name = personal.git.userName;
-      };
-
       alias = {
         a = "add";
         co = "checkout";
