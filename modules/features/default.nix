@@ -18,6 +18,7 @@
     ./desktop/theme
     ./desktop/applications
     ./desktop/winbox
+    ./desktop/paneru
     ./platform/nixos
   ];
 }

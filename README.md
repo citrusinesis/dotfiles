@@ -131,6 +131,8 @@ Homebrew to PATH, and expects GUI apps to be installed separately.
 
 ## Applications and services
 
+Paneru scrolling is configured only for juicer (single-display MacBook); see [setup and shortcuts](docs/paneru.md).
+
 Darwin GUI applications come from Homebrew casks and `masApps`; Nix manages CLI
 tools, fonts and editor settings. Native `pinentry-mac` is the authentication-helper
 exception. Home Manager app linking/copying is disabled. Kitty, VS Code and Podman

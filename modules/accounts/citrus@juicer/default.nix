@@ -14,6 +14,7 @@ in
         features.ghostty
         features.zed
         features.winbox
+        features.paneru
       ];
       darwin = ./darwin.nix;
     };
