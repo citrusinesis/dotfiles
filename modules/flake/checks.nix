@@ -97,10 +97,16 @@
             import ../../tests/aspect-resolution.nix { inherit inputs lib; }
           );
           configuration-policy = verify "configuration-policy" (
-            import ../../tests/configuration-policy.nix { inherit lib self system; }
+            import ../../tests/configuration-policy.nix {
+              inherit lib self system;
+              inventory = import ../../lib/resolve-inventory.nix { inherit lib; } config.dotfiles.inventory;
+            }
           );
         }
         // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+          darwin-preferences-policy = verify "darwin-preferences-policy" (
+            import ../../tests/darwin-preferences.nix { inherit lib self; }
+          );
           key-remapping-migration = import ../../tests/key-remapping-migration.nix {
             inherit pkgs lib;
             script =

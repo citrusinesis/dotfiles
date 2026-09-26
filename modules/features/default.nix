@@ -1,11 +1,14 @@
 {
   imports = [
     ./core
+
     ./platform/darwin
+
     ./terminal/cli
     ./terminal/shell
     ./terminal/ghostty
     ./terminal/kitty
+
     ./development/languages
     ./development/tools
     ./development/nixvim
@@ -13,12 +16,13 @@
     ./development/vscode
     ./development/apple-container
     ./development/podman
+
     ./desktop/fonts
     ./desktop/darwin-preferences
     ./desktop/theme
     ./desktop/applications
     ./desktop/winbox
-    ./desktop/paneru
+
     ./platform/nixos
   ];
 }

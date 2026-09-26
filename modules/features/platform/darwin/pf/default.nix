@@ -103,7 +103,16 @@ in
     }
 
     (lib.mkIf anyRulesEnabled {
-      environment.etc."pf.conf".text = rules.pfConf;
+      environment.etc."pf.conf" = {
+        text = rules.pfConf;
+        # Allow activation to replace files this module did not link itself:
+        # Apple's stock pf.conf, which macOS updates restore, and the default
+        # file the cleanup path writes when every PF option is disabled.
+        knownSha256Hashes = [
+          "6fb5b260918922ca5ca4dfb296967d8edb9c12f2c043f26b64590758441d682d"
+          (builtins.hashString "sha256" rules.applePfConf)
+        ];
+      };
       environment.etc."pf.anchors/${rules.anchorName}".text = rules.denyOnlyRules;
       environment.etc."newsyslog.d/pf-tailscale.conf".text = ''
         # logfilename                 owner:group  mode  count  size  when  flags

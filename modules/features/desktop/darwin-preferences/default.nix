@@ -1,3 +1,6 @@
 {
-  dotfiles.aspects.features.provides.darwin-preferences.homeManager = ./home.nix;
+  dotfiles.aspects.features.provides.darwin-preferences = {
+    darwin = ./darwin.nix;
+    homeManager = ./home.nix;
+  };
 }

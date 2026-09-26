@@ -2,10 +2,28 @@
   lib,
   self,
   system,
+  inventory,
 }:
 let
   isDarwin = system == "aarch64-darwin";
   configurations = if isDarwin then self.darwinConfigurations else self.nixosConfigurations;
+  hostsFor =
+    backend: builtins.attrNames (lib.filterAttrs (_: h: h.backend == backend) inventory.hosts);
+  ownsNoPreferences =
+    h:
+    lib.all
+      (
+        domains:
+        lib.all (domain: lib.all (value: value == null) (builtins.attrValues domain)) (
+          builtins.attrValues domains
+        )
+      )
+      [
+        h.targets.darwin.defaults
+        h.targets.darwin.currentHostDefaults
+      ]
+    && !(h.home.activation ? setDarwinDefaults)
+    && !(h.home.activation ? restartDock);
   sort = lib.sort builtins.lessThan;
   # HM supplies its standalone CLI, profile-specific session variables, and
   # NixOS font-cache placeholders through its integration adapters.
@@ -28,16 +46,17 @@ let
     name: configuration:
     let
       c = configuration.config;
-      username = if name == "ws-jh-song" then "jh-song" else "citrus";
+      account = inventory.accounts.${inventory.hosts.${name}.primaryAccount};
+      username = account.userName;
       h = c.home-manager.users.${username};
     in
     {
       "${name}/identity" =
         c.dotfiles.primaryUser == username
         && c.networking.hostName == name
-        && c.nixpkgs.hostPlatform.system == system
+        && c.nixpkgs.hostPlatform.system == inventory.hosts.${name}.system
         && h.home.username == username
-        && h.home.homeDirectory == (if isDarwin then "/Users/${username}" else "/home/${username}");
+        && h.home.homeDirectory == account.home.directory;
       "${name}/embedded-home" =
         c.home-manager.useGlobalPkgs
         && c.home-manager.useUserPackages
@@ -56,18 +75,14 @@ let
         &&
           h.home.activation.migrateLegacyKeyRemapping
           == self.homeConfigurations."${username}@${name}".config.home.activation.migrateLegacyKeyRemapping;
-      "${name}/user-defaults-ownership" =
-        lib.all (value: value == null) (
-          builtins.attrValues (builtins.removeAttrs c.system.defaults.dock [ "expose-group-by-app" ])
-        )
-        && !(c.launchd.agents ? key-remapping)
-        && h.targets.darwin.defaults."com.apple.dock".tilesize == 50
-        && h.targets.darwin.defaults.".GlobalPreferences".AppleMetricUnits == 1
-        &&
-          h.targets.darwin.defaults."com.apple.AppleMultitouchTrackpad"
-          == h.targets.darwin.defaults."com.apple.driver.AppleBluetoothMultitouch.trackpad"
-        && h.launchd.agents.key-remapping.config.Label == "com.local.KeyRemapping"
-        && builtins.elem "setDarwinDefaults" h.home.activation.restartDock.after;
+      "${name}/user-defaults-ownership" = lib.all (
+        user:
+        ownsNoPreferences c.home-manager.users.${user}
+        && ownsNoPreferences self.homeConfigurations."${user}@${name}".config
+      ) (builtins.attrNames c.home-manager.users);
+      "${name}/key-remapping-ownership" =
+        !(c.launchd.agents ? key-remapping)
+        && h.launchd.agents.key-remapping.config.Label == "com.local.KeyRemapping";
       "${name}/gpg-on-demand" = h.services.gpg-agent.enable && !h.launchd.agents.gpg-agent.enable;
       "${name}/boot-safe-launchers" =
         lib.all
@@ -106,16 +121,8 @@ let
     };
 in
 lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
-  darwin-host-set =
-    builtins.attrNames self.darwinConfigurations == [
-      "juicer"
-      "mixer"
-    ];
-  nixos-host-set =
-    builtins.attrNames self.nixosConfigurations == [
-      "blender"
-      "ws-jh-song"
-    ];
+  darwin-host-set = builtins.attrNames self.darwinConfigurations == hostsFor "darwin";
+  nixos-host-set = builtins.attrNames self.nixosConfigurations == hostsFor "nixos";
   private-aspects =
     !(self ? aspects)
     && !(self ? modules)
@@ -123,12 +130,7 @@ lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
     && !(self ? darwinModules)
     && (self.nixosModules or { }) == { };
   canonical-home-outputs =
-    builtins.attrNames self.homeConfigurations == [
-      "citrus@blender"
-      "citrus@juicer"
-      "citrus@mixer"
-      "jh-song@ws-jh-song"
-    ];
+    builtins.attrNames self.homeConfigurations == builtins.attrNames inventory.accounts;
   standalone-account-parity = lib.all (
     name:
     let

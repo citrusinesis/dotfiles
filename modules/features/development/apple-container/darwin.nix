@@ -56,7 +56,7 @@ in
   system.activationScripts.preActivation.text = lib.mkIf cfg.enable (
     lib.mkOrder 600 ''
       if container_status=$(/usr/bin/sudo -H -u ${lib.escapeShellArg cfg.user} -- ${lib.getExe cfg.package} system status --format json 2>/dev/null); then
-        container_install_root=$(printf '%s' "$container_status" | ${lib.getExe pkgs.jq} -er '.installRoot')
+        container_install_root=$(printf '%s' "$container_status" | ${lib.getExe pkgs.jq} -r '.paths.installRoot // .installRoot // ""')
         container_kernel=$(/usr/bin/readlink ${lib.escapeShellArg kernelLink} 2>/dev/null || true)
         if [ "''${container_install_root%/}" != ${lib.escapeShellArg (toString cfg.package)} ] || [ "$container_kernel" != ${lib.escapeShellArg (toString cfg.kernel)} ]; then
           echo "Restarting Apple Container for the updated package or kernel..."

@@ -1,40 +1,32 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 {
-  config = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-    targets.darwin.defaults = {
-      "com.apple.finder" = {
-        # Display
-        _FXShowPosixPathInTitle = true;
-        _FXSortFoldersFirst = true;
-        _FXSortFoldersFirstOnDesktop = true;
-        AppleShowAllExtensions = true;
-        AppleShowAllFiles = true;
-        FXPreferredViewStyle = "clmv";
-        ShowPathbar = true;
-        ShowStatusBar = true;
-
-        # Search & warnings
-        FXDefaultSearchScope = "SCcf"; # SCcf=current folder | SCsp=previous scope | SCev=entire Mac
-        FXEnableExtensionChangeWarning = false;
-
-        # Desktop
-        CreateDesktop = true;
-        ShowExternalHardDrivesOnDesktop = true;
-        ShowHardDrivesOnDesktop = false;
-        ShowMountedServersOnDesktop = true;
-        ShowRemovableMediaOnDesktop = true;
-
-        # Behavior
-        FXRemoveOldTrashItems = true;
-        QuitMenuItem = true;
-      };
-
-      # Prevent .DS_Store on network and USB volumes
+  # Shared preferences; account modules may override individual keys.
+  system.defaults = {
+    CustomUserPreferences = {
       "com.apple.desktopservices" = {
-        DSDontWriteNetworkStores = true;
-        DSDontWriteUSBStores = true;
+        DSDontWriteNetworkStores = lib.mkDefault true;
+        DSDontWriteUSBStores = lib.mkDefault true;
       };
+    };
+
+    finder = {
+      AppleShowAllExtensions = lib.mkDefault true;
+      AppleShowAllFiles = lib.mkDefault true;
+      CreateDesktop = lib.mkDefault true;
+      FXDefaultSearchScope = lib.mkDefault "SCcf";
+      FXEnableExtensionChangeWarning = lib.mkDefault false;
+      FXPreferredViewStyle = lib.mkDefault "clmv";
+      FXRemoveOldTrashItems = lib.mkDefault true;
+      ShowExternalHardDrivesOnDesktop = lib.mkDefault true;
+      ShowHardDrivesOnDesktop = lib.mkDefault false;
+      ShowMountedServersOnDesktop = lib.mkDefault true;
+      ShowPathbar = lib.mkDefault true;
+      ShowRemovableMediaOnDesktop = lib.mkDefault true;
+      ShowStatusBar = lib.mkDefault true;
+      _FXShowPosixPathInTitle = lib.mkDefault true;
+      _FXSortFoldersFirst = lib.mkDefault true;
+      _FXSortFoldersFirstOnDesktop = lib.mkDefault true;
     };
   };
 }

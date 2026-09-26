@@ -1,46 +1,80 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 {
-  config = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-    targets.darwin.defaults = {
-      "com.apple.screencapture".type = "png";
-
-      # Use the literal global domain to preserve AppleMetricUnits as an
-      # integer; Home Manager's NSGlobalDomain option only accepts a boolean.
+  # Shared preferences; account modules may override individual keys.
+  system.defaults = {
+    CustomUserPreferences = {
       ".GlobalPreferences" = {
-        WebKitDeveloperExtras = true;
-        # Autocorrect — all off
-        NSAutomaticCapitalizationEnabled = false;
-        NSAutomaticDashSubstitutionEnabled = false;
-        NSAutomaticInlinePredictionEnabled = false;
-        NSAutomaticPeriodSubstitutionEnabled = false;
-        NSAutomaticQuoteSubstitutionEnabled = false;
-        NSAutomaticSpellingCorrectionEnabled = false;
-
-        # Appearance & UI
-        "com.apple.sound.beep.feedback" = 0;
-        _HIHideMenuBar = false;
-        AppleInterfaceStyleSwitchesAutomatically = true;
-        AppleShowScrollBars = "WhenScrolling";
-        AppleWindowTabbingMode = "always";
-        NSWindowShouldDragOnGesture = true;
-
-        # Dialogs
-        NSDocumentSaveNewDocumentsToCloud = false;
-        NSNavPanelExpandedStateForSaveMode = true;
-        NSNavPanelExpandedStateForSaveMode2 = true;
-
-        # Region & units
-        AppleICUForce24HourTime = true;
-        AppleMeasurementUnits = "Centimeters";
-        AppleMetricUnits = 1;
-        AppleTemperatureUnit = "Celsius";
+        AppleLanguages = lib.mkDefault [
+          "en-KR"
+          "ko-KR"
+        ];
+        AppleLocale = lib.mkDefault "en_KR";
+        WebKitDeveloperExtras = lib.mkDefault true;
       };
 
-      # Extras (no native nix-darwin option)
-      "com.apple.AdLib".allowApplePersonalizedAdvertising = false;
-      "com.apple.ImageCapture".disableHotPlug = true;
-      "com.apple.widgets".widgetAppearance = 0;
+      "com.apple.AdLib" = {
+        allowApplePersonalizedAdvertising = lib.mkDefault false;
+      };
+
+      "com.apple.ImageCapture" = {
+        disableHotPlug = lib.mkDefault true;
+      };
+
+      "com.apple.widgets" = {
+        widgetAppearance = lib.mkDefault 0;
+      };
+    };
+
+    NSGlobalDomain = {
+      AppleICUForce24HourTime = lib.mkDefault true;
+      AppleInterfaceStyleSwitchesAutomatically = lib.mkDefault true;
+      AppleKeyboardUIMode = lib.mkDefault 2;
+      AppleMeasurementUnits = lib.mkDefault "Centimeters";
+      AppleMetricUnits = lib.mkDefault 1;
+      ApplePressAndHoldEnabled = lib.mkDefault false;
+      AppleShowScrollBars = lib.mkDefault "WhenScrolling";
+      AppleSpacesSwitchOnActivate = lib.mkDefault true;
+      AppleTemperatureUnit = lib.mkDefault "Celsius";
+      AppleWindowTabbingMode = lib.mkDefault "always";
+      InitialKeyRepeat = lib.mkDefault 15;
+      KeyRepeat = lib.mkDefault 3;
+      NSAutomaticCapitalizationEnabled = lib.mkDefault false;
+      NSAutomaticDashSubstitutionEnabled = lib.mkDefault false;
+      NSAutomaticInlinePredictionEnabled = lib.mkDefault false;
+      NSAutomaticPeriodSubstitutionEnabled = lib.mkDefault false;
+      NSAutomaticQuoteSubstitutionEnabled = lib.mkDefault false;
+      NSAutomaticSpellingCorrectionEnabled = lib.mkDefault false;
+      NSDocumentSaveNewDocumentsToCloud = lib.mkDefault false;
+      NSNavPanelExpandedStateForSaveMode = lib.mkDefault true;
+      NSNavPanelExpandedStateForSaveMode2 = lib.mkDefault true;
+      NSWindowShouldDragOnGesture = lib.mkDefault true;
+      _HIHideMenuBar = lib.mkDefault false;
+      "com.apple.keyboard.fnState" = lib.mkDefault true;
+      "com.apple.sound.beep.feedback" = lib.mkDefault 0;
+      "com.apple.swipescrolldirection" = lib.mkDefault true;
+    };
+
+    SoftwareUpdate = {
+      AutomaticallyInstallMacOSUpdates = lib.mkDefault true;
+    };
+
+    controlcenter = {
+      BatteryShowPercentage = lib.mkDefault true;
+    };
+
+    menuExtraClock = {
+      ShowAMPM = lib.mkDefault false;
+      ShowDate = lib.mkDefault 1;
+    };
+
+    screencapture = {
+      type = lib.mkDefault "png";
+    };
+
+    screensaver = {
+      askForPassword = lib.mkDefault true;
+      askForPasswordDelay = lib.mkDefault 0;
     };
   };
 }

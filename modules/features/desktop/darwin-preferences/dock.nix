@@ -1,31 +1,27 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 {
-  config = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-    targets.darwin.defaults = {
-      "com.apple.dock" = {
-        autohide = false;
-        expose-group-apps = true;
-        launchanim = true;
-        mineffect = "genie";
-        minimize-to-application = true;
-        mru-spaces = false;
-        orientation = "bottom";
-        show-recents = false;
-        showhidden = true;
-        static-only = true;
-        tilesize = 50;
+  # Shared preferences; account modules may override individual keys.
+  system.defaults = {
+    dock = {
+      expose-group-apps = lib.mkDefault true;
+      launchanim = lib.mkDefault true;
+      mineffect = lib.mkDefault "genie";
+      minimize-to-application = lib.mkDefault true;
+      mru-spaces = lib.mkDefault false;
+      orientation = lib.mkDefault "bottom";
+      show-recents = lib.mkDefault false;
+      showhidden = lib.mkDefault true;
+      static-only = lib.mkDefault true;
+      tilesize = lib.mkDefault 50;
+      wvous-bl-corner = lib.mkDefault 1;
+      wvous-br-corner = lib.mkDefault 1;
+      wvous-tl-corner = lib.mkDefault 1;
+      wvous-tr-corner = lib.mkDefault 1;
+    };
 
-        # Hot corners — all disabled (1 = disabled)
-        wvous-tl-corner = 1;
-        wvous-tr-corner = 1;
-        wvous-bl-corner = 1;
-        wvous-br-corner = 1;
-      };
-
-      "com.apple.spaces".spans-displays = false;
-
-      ".GlobalPreferences".AppleSpacesSwitchOnActivate = true;
+    spaces = {
+      spans-displays = lib.mkDefault false;
     };
   };
 }

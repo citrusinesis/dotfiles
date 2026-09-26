@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -6,6 +7,11 @@
 
 {
   system.stateVersion = 5;
+
+  system.defaults.smb = {
+    NetBIOSName = config.networking.hostName;
+    ServerDescription = config.networking.hostName;
+  };
 
   # nix-darwin's pinned nixos-render-docs invocation (`manual html --toc-depth`)
   # is incompatible with the version shipped by current nixpkgs, which removed
