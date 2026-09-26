@@ -2,13 +2,12 @@
   lib,
   self,
   system,
-  inventory,
+  hosts,
 }:
 let
   isDarwin = system == "aarch64-darwin";
   configurations = if isDarwin then self.darwinConfigurations else self.nixosConfigurations;
-  hostsFor =
-    backend: builtins.attrNames (lib.filterAttrs (_: h: h.backend == backend) inventory.hosts);
+  hostsOn = suffix: builtins.attrNames (lib.filterAttrs (_: h: lib.hasSuffix suffix h.system) hosts);
   ownsNoPreferences =
     h:
     lib.all
@@ -46,17 +45,17 @@ let
     name: configuration:
     let
       c = configuration.config;
-      account = inventory.accounts.${inventory.hosts.${name}.primaryAccount};
-      username = account.userName;
+      username = hosts.${name}.user;
       h = c.home-manager.users.${username};
     in
     {
       "${name}/identity" =
         c.dotfiles.primaryUser == username
         && c.networking.hostName == name
-        && c.nixpkgs.hostPlatform.system == inventory.hosts.${name}.system
+        && c.nixpkgs.hostPlatform.system == hosts.${name}.system
         && h.home.username == username
-        && h.home.homeDirectory == account.home.directory;
+        && h.home.homeDirectory == "${if isDarwin then "/Users" else "/home"}/${username}"
+        && h.home.homeDirectory == c.users.users.${username}.home;
       "${name}/embedded-home" =
         c.home-manager.useGlobalPkgs
         && c.home-manager.useUserPackages
@@ -121,17 +120,17 @@ let
     };
 in
 lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
-  darwin-host-set = builtins.attrNames self.darwinConfigurations == hostsFor "darwin";
-  nixos-host-set = builtins.attrNames self.nixosConfigurations == hostsFor "nixos";
-  private-aspects =
-    !(self ? aspects)
-    && !(self ? modules)
+  darwin-host-set = builtins.attrNames self.darwinConfigurations == hostsOn "-darwin";
+  nixos-host-set = builtins.attrNames self.nixosConfigurations == hostsOn "-linux";
+  private-modules =
+    !(self ? modules)
     && !(self ? homeModules)
     && !(self ? darwinModules)
     && (self.nixosModules or { }) == { };
   canonical-home-outputs =
-    builtins.attrNames self.homeConfigurations == builtins.attrNames inventory.accounts;
-  standalone-account-parity = lib.all (
+    builtins.attrNames self.homeConfigurations
+    == lib.sort builtins.lessThan (lib.mapAttrsToList (name: h: "${h.user}@${name}") hosts);
+  standalone-home-parity = lib.all (
     name:
     let
       c = configurations.${name}.config;

@@ -1,3 +1,0 @@
-{
-  home.sessionPath = [ "/shared-feature" ];
-}

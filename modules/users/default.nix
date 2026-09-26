@@ -1,6 +1,0 @@
-{
-  imports = [
-    ./citrus
-    ./jh-song
-  ];
-}

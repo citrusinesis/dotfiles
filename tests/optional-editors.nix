@@ -1,19 +1,14 @@
-{
-  features,
-  lib,
-  self,
-}:
+{ lib, self }:
 let
   username = self.darwinConfigurations.juicer.config.system.primaryUser;
   optional = self.darwinConfigurations.juicer.extendModules {
     modules = [
-      (features.kitty.resolve { class = "darwin"; })
-      (features.vscode.resolve { class = "darwin"; })
       {
         home-manager.users.${username} = {
+          # Their casks must reach nix-darwin through dotfiles.casks.
           imports = [
-            (features.kitty.resolve { class = "homeManager"; })
-            (features.vscode.resolve { class = "homeManager"; })
+            ../modules/home/kitty.nix
+            ../modules/home/vscode.nix
           ];
           xdg.configHome = lib.mkForce "/Users/${username}/xdg-config-test";
         };

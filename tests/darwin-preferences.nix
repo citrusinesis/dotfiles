@@ -43,7 +43,7 @@ let
         && d.ActivityMonitor.OpenMainWindow == null
         && d.dock.persistent-apps == null;
     };
-  rules = import ../modules/features/platform/darwin/pf/rules.nix {
+  rules = import ../modules/darwin/pf/rules.nix {
     inherit lib;
     cfg = mixer.pf;
   };

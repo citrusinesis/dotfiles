@@ -10,7 +10,6 @@
     };
 
     flake-parts.url = "github:hercules-ci/flake-parts";
-    flake-aspects.url = "github:denful/flake-aspects";
 
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
@@ -71,6 +70,6 @@
         "x86_64-linux"
       ];
 
-      imports = [ ./modules ];
+      imports = [ ./flake ];
     };
 }
