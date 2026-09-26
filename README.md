@@ -1,8 +1,7 @@
 # dotfiles
 
-Personal NixOS and macOS configuration using [flake-parts](https://flake.parts/)
-and [flake-aspects](https://github.com/denful/flake-aspects).
-User, Host and Account declarations compose the system and Home Manager outputs.
+Personal NixOS and macOS configuration using [flake-parts](https://flake.parts/),
+ordinary NixOS / nix-darwin / Home Manager modules, and one host table.
 Build and activate them with [nh](https://github.com/nix-community/nh).
 
 ## Setup and daily use
@@ -20,7 +19,7 @@ and installs Homebrew on macOS if necessary. It does not activate configuration.
 On NixOS, replace `darwin` with `os`. Run nh as your normal user; system activation
 obtains privileges when needed. Open a new login shell after the first switch.
 
-| Host | Platform | Primary Account |
+| Host | Platform | Home |
 | --- | --- | --- |
 | `juicer` | aarch64-darwin | `citrus@juicer` |
 | `mixer` | aarch64-darwin | `citrus@mixer` |
@@ -51,7 +50,7 @@ the first switch if the machine has a different name. `nh home` selects
 `homeConfigurations."user@host"`, including `jh-song@ws-jh-song`, without username
 translation. No custom host detection or activation wrapper is involved.
 
-Every managed Account has both a system-integrated Home and a standalone Home.
+Every host's user has both a system-integrated Home and a standalone Home.
 `nh home switch` applies Home settings; `nh darwin switch` / `nh os switch` also
 apply OS users, services and system applications. Both compose the same Home
 modules and use the same Host packages. A fresh login shell prioritizes the
@@ -69,72 +68,56 @@ nix flake check
 nh clean all --keep 5 --keep-since 3d
 ```
 
-## User, Host and Account
+## Layout
 
-- **User**: the login name, development tools and personal preferences shared
-  across machines. `citrus` and `jh-song` are separate Users with shared Git data.
-- **Host**: platform, hardware, networking and services. A managed Host declares
-  a `primaryAccount` for services that need one owner.
-- **Account**: a `user@host` pair, Home state version and directory, desktop
-  feature selection, and native user permissions such as UID/GID, groups and sudo.
+```
+flake/hosts.nix     host table: system, user and Home state version per host
+lib/mk-host.nix     builds hosts/<name> into a system, integrated Home and standalone Home
+hosts/<name>/       default.nix (system) and home.nix (its user's Home)
+modules/system/     shared by nix-darwin and NixOS (core Nix settings, fonts)
+modules/darwin/     every Mac (default.nix) plus optional modules
+modules/nixos/      every NixOS host (default.nix) plus optional modules
+modules/home/       every Home (default.nix) plus optional applications
+```
 
-Each entity is declared once in `dotfiles.inventory`, with its aspect inline.
-Only reusable features are registered in the private
-`dotfiles.aspects.features.provides` collection. There is no profile layer.
+A module is selected by importing it; there are no `enable` switches for
+features. Shared files imported more than once are deduplicated by Nix.
 
 ```nix
-{ config, ... }:
-let
-  features = config.dotfiles.aspects.features.provides;
-in {
-  dotfiles.inventory = {
-    users.alice.aspect.includes = [ features.cli features.shell ];
-    hosts.laptop = {
-      system = "aarch64-darwin";
-      backend = "darwin";
-      primaryAccount = "alice@laptop";
-      aspect = {
-        includes = [ features.core features.darwin ];
-        darwin.system.stateVersion = 5;
-      };
-    };
-    accounts."alice@laptop" = {
-      home.stateVersion = "25.11";
-      aspect.includes = [ features.fonts features.ghostty ];
-    };
-  };
+# hosts/laptop/default.nix
+{
+  imports = [
+    ../../modules/darwin
+    ../../modules/system/fonts
+  ];
+  time.timeZone = "Asia/Seoul";
+}
+
+# hosts/laptop/home.nix
+{
+  imports = [
+    ../../modules/home
+    ../../modules/home/ghostty.nix
+  ];
 }
 ```
 
-Import new entries explicitly from their parent `default.nix`. Account directory
-names match their keys, for example `modules/accounts/citrus@juicer`.
-Account modules are ordinary Nix modules; an account-specific file can name its
-user directly. No context factory or additional module key is needed.
+Register the host in `flake/hosts.nix`. `mk-host.nix` fixes the hostname, the
+user's home directory (`/Users/<user>` or `/home/<user>`), `system.primaryUser`
+on macOS and `dotfiles.primaryUser` for modules that need the owner. Package
+configuration and overlays have one shared import there; `modules/home/activation.nix`
+contains common Home activation policy. System state versions belong in host modules.
 
-Each Home composes **Host Home + User Home + Account Home**. Native systems compose
-Host modules plus all connected User and Account native modules. Shared feature
-files are deduplicated by Nix. Normal option merging applies, with identity derived
-from inventory. Home directories default to `/Users/<user>` or `/home/<user>`;
-set `home.directory` for an existing nonstandard location. `home.stateVersion`
-is required. System state versions belong in Host modules.
-
-`lib/mk-configurations.nix` builds the standard outputs with the official
-constructors; `lib/system-adapter.nix` connects OS users and integrated Home.
-`modules/home.nix` contains common Home activation policy. Package configuration
-and overlays have one shared import; application bundles use `/Applications`.
-
-For an existing unmanaged OS, use `backend = "unmanaged"`, omit `primaryAccount`,
-and register its existing user and hostname. It provides standalone Home only.
-See [examples](examples/unmanaged.nix). Unmanaged Linux enables generic Linux and
-fontconfig support. Unmanaged macOS manages fonts, settings and terminfo, adds
-Homebrew to PATH, and expects GUI apps to be installed separately.
+Home application modules declare their Homebrew casks with `dotfiles.casks`;
+nix-darwin installs the casks of every integrated Home. Casks without Home
+settings (`modules/darwin/applications.nix`, host-specific apps) stay in system modules.
 
 ## Applications and services
 
 Darwin GUI applications come from Homebrew casks and `masApps`; Nix manages CLI
 tools, fonts and editor settings. Native `pinentry-mac` is the authentication-helper
 exception. Home Manager app linking/copying is disabled. Kitty, VS Code and Podman
-remain optional features. Select a feature to enable it; NVIDIA LXC additionally
+remain optional modules. Import a module to enable it; NVIDIA LXC additionally
 requires a user-space driver matching the physical host's kernel driver.
 
 Homebrew activation keeps `autoUpdate = false`, `upgrade = false` and
@@ -144,15 +127,15 @@ by `flake.lock`; updates use `brew update` / `brew upgrade --cask --greedy`.
 App Store installations require an authenticated session; use `mas upgrade` for
 updates and remove formerly declared App Store applications separately.
 
-Apple Container is a Host service owned by the primary Account. The pinned
+Apple Container is a host service owned by the host's user. The pinned
 upstream module manages its signed CLI, kernel and launchd jobs. Defaults are
 8 CPUs, 4 GiB RAM and the `.test` DNS domain. Package/kernel updates restart the
 runtime, and activation refreshes its Background agent without requiring login.
-Declare workloads through `services.containerization.containers` in a Host module.
+Declare workloads through `services.containerization.containers` in a host module.
 Activation prunes stopped containers and removes undeclared workloads.
 
-To remove Apple Container, keep the feature selected and activate
-`services.containerization.enable = false` once before removing the feature.
+To remove Apple Container, keep the module imported and activate
+`services.containerization.enable = false` once before removing the import.
 Set `preserveImagesOnDisable` / `preserveVolumesOnDisable` first if needed.
 See the [service validation record](docs/apple-container-migration-validation.md)
 for legacy cleanup and the pinned upstream's GUI-session autostart limitation.
@@ -170,9 +153,9 @@ rule validation and cleanup when disabled remain active.
 
 ## Validation
 
-Checks cover real native and Home outputs, two-Account isolation, shared-module
-deduplication, integrated/standalone parity, nh naming and XDG paths, unmanaged
-platforms, GUI ownership and the KeyRemapping activation regression.
+Checks cover real native and Home outputs, host identity, integrated/standalone
+parity, Darwin preference isolation, optional editor casks, nh naming and XDG paths,
+GUI ownership and the KeyRemapping activation regression.
 Formatting, Nix linting, shell linting and secret checks remain enabled.
 
 Build Darwin configurations locally with `nh darwin build . -H <host>`; build
@@ -180,5 +163,6 @@ Linux configurations on an x86_64-linux builder with `nh os build . -H <host>`.
 Evaluation/builds do not activate services, install casks or test GUI applications.
 
 Historical records: [Account migration](docs/account-migration-validation.md),
-[aspect migration](docs/aspect-migration-validation.md), and
-[structure simplification](docs/structure-simplification.md).
+[aspect migration](docs/aspect-migration-validation.md),
+[structure simplification](docs/structure-simplification.md) and
+[aspect removal](docs/aspect-removal.md).
