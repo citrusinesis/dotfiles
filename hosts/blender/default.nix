@@ -2,6 +2,7 @@
   config,
   inputs,
   lib,
+  modules,
   ...
 }:
 
@@ -11,7 +12,7 @@ in
 {
   imports = [
     inputs.nixos-wsl.nixosModules.default
-    ../../modules/nixos
+    modules.nixos.default
     ./users.nix
   ];
 

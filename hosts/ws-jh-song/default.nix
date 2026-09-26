@@ -1,5 +1,6 @@
 {
   lib,
+  modules,
   modulesPath,
   ...
 }:
@@ -7,8 +8,8 @@
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
-    ../../modules/nixos
-    ../../modules/nixos/nvidia-lxc.nix
+    modules.nixos.default
+    modules.nixos.nvidia-lxc
     ./users.nix
     ./capitol-workspace.nix
     ./nvidia.nix

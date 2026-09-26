@@ -72,6 +72,7 @@ nh clean all --keep 5 --keep-since 3d
 
 ```
 flake/hosts.nix     host table: system, user and Home state version per host
+lib/modules.nix     exposes modules/ as `modules.<class>.<name>`
 lib/mk-host.nix     builds hosts/<name> into a system, integrated Home and standalone Home
 hosts/<name>/       default.nix (system) and home.nix (its user's Home)
 modules/system/     shared by nix-darwin and NixOS (core Nix settings, fonts)
@@ -83,21 +84,27 @@ modules/home/       every Home (default.nix) plus optional applications
 A module is selected by importing it; there are no `enable` switches for
 features. Shared files imported more than once are deduplicated by Nix.
 
+Hosts refer to modules as `modules.<class>.<name>`, generated from the
+directory tree by `lib/modules.nix`; `modules.<class>.default` is the class's
+common module. New files appear there without registration.
+
 ```nix
 # hosts/laptop/default.nix
+{ modules, ... }:
 {
   imports = [
-    ../../modules/darwin
-    ../../modules/system/fonts
+    modules.darwin.default
+    modules.system.fonts
   ];
   time.timeZone = "Asia/Seoul";
 }
 
 # hosts/laptop/home.nix
+{ modules, ... }:
 {
   imports = [
-    ../../modules/home
-    ../../modules/home/ghostty.nix
+    modules.home.default
+    modules.home.ghostty
   ];
 }
 ```

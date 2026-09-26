@@ -14,7 +14,10 @@ let
     config.allowUnfree = true;
     overlays = [ inputs.self.overlays.default ];
   };
-  specialArgs = { inherit inputs; };
+  specialArgs = {
+    inherit inputs;
+    modules = import ./modules.nix { inherit lib; };
+  };
   homeDirectory = "${if darwin then "/Users" else "/home"}/${user}";
   homeModules = [
     ../hosts/${name}/home.nix
