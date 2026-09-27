@@ -37,10 +37,12 @@ Snapshots from before and after the change were compared per host:
 - Homebrew casks, brews and App Store apps: identical sets on both Macs.
 - Darwin system defaults, fonts, launchd daemons/agents and system packages: equal.
 - Darwin Homes: only the PATH position of `/Applications/Ghostty.app/Contents/MacOS`
-  changed (now before the system profile and `/usr/local/bin`). It contains only
-  the `ghostty` executable.
-- NixOS system packages: identical sets; host-specific packages now precede the
-  shared ones because host definitions come before their imports.
+  changed (now after the system profile and `/usr/local/bin`, previously before).
+  It contains only the `ghostty` executable.
+- NixOS `system-path`: the same 330 (blender) / 334 (ws-jh-song) package paths and
+  otherwise identical attributes; only their order changed, with host-specific
+  packages now preceding the shared ones. Order decides which package wins a file
+  collision in `buildEnv`, so compare built `system-path` trees on a Linux builder.
 
 ## Validation
 
