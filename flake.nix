@@ -10,7 +10,6 @@
     };
 
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixos-unified.url = "github:srid/nixos-unified";
 
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL/main";
@@ -19,6 +18,11 @@
 
     nix-darwin = {
       url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-apple-container = {
+      url = "github:halfwhey/nix-apple-container";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -66,12 +70,6 @@
         "x86_64-linux"
       ];
 
-      _module.args.root = ./.;
-
-      imports =
-        let
-          flakeModules = ./modules/flake;
-        in
-        map (name: flakeModules + "/${name}") (builtins.attrNames (builtins.readDir flakeModules));
+      imports = [ ./flake ];
     };
 }

@@ -1,0 +1,18 @@
+{ pkgs, lib }:
+with pkgs;
+[
+  nerd-fonts.hack
+  nerd-fonts.geist-mono
+  nerd-fonts.d2coding
+  nerd-fonts.jetbrains-mono
+  nerd-fonts.fira-code
+
+  noto-fonts-cjk-sans
+  pretendard
+]
+++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+  noto-fonts
+  noto-fonts-cjk-sans
+  noto-fonts-color-emoji
+  liberation_ttf
+]

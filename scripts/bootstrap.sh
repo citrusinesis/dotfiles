@@ -112,4 +112,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
   fi
 fi
 
-info "Ready — run 'nix run .#activate' to apply configuration (afterwards use 'sw' or update-and-switch with 'up')"
+if [[ "$(uname)" == "Darwin" ]]; then
+  info "Ready — run 'nix run .#nh -- darwin switch . -H <host>' (juicer or mixer)"
+else
+  info "Ready — run 'nix run .#nh -- os switch . -H <host>' (blender or ws-jh-song)"
+fi

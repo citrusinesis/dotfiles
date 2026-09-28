@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -9,11 +9,11 @@
     nix-diff
     statix
     deadnix
-    nh
     nvd
   ];
 
-  home.sessionVariables = {
-    NH_FLAKE = "$HOME/.config/dotfiles";
+  programs.nh = {
+    enable = true;
+    flake = "${config.xdg.configHome}/dotfiles";
   };
 }

@@ -2,12 +2,9 @@
 
 {
   imports = [
-    ./minimal.nix
-    ../shared/fonts.nix
-
-    ./system/desktop.nix
-    ./system/audio.nix
-    ./system/networking.nix
-    ./system/i18n.nix
+    ./desktop.nix
+    ./audio.nix
+    ./networking.nix
+    ./i18n.nix
   ];
 }
