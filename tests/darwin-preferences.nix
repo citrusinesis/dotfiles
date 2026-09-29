@@ -55,9 +55,9 @@ lib.foldlAttrs
   )
   {
     desktop-isolation =
-      juicer.system.defaults.dock.autohide
+      !juicer.system.defaults.dock.autohide
       && !mixer.system.defaults.dock.autohide
-      && !juicer.system.defaults.WindowManager.GloballyEnabled
+      && juicer.system.defaults.WindowManager.GloballyEnabled
       && mixer.system.defaults.WindowManager.GloballyEnabled
       && juicer.system.defaults.NSGlobalDomain."com.apple.trackpad.scaling" == 0.875
       && mixer.system.defaults.NSGlobalDomain."com.apple.trackpad.scaling" == 1.0

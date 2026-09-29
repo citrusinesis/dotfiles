@@ -13,11 +13,11 @@
     };
 
     WindowManager = {
-      GloballyEnabled = false;
+      GloballyEnabled = true;
     };
 
     dock = {
-      autohide = true;
+      autohide = false;
     };
 
     trackpad = {
