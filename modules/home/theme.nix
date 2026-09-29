@@ -11,6 +11,8 @@
 
     starship.enable = false;
     zed.enable = false;
+    vscode.profiles.default.enable = false;
+    vscode.profiles.default.icons.enable = false;
 
     tmux = {
       enable = true;

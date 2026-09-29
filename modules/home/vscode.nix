@@ -34,13 +34,13 @@ in
     enable = true;
     package = if pkgs.stdenv.hostPlatform.isDarwin then null else pkgs.vscode;
 
-    mutableExtensionsDir = false;
+    mutableExtensionsDir = true;
 
     profiles.default.userSettings = {
       "update.mode" = "none";
       "update.showReleaseNotes" = false;
-      "extensions.autoCheckUpdates" = false;
-      "extensions.autoUpdate" = false;
+      "extensions.autoCheckUpdates" = true;
+      "extensions.autoUpdate" = true;
 
       "editor.formatOnSaveMode" = "modificationsIfAvailable";
       "editor.formatOnType" = true;
@@ -69,6 +69,7 @@ in
 
       "workbench.iconTheme" = "catppuccin-mocha";
       "workbench.colorTheme" = "Catppuccin Mocha";
+      "catppuccin.accentColor" = config.catppuccin.accent;
 
       "workbench.sideBar.location" = "right";
       "workbench.activityBar.location" = "top";
@@ -149,58 +150,6 @@ in
         };
       };
 
-      # Typescript
-      "[javascript]" = {
-        "editor.defaultFormatter" = "biomejs.biome";
-        "editor.formatOnSave" = true;
-        "editor.codeActionsOnSave" = {
-          "quickfix.biome" = "explicit";
-          "source.organizeImports.biome" = "explicit";
-        };
-      };
-
-      "[typescript]" = {
-        "editor.defaultFormatter" = "biomejs.biome";
-        "editor.formatOnSave" = true;
-        "editor.codeActionsOnSave" = {
-          "quickfix.biome" = "explicit";
-          "source.organizeImports.biome" = "explicit";
-        };
-      };
-
-      "[javascriptreact]" = {
-        "editor.defaultFormatter" = "biomejs.biome";
-        "editor.formatOnSave" = true;
-        "editor.codeActionsOnSave" = {
-          "quickfix.biome" = "explicit";
-          "source.organizeImports.biome" = "explicit";
-        };
-      };
-
-      "[typescriptreact]" = {
-        "editor.defaultFormatter" = "biomejs.biome";
-        "editor.formatOnSave" = true;
-        "editor.codeActionsOnSave" = {
-          "quickfix.biome" = "explicit";
-          "source.organizeImports.biome" = "explicit";
-        };
-      };
-
-      "[json]" = {
-        "editor.defaultFormatter" = "biomejs.biome";
-        "editor.formatOnSave" = true;
-      };
-
-      "[jsonc]" = {
-        "editor.defaultFormatter" = "biomejs.biome";
-        "editor.formatOnSave" = true;
-      };
-
-      "[css]" = {
-        "editor.defaultFormatter" = "biomejs.biome";
-        "editor.formatOnSave" = true;
-      };
-
       # Python
       "python.languageServer" = "None";
       "python.defaultInterpreterPath" = ".venv/bin/python";
@@ -229,70 +178,5 @@ in
       "ruff.importStrategy" = "fromEnvironment";
     };
 
-    profiles.default.extensions = [
-      pkgs.vscode-extensions.mkhl.direnv
-
-      (pkgs.vscode-utils.buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "biome";
-          publisher = "biomejs";
-          version = "2026.3.311859";
-          hash = "sha256-HH+KJYY4J6nuHwQ/+DhEFsJ7P5S97UsNuoc+y7GnE00=";
-        };
-      })
-    ]
-    ++ (with pkgs.vscode-marketplace-release; [
-      catppuccin.catppuccin-vsc-icons
-      catppuccin.catppuccin-vsc
-
-      github.copilot-chat
-
-      opentofu.vscode-opentofu
-      oven.bun-vscode
-      myriad-dreamin.tinymist
-      skellock.just
-    ])
-    ++ (with pkgs.vscode-marketplace; [
-      jnoortheen.nix-ide
-      arrterian.nix-env-selector
-
-      github.vscode-pull-request-github
-      github.vscode-github-actions
-      anthropic.claude-code
-      openai.chatgpt
-
-      usernamehw.errorlens
-      gruntfuggly.todo-tree
-      donjayamanne.githistory
-
-      rust-lang.rust-analyzer
-      dustypomerleau.rust-syntax
-      fill-labs.dependi
-      tamasfe.even-better-toml
-
-      golang.go
-
-      hashicorp.hcl
-      redhat.vscode-yaml
-      mineiros.terramate
-
-      # ms-azuretools.vscode-containers
-      ms-kubernetes-tools.vscode-kubernetes-tools
-      ms-vscode-remote.remote-containers
-      ms-vscode-remote.remote-ssh
-      ms-vscode-remote.remote-ssh-edit
-      ms-vscode.remote-explorer
-      ms-vscode.remote-server
-
-      redis.redis-for-vscode
-
-      ms-python.python
-      ms-python.debugpy
-      detachhead.basedpyright
-      charliermarsh.ruff
-      ms-toolsai.jupyter
-
-      tomoki1207.pdf
-    ]);
   };
 }

@@ -23,7 +23,6 @@ obtains privileges when needed. Open a new login shell after the first switch.
 | --- | --- | --- |
 | `juicer` | aarch64-darwin | `citrus@juicer` |
 | `mixer` | aarch64-darwin | `citrus@mixer` |
-| `blender` | x86_64-linux / WSL | `citrus@blender` |
 | `ws-jh-song` | x86_64-linux / Proxmox LXC | `jh-song@ws-jh-song` |
 
 ```bash
@@ -140,6 +139,12 @@ upstream module manages its signed CLI, kernel and launchd jobs. Defaults are
 runtime, and activation refreshes its Background agent without requiring login.
 Declare workloads through `services.containerization.containers` in a host module.
 Activation prunes stopped containers and removes undeclared workloads.
+
+`nh darwin build` checks the locked configuration without activating it.
+Use `nh darwin switch . -H <host> -U nix-apple-container` to update the service
+input and activate it. A plain switch uses the existing lock. The service's
+package version follows `halfwhey/nix-apple-container`, so it can lag Apple's
+releases even when that input is fully updated.
 
 To remove Apple Container, keep the module imported and activate
 `services.containerization.enable = false` once before removing the import.

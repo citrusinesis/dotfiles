@@ -5,6 +5,7 @@
     modules.home.key-remapping
     modules.home.ghostty
     modules.home.zed
+    modules.home.vscode
     modules.home.winbox
   ];
 }

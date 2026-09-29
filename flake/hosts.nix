@@ -15,11 +15,6 @@ let
       user = "citrus";
       stateVersion = "25.11";
     };
-    blender = {
-      system = "x86_64-linux";
-      user = "citrus";
-      stateVersion = "25.11";
-    };
     ws-jh-song = {
       system = "x86_64-linux";
       user = "jh-song";

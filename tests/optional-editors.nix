@@ -22,6 +22,10 @@ in
   checks = {
     kitty-settings-only = h.programs.kitty.enable && h.programs.kitty.package == null;
     vscode-settings-only = h.programs.vscode.enable && h.programs.vscode.package == null;
+    vscode-user-managed-extensions =
+      h.programs.vscode.mutableExtensionsDir
+      && h.programs.vscode.profiles.default.extensions == [ ]
+      && !(lib.any (path: lib.hasPrefix ".vscode/extensions" path) (builtins.attrNames h.home.file));
     optional-casks = builtins.elem "kitty" casks && builtins.elem "visual-studio-code" casks;
     custom-xdg-nh = h.programs.nh.flake == "/Users/${username}/xdg-config-test/dotfiles";
   };
