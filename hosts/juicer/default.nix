@@ -24,6 +24,7 @@
     "notion"
 
     "cloudflare-warp"
+    "ddpm"
     "lm-studio"
     "utm"
   ];
