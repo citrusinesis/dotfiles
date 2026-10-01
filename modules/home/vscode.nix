@@ -53,7 +53,7 @@ in
 
       "editor.fontFamily" =
         "Hack Nerd Font Mono, GeistMono NF Medium, D2CodingLigature Nerd Font, monospace";
-      "editor.fontSize" = 15;
+      "editor.fontSize" = 14;
       "terminal.integrated.fontSize" = 14;
       "terminal.integrated.env.linux" = {
         TERM = "xterm-256color";
