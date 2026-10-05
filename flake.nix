@@ -50,6 +50,8 @@
       url = "github:numtide/llm-agents.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    paseo.url = "github:getpaseo/paseo";
   };
 
   outputs =

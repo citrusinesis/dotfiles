@@ -1,4 +1,6 @@
 {
+  config,
+  inputs,
   lib,
   modules,
   modulesPath,
@@ -7,6 +9,7 @@
 
 {
   imports = [
+    inputs.paseo.nixosModules.default
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
     modules.nixos.default
     modules.nixos.nvidia-lxc
@@ -25,6 +28,12 @@
   time.timeZone = "Asia/Seoul";
 
   services.tailscale.enable = true;
+
+  services.paseo = {
+    enable = true;
+    user = config.dotfiles.primaryUser;
+    group = config.users.users.${config.dotfiles.primaryUser}.group;
+  };
 
   # Keep OpenSSH as a break-glass path if Tailscale SSH is unavailable.
   services.openssh.enable = lib.mkForce true;

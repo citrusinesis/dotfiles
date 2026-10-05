@@ -13,6 +13,7 @@
       "element"
       "monitorcontrol"
       "obsidian"
+      "paseo"
     ];
     masApps = {
       "KakaoTalk" = 869223134;
