@@ -74,7 +74,19 @@ in
       "workbench.sideBar.location" = "right";
       "workbench.activityBar.location" = "top";
 
+      # Keep startup and title-bar UI focused on code.
+      "workbench.startupEditor" = "none";
+      "workbench.secondarySideBar.defaultVisibility" = "hidden";
+      "window.commandCenter" = false;
+      "workbench.layoutControl.enabled" = false;
+      "chat.agentsControl.enabled" = "hidden";
+      "chat.unifiedAgentsBar.enabled" = false;
+      "chat.titleBar.openInAgentsWindow.enabled" = false;
+      "chat.titleBar.signIn.enabled" = false;
+
       "git.autofetch" = true;
+
+      "todo-tree.ripgrep.ripgrep" = lib.getExe pkgs.ripgrep;
 
       "remote.SSH.connectTimeout" = 60;
       "remote.SSH.serverInstallTimeout" = 300;
