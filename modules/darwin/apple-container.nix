@@ -40,6 +40,16 @@ in
   # Declare host workloads through services.containerization.containers.
   services.containerization.enable = lib.mkDefault true;
 
+  # Container's search domain breaks MagicDNS short names: https://github.com/apple/container/issues/817.
+  environment.etc."resolver/containerization.test" = {
+    inherit (cfg) enable;
+    text = lib.mkForce ''
+      domain test
+      nameserver 127.0.0.1
+      port 2053
+    '';
+  };
+
   # Container 1.3 reads TOML instead of macOS defaults. Ship immutable defaults
   # with the upstream package; leave its signed binaries and version untouched.
   services.containerization.package = lib.mkDefault (
