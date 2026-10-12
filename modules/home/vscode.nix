@@ -188,6 +188,8 @@ in
       "ruff.fixAll" = true;
       "ruff.lint.run" = "onSave";
       "ruff.importStrategy" = "fromEnvironment";
+
+      "dev.containers.experimentalAppleContainerSupport" = true;
     };
 
   };
