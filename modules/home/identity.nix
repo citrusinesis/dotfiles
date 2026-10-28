@@ -2,7 +2,7 @@ let
   # Shared personal data. User IDs remain actual login names.
   identity = {
     name = "Jiho Song";
-    email = "me@citrus.name";
+    email = "me@jihosong.dev";
     signingKey = "C357DE5B22337AA187AF70B40DFA01A9CCF622D0!";
   };
 in
