@@ -5,6 +5,11 @@ let
   # Each host is configured by hosts/<name>/default.nix (system) and
   # hosts/<name>/home.nix (its user's Home).
   hosts = {
+    blender = {
+      system = "x86_64-linux";
+      user = "citrus";
+      stateVersion = "26.11";
+    };
     juicer = {
       system = "aarch64-darwin";
       user = "citrus";

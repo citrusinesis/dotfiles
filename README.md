@@ -21,6 +21,7 @@ obtains privileges when needed. Open a new login shell after the first switch.
 
 | Host | Platform | Home |
 | --- | --- | --- |
+| `blender` | x86_64-linux / bare metal | `citrus@blender` |
 | `juicer` | aarch64-darwin | `citrus@juicer` |
 | `mixer` | aarch64-darwin | `citrus@mixer` |
 | `ws-jh-song` | x86_64-linux / Proxmox LXC | `jh-song@ws-jh-song` |
@@ -126,6 +127,9 @@ exception. Home Manager app linking/copying is disabled. Kitty, VS Code and Podm
 remain optional modules. Import a module to enable it; NVIDIA LXC additionally
 requires a user-space driver matching the physical host's kernel driver.
 
+`blender` is installed from its disko layout rather than switched onto an existing system.
+See the [installation guide](docs/blender-install.md) for partitioning, the LUKS passphrase and the later Secure Boot / TPM unlock.
+
 Homebrew activation keeps `autoUpdate = false`, `upgrade = false` and
 `cleanup = "zap"`. Declare wanted packages before switching: undeclared packages
 and data covered by cask zap rules can be removed. Homebrew versions are not pinned
@@ -176,5 +180,6 @@ Evaluation/builds do not activate services, install casks or test GUI applicatio
 
 Historical records: [Account migration](docs/account-migration-validation.md),
 [aspect migration](docs/aspect-migration-validation.md),
-[structure simplification](docs/structure-simplification.md) and
-[aspect removal](docs/aspect-removal.md).
+[structure simplification](docs/structure-simplification.md),
+[aspect removal](docs/aspect-removal.md) and
+[blender host](docs/blender-host.md).
