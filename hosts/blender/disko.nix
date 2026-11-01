@@ -32,7 +32,6 @@ in
             name = "cryptroot";
             settings = {
               allowDiscards = true;
-              # On NVMe, dm-crypt's workqueues add more latency than they save.
               bypassWorkqueues = true;
               crypttabExtraOpts = [ "tpm2-device=auto" ];
             };
