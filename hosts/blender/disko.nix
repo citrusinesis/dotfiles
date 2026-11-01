@@ -49,6 +49,10 @@ in
                   mountpoint = "/home";
                   mountOptions = btrfsOptions;
                 };
+                "@snapshots-home" = {
+                  mountpoint = "/home/.snapshots";
+                  mountOptions = btrfsOptions;
+                };
                 "@nix" = {
                   mountpoint = "/nix";
                   mountOptions = btrfsOptions;

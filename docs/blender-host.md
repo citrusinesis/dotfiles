@@ -15,6 +15,8 @@ Installation is described in [blender-install.md](blender-install.md).
 - `modules/nixos/i18n.nix` switches the input method from kime to fcitx5 with `fcitx5-hangul`, keeping kime's toggle keys (Hangul, Right Alt).
   KWin hands Wayland-native text input only to an input method speaking `input-method-v1`, while Hyprland speaks `input-method-v2`.
   kime implements only v2, so under Plasma it was limited to GTK/Qt IM modules; fcitx5 implements both.
+- `hosts/blender/btrfs.nix` runs snapper on `/home` only (24 hourly, 7 daily, 4 weekly, 3 monthly), since NixOS generations already roll back the system, and scrubs the filesystem monthly to detect silent corruption.
+  The NixOS snapper module does not create the `.snapshots` subvolume, so disko creates it as the top-level `@snapshots-home`, which survives replacing `@home` with one of its snapshots.
 - `modules/home/hyprland.nix` configures Hyprland, waybar, fuzzel, mako, hyprlock, hypridle and the polkit agent.
 
 ## Upstream changes met along the way
