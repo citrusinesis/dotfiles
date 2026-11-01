@@ -6,8 +6,8 @@ Everything below erases the target disk.
 
 | Partition | Content |
 | --- | --- |
-| `disk-main-ESP` (1 GiB) | vfat, mounted at `/boot` |
-| `disk-main-luks` (rest) | LUKS2 `cryptroot` → btrfs `@root` `/`, `@home` `/home`, `@snapshots-home` `/home/.snapshots`, `@nix` `/nix`, `@swap` `/swap` (16 GiB swapfile) |
+| `disk-blender-ESP` (1 GiB) | vfat, mounted at `/boot` |
+| `disk-blender-luks` (rest) | LUKS2 `cryptroot` → btrfs `@root` `/`, `@home` `/home`, `@snapshots-home` `/home/.snapshots`, `@nix` `/nix`, `@swap` `/swap` (16 GiB swapfile) |
 
 Unlocking happens in two stages.
 Stage 1 installs with a LUKS passphrase.
@@ -86,7 +86,7 @@ nh os switch
 - SDDM offers both `Hyprland (uwsm-managed)` and `Plasma (Wayland)` sessions.
 - In Plasma, select Fcitx 5 under System Settings → Keyboard → Virtual Keyboard so Wayland-native apps receive Korean input.
 - snapper snapshots `/home` hourly and keeps 24 hourly, 7 daily, 4 weekly and 3 monthly snapshots. Check with `snapper -c home list`; restore with `snapper -c home undochange <old>..<new> <path>` or by copying from `/home/.snapshots/<n>/snapshot`. Snapshots live on the same disk and are not a backup. A monthly `btrfs scrub` verifies every block against its checksum; see the last result with `sudo btrfs scrub status /`.
-- Back up the LUKS header and keep the file off this disk; a damaged header makes the disk unreadable even with the passphrase: `sudo cryptsetup luksHeaderBackup /dev/disk/by-partlabel/disk-main-luks --header-backup-file luks-header.img`.
+- Back up the LUKS header and keep the file off this disk; a damaged header makes the disk unreadable even with the passphrase: `sudo cryptsetup luksHeaderBackup /dev/disk/by-partlabel/disk-blender-luks --header-backup-file luks-header.img`.
 - `hosts/blender/hardware.nix` was written without the machine. Compare it with `nixos-generate-config --no-filesystems --show-hardware-config` and add any kernel modules it lists that are missing.
 
 ## Stage 2: Secure Boot and TPM unlock
@@ -114,12 +114,12 @@ lanzaboote boots signed unified kernel images, so an unsigned bootloader, kernel
 6. Enroll the TPM, optionally after creating a recovery key to store offline:
 
    ```bash
-   sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-main-luks --recovery-key
-   sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-main-luks --tpm2-device=auto --tpm2-pcrs=7
+   sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --recovery-key
+   sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --tpm2-device=auto --tpm2-pcrs=7
    ```
 
 7. Reboot. The disk unlocks without a prompt.
 
 Keep the passphrase slot.
 Changing the Secure Boot keys or certain firmware updates change PCR 7, and boot falls back to the passphrase.
-Re-enroll afterwards with `sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-main-luks --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7`.
+Re-enroll afterwards with `sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7`.

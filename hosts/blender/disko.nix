@@ -7,9 +7,8 @@ let
   ];
 in
 {
-  disko.devices.disk.main = {
+  disko.devices.disk.blender = {
     type = "disk";
-    # Only read while partitioning; afterwards everything is found by partition label.
     device = "/dev/nvme0n1";
 
     content = {
@@ -33,7 +32,8 @@ in
             name = "cryptroot";
             settings = {
               allowDiscards = true;
-              # Falls back to the passphrase until a TPM2 key slot is enrolled.
+              # On NVMe, dm-crypt's workqueues add more latency than they save.
+              bypassWorkqueues = true;
               crypttabExtraOpts = [ "tpm2-device=auto" ];
             };
 
