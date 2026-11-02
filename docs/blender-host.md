@@ -41,7 +41,7 @@ Installation is described in [blender-install.md](blender-install.md).
 
 - nixpkgs 26.11 removed the scripted initrd. The systemd initrd is the only implementation, so TPM2 unlock through `tpm2-device=auto` needs no extra option, and setting `boot.initrd.systemd.enable` is an error.
 
-## Validation
+## Validation before the first installation
 
 - `nix flake check --all-systems --no-build`: passed, including the x86_64-linux configuration policy for `blender`.
 - nixfmt, statix and deadnix: clean.
@@ -49,3 +49,93 @@ Installation is described in [blender-install.md](blender-install.md).
 - `hosts/blender/hardware.nix` was written without the machine and has not been compared with `nixos-generate-config` yet.
 
 Nothing was built for x86_64-linux or activated.
+
+## Keyboard and GPU investigation — 2026-11-03
+
+`hosts/blender/keyboard.nix` enables keyd and maps only Caps Lock to `hangeul`
+(the evdev Hangul key), using the existing fcitx5 Hangul trigger in niri and
+Plasma. Caps Lock switches languages without toggling letter case. The existing
+Hangul and Right Alt triggers remain available. Ctrl, Alt, Super, application
+shortcuts and niri window management bindings retain their original roles.
+Terminal clipboard shortcuts remain Ctrl+Shift+C/V, with Ctrl+C for SIGINT.
+
+The initial F18 mapping did not work: the default evdev/pc105/us XKB map
+translates KEY_F18 into XF86Launch9, while fcitx5 was configured for F18.
+Compiling that keymap with libxkbcommon confirmed KEY_HANGEUL resolves to
+Hangul, matching the existing trigger.
+
+### Journal findings
+
+All times below are KST on 2026-11-03; driver is 615.78.08, open kernel module,
+GPU is RTX 5070 at 0000:02:00.0.
+
+- Boot `2ba80aa747614813be7374dbfe907bbf` (`-2` at investigation): at
+  01:43:45, Xid 79, `GPU has fallen off the bus`, followed by GPU-lost RPC
+  failures, TLB invalidation failures and memory teardown assertions. The
+  first Xid is the primary finding; later messages may be consequences.
+- Boot `6ff466ee364a455b8900cb76389ec67e` (current at investigation): 36
+  `VM: invalid mmap context` messages at 02:21:29, immediately after niri's
+  confirmed exit at 02:21:27 and during SDDM startup. No Xid in this boot at
+  inspection. PipeWire also segfaulted during session teardown at 02:21:28.
+- The other two retained boots had no NVRM errors in the inspected kernel
+  logs. `nvidia-smi` currently responds normally.
+
+[NVIDIA's Xid catalog](https://docs.nvidia.com/deploy/xid-errors/analyzing-xid-catalog.html)
+identifies Xid 79 as loss of PCIe access to the GPU. It does not establish
+whether this machine has a driver, firmware, link or power problem. Keep the
+open kernel module required by Blackwell. No speculative ASPM, GSP or driver
+changes were made from this single incident.
+
+If it happens again, save evidence before rebooting if the machine responds:
+
+```sh
+journalctl -k -b --no-pager > /tmp/blender-kernel.log
+journalctl -b --since '-10 minutes' --no-pager > /tmp/blender-session.log
+nvidia-smi -q > /tmp/blender-nvidia-smi.log
+sudo nvidia-bug-report.sh
+```
+
+Keep these reports outside git; they can contain machine and session details.
+Record whether the trigger was idle, suspend, logout or GPU load. After a
+power cycle, check GPU power connectors and seating with the machine off if
+Xid 79 recurs, and collect PCIe/AER messages (`journalctl -k -b | rg -i
+'aer|pcie|nvrm|xid'`). Compare a known working NixOS generation before trying
+one driver or PCIe power setting change at a time. A successful evaluation
+or rebuild cannot demonstrate that this intermittent GPU fault is fixed.
+
+Apply the configuration with `nh os switch` and test Caps Lock in both
+sessions. Check `systemctl status keyd` if keys are unchanged. No additional
+fcitx5 trigger is required by the final Hangul mapping.
+
+Validation: `keyd check` on the generated configuration and the generated
+niri configuration's build-time validation passed. The complete NixOS system,
+including NVIDIA modules, was built successfully. The initial F18 failure
+was reported during keyboard testing; the mapping above replaces it.
+
+## Desktop preferences — 2026-11-03
+
+`hosts/blender/home.nix` selects 3840x2160 at 119.999 Hz and 125% scale for
+Dell U2725QE serial 8DNMGF4, enables natural mouse scrolling, and overrides
+Ghostty's font size to 12. Other hosts retain their defaults. The shared niri
+module accepts extra top-level and input configuration from the host and
+validates the combined KDL during the build.
+
+## Latest kernel — 2026-11-03
+
+`blender` overrides the shared `linuxPackages_6_12` default with
+`pkgs.linuxPackages_latest`. The current lock resolves this to Linux 7.3.1;
+future lock updates may advance that version. Other hosts keep their kernel
+policy. NVIDIA's package is already selected from `boot.kernelPackages`, so
+its kernel module follows this host's selected kernel.
+
+The running kernel was 6.12.115 when this change was prepared. After applying
+with `nh os switch`, reboot and check `uname -r`; switching alone does not
+replace the running kernel. Keep the previous NixOS generation available in
+the boot menu. Check desktop responsiveness, suspend/resume, CUDA workloads
+and NVRM/Xid logs before comparing CachyOS patches as a separate change.
+No CachyOS patches are included at this stage.
+
+After the user applied the configuration and rebooted, `uname -r` reported
+7.3.1 and `nvidia-smi` responded with driver 615.78.08. At about one minute
+of uptime, the current boot had no NVRM errors. This is an initial boot check,
+not evidence that the earlier intermittent Xid 79 issue is resolved.

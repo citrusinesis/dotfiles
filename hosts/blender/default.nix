@@ -2,6 +2,7 @@
   inputs,
   lib,
   modules,
+  pkgs,
   ...
 }:
 
@@ -19,8 +20,12 @@
     ./containers.nix
     ./data-disk.nix
     ./btrfs.nix
+    ./keyboard.nix
     ./users.nix
   ];
+
+  # Track the latest stable kernel available in the locked nixpkgs input.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.displayManager.defaultSession = "niri";
 
