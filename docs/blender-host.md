@@ -35,6 +35,7 @@ Installation is described in [blender-install.md](blender-install.md).
 - `modules/home/firefox.nix` installs Firefox from nixpkgs with policies that turn off telemetry, studies and sponsored suggestions and force-install uBlock Origin.
   Helium, the browser on the Macs, is not in nixpkgs; Firefox keeps security updates with nixpkgs, runs the full uBlock Origin that Chromium's Manifest V3 move cut down, and is the browser `nvidia-vaapi-driver` targets.
   catppuccin's Firefox theme is off for the same evaluation-time reason as its swaylock theme.
+  blender forces Firefox's hardware video decoding through `nvidia-vaapi-driver` but keeps the RDD sandbox, which the driver's documentation says to disable; if decoding falls back to software, `about:support` (Media) shows it, and disabling the sandbox is a separate decision.
 
 ## Upstream changes met along the way
 
