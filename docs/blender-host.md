@@ -32,6 +32,9 @@ Installation is described in [blender-install.md](blender-install.md).
   The GTK portal opens files instead of the GNOME one, which would require Nautilus.
   An NVIDIA application profile sets `GLVidHeapReuseRatio` to 0 for the `niri` process, as niri's documentation recommends; otherwise the driver keeps freed buffers and niri's VRAM use grows toward 1 GiB.
   SDDM starts niri by default, since both session modules propose a default and the host must choose.
+- `modules/home/firefox.nix` installs Firefox from nixpkgs with policies that turn off telemetry, studies and sponsored suggestions and force-install uBlock Origin.
+  Helium, the browser on the Macs, is not in nixpkgs; Firefox keeps security updates with nixpkgs, runs the full uBlock Origin that Chromium's Manifest V3 move cut down, and is the browser `nvidia-vaapi-driver` targets.
+  catppuccin's Firefox theme is off for the same evaluation-time reason as its swaylock theme.
 
 ## Upstream changes met along the way
 
