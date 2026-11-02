@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-# System side of the niri session; its configuration lives in modules/home/niri.nix.
+# System side of the niri session; its configuration lives in modules/home/niri/.
 {
   imports = [ ./graphical.nix ];
 
@@ -9,10 +9,6 @@
     # Opens files through the GTK portal instead of pulling in Nautilus for the GNOME one.
     useNautilus = false;
   };
-
-  # The PAM service hyprlock authenticates against.
-  # programs.hyprlock would also add a system hypridle unit, whose PATH pulls in Hyprland itself.
-  security.pam.services.hyprlock = { };
 
   # niri starts xwayland-satellite on demand when it finds it on PATH.
   environment.systemPackages = [ pkgs.xwayland-satellite ];

@@ -21,9 +21,11 @@ Installation is described in [blender-install.md](blender-install.md).
   BitLocker is the only encryption both systems open natively (`cryptsetup` reads BitLocker, while Windows has no maintained LUKS driver), and ntfs-3g is preferred over the faster ntfs3 driver because the HDD, not FUSE, bounds throughput.
   The disk is not managed by disko, so reinstalling NixOS never touches shared data; a GPT name set after Windows creates the partition keeps the mount free of machine-specific UUIDs.
   Windows boots from the firmware menu rather than a systemd-boot entry, which would need a UEFI shell signed for Secure Boot.
-- `modules/home/niri/` configures niri, waybar, fuzzel, mako, hyprlock, hypridle and the polkit agent.
+- `modules/home/niri/` configures niri, waybar, fuzzel, mako, swaylock, swayidle and Plasma's polkit agent.
   `config.kdl` is plain KDL, checked with `niri validate` while the Home is built, so a config error fails the switch instead of niri falling back to its defaults.
-  waybar, hypridle and the polkit agent are bound to `niri.service` and do not start under Plasma.
+  waybar, swayidle and the polkit agent are bound to `niri.service` and do not start under Plasma.
+  The lock and idle tools follow niri's own documentation rather than the Hyprland tools carried over at first, which brought Hyprland's libraries along and, through the NixOS hyprlock module, Hyprland itself.
+  catppuccin's swaylock theme is off because it reads its colors at evaluation time from a built source, which the Mac cannot evaluate for this host.
 - niri replaced Hyprland before the first install.
   Hyprland 0.56 had just moved its configuration to Lua and Home Manager's generator was still catching up, while niri's KDL format has stayed stable; niri's scrolling layout also keeps windows at their width instead of splitting the screen further.
   niri-flake was tried for its typed `programs.niri.settings`, but its packages (25.08 and unstable) no longer evaluate against current nixpkgs, which removed `libdisplay-info_0_2`; nixpkgs ships niri 26.04.

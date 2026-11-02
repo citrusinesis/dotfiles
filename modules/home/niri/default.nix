@@ -7,7 +7,7 @@
     ./idle.nix
   ];
 
-  # Starts waybar, hypridle and the polkit agent with niri only, not under Plasma.
+  # Starts waybar, swayidle and the polkit agent with niri only, not under Plasma.
   wayland.systemd.target = "niri.service";
 
   # Validating at build time turns a config error into a failed switch instead of niri starting with its defaults.
@@ -28,7 +28,19 @@
 
   services.mako.enable = true;
 
-  services.hyprpolkitagent.enable = true;
+  # Plasma's agent, already installed for the Plasma session; its own unit only starts with Plasma.
+  systemd.user.services.polkit-kde-agent = {
+    Unit = {
+      Description = "KDE PolicyKit authentication agent";
+      PartOf = [ "niri.service" ];
+      After = [ "niri.service" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.kdePackages.polkit-kde-agent-1}/libexec/polkit-kde-authentication-agent-1";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "niri.service" ];
+  };
 
   home.packages = with pkgs; [
     wl-clipboard

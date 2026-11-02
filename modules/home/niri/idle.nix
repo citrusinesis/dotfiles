@@ -1,31 +1,35 @@
-{ ... }:
+{ lib, pkgs, ... }:
 
 let
-  niriAction = name: "niri msg action ${name}";
+  # swayidle runs its commands with only a shell on PATH.
+  loginctl = "${pkgs.systemd}/bin/loginctl";
+  niriAction = name: "${lib.getExe pkgs.niri} msg action ${name}";
+  lock = "${lib.getExe pkgs.swaylock} -f";
 in
 {
-  programs.hyprlock.enable = true;
-
-  services.hypridle = {
+  programs.swaylock = {
     enable = true;
-    settings = {
-      general = {
-        lock_cmd = "pidof hyprlock || hyprlock";
-        before_sleep_cmd = "loginctl lock-session";
-        after_sleep_cmd = niriAction "power-on-monitors";
-      };
+    # catppuccin's swaylock theme is read at evaluation time from a built source, which a non-Linux machine cannot evaluate.
+    settings.color = "1e1e2e";
+  };
+  catppuccin.swaylock.enable = false;
 
-      listener = [
-        {
-          timeout = 600;
-          on-timeout = "loginctl lock-session";
-        }
-        {
-          timeout = 900;
-          on-timeout = niriAction "power-off-monitors";
-          on-resume = niriAction "power-on-monitors";
-        }
-      ];
+  services.swayidle = {
+    enable = true;
+    timeouts = [
+      {
+        timeout = 600;
+        command = "${loginctl} lock-session";
+      }
+      {
+        timeout = 900;
+        command = niriAction "power-off-monitors";
+        resumeCommand = niriAction "power-on-monitors";
+      }
+    ];
+    events = {
+      inherit lock;
+      before-sleep = lock;
     };
   };
 }
