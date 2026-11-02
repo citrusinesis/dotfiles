@@ -17,6 +17,10 @@ Installation is described in [blender-install.md](blender-install.md).
   kime implements only v2, so under Plasma it was limited to GTK/Qt IM modules; fcitx5 implements both.
 - `hosts/blender/btrfs.nix` runs snapper on `/home` only (24 hourly, 7 daily, 4 weekly, 3 monthly), since NixOS generations already roll back the system, and scrubs the filesystem monthly to detect silent corruption.
   The NixOS snapper module does not create the `.snapshots` subvolume, so disko creates it as the top-level `@snapshots-home`, which survives replacing `@home` with one of its snapshots.
+- `hosts/blender/data-disk.nix` mounts a BitLocker-encrypted NTFS HDD shared with Windows at `/mnt/data`, through ntfs-3g and a key file outside the repository.
+  BitLocker is the only encryption both systems open natively (`cryptsetup` reads BitLocker, while Windows has no maintained LUKS driver), and ntfs-3g is preferred over the faster ntfs3 driver because the HDD, not FUSE, bounds throughput.
+  The disk is not managed by disko, so reinstalling NixOS never touches shared data; a GPT name set after Windows creates the partition keeps the mount free of machine-specific UUIDs.
+  Windows boots from the firmware menu rather than a systemd-boot entry, which would need a UEFI shell signed for Secure Boot.
 - `modules/home/hyprland.nix` configures Hyprland, waybar, fuzzel, mako, hyprlock, hypridle and the polkit agent.
 
 ## Upstream changes met along the way

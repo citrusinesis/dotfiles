@@ -3,6 +3,7 @@
 {
   users.users.citrus = {
     isNormalUser = true;
+    uid = 1000;
     extraGroups = [
       "wheel"
       "networkmanager"

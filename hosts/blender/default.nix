@@ -17,6 +17,7 @@
     ./disko.nix
     ./boot.nix
     ./containers.nix
+    ./data-disk.nix
     ./btrfs.nix
     ./users.nix
   ];

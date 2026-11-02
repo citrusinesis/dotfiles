@@ -123,3 +123,50 @@ lanzaboote boots signed unified kernel images, so an unsigned bootloader, kernel
 Keep the passphrase slot.
 Changing the Secure Boot keys or certain firmware updates change PCR 7, and boot falls back to the passphrase.
 Re-enroll afterwards with `sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7`.
+
+## Windows and the shared HDD
+
+Windows lives on its own SSD and is started from the firmware boot menu; systemd-boot does not list it.
+A systemd-boot entry for an ESP on another disk needs a UEFI shell, which would have to be signed and trusted once Secure Boot is on.
+
+The HDD is shared as an NTFS volume encrypted with BitLocker.
+NixOS opens it with the BitLocker password from a key file on the encrypted root and mounts it at `/mnt/data`.
+`hosts/blender/data-disk.nix` declares both with `nofail`, so boot is unaffected until the disk is prepared.
+BitLocker's TPM protector only works under Windows; on NixOS the disk unlocks without a prompt once the root does, because the key file lives there.
+
+### Windows
+
+1. Install Windows with the NVMe disconnected or disabled in the firmware. Otherwise the installer puts its boot files on blender's ESP.
+2. Disable hibernation and Fast Startup, which leave NTFS volumes marked in use and make ntfs-3g refuse to mount them: `powercfg /h off`.
+3. Keep the hardware clock in UTC, as NixOS does: `reg add "HKLM\System\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /t REG_DWORD /d 1 /f`.
+4. If the Windows system drive will use BitLocker with the TPM, finish Stage 2 first. Enrolling Secure Boot keys afterwards changes PCR 7, and Windows then asks for its recovery key.
+
+### HDD
+
+1. In Disk Management, initialize the HDD as GPT and create one NTFS volume.
+2. Turn on BitLocker for it with "Use a password to unlock the drive", and store the recovery key off the machine. Automatic unlocking in Windows is optional and requires a BitLocker system drive.
+3. Boot NixOS and give the BitLocker partition the label the configuration expects. GPT names are invisible to Windows and BitLocker.
+
+   ```bash
+   lsblk -o NAME,SIZE,FSTYPE,PARTLABEL   # FSTYPE BitLocker; usually partition 2 after the MSR partition
+   sudo nix shell nixpkgs#gptfdisk -c sgdisk -c 2:blender-data /dev/sdX
+   sudo udevadm trigger
+   ```
+
+4. Store the BitLocker password as the key file. systemd-cryptsetup uses the whole file as the password, so it must not end with a newline:
+
+   ```bash
+   sudo install -d -m 0700 /etc/cryptsetup-keys.d
+   sudo sh -c 'umask 077; IFS= read -rs p; printf %s "$p" > /etc/cryptsetup-keys.d/data.key'
+   ```
+
+5. Open and check it, or reboot:
+
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl start systemd-cryptsetup@data.service
+   ls /mnt/data
+   ```
+
+The key file is not in this repository; restore it after a reinstall.
+Never write to the HDD from NixOS while Windows is hibernated.
