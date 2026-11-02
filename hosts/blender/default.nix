@@ -10,7 +10,7 @@
     inputs.disko.nixosModules.disko
     modules.nixos.default
     modules.nixos.plasma
-    modules.nixos.hyprland
+    modules.nixos.niri
     modules.nixos.nvidia
     modules.system.fonts
     ./hardware.nix
@@ -21,6 +21,8 @@
     ./btrfs.nix
     ./users.nix
   ];
+
+  services.displayManager.defaultSession = "niri";
 
   networking.networkmanager.enable = true;
   time.timeZone = "Asia/Seoul";

@@ -1,6 +1,6 @@
 { ... }:
 
-# Shared by every desktop session module (plasma, hyprland).
+# Shared by every desktop session module (plasma, niri).
 {
   imports = [
     ./audio.nix
