@@ -10,8 +10,9 @@
     useNautilus = false;
   };
 
-  # Installs the PAM service hyprlock authenticates against.
-  programs.hyprlock.enable = true;
+  # The PAM service hyprlock authenticates against.
+  # programs.hyprlock would also add a system hypridle unit, whose PATH pulls in Hyprland itself.
+  security.pam.services.hyprlock = { };
 
   # niri starts xwayland-satellite on demand when it finds it on PATH.
   environment.systemPackages = [ pkgs.xwayland-satellite ];
