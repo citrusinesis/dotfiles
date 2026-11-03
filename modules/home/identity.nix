@@ -1,3 +1,5 @@
+{ lib, ... }:
+
 let
   # Shared personal data. User IDs remain actual login names.
   identity = {
@@ -10,7 +12,8 @@ in
   programs.git = {
     signing = {
       format = "openpgp";
-      key = identity.signingKey;
+      # Hosts holding their own signing subkey override this.
+      key = lib.mkDefault identity.signingKey;
       signByDefault = true;
     };
     settings.user = { inherit (identity) name email; };

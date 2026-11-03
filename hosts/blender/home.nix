@@ -25,5 +25,7 @@
     font-size = 12
   '';
 
+  programs.git.signing.key = "5F73329AB4C0EE88F426212A9BD61B25CBCCEBF4!";
+
   programs.firefox.profiles.default.settings."media.hardware-video-decoding.force-enabled" = true;
 }
