@@ -208,3 +208,17 @@ Hangul sans-serif, Hack for Latin monospace, and D2KodingLigature for Hangul
 monospace. Ghostty validation, the system build, configuration policy check and
 Darwin configuration evaluation passed. Apply with `nh os switch`, then reopen
 apps to refresh their font selection.
+
+## Desktop boot appearance — 2026-11-05
+
+`hosts/blender/boot-splash.nix` enables Plymouth's `bgrt` theme, quiet boot, and early KMS by loading `nvidia`, `nvidia_modeset` and `nvidia_drm` in the initrd.
+The locked nixpkgs provides `modeset=1` and `fbdev=1` as `nvidia-drm` modprobe options when `hardware.nvidia.modesetting.enable` is true, so they are not duplicated on the kernel command line.
+Plymouth supplies `splash` once.
+`boot.initrd.verbose` is removed in this nixpkgs, so `quiet` covers the systemd initrd instead.
+The existing systemd initrd needs no enable option.
+
+`hosts/blender/boot.nix` sets `boot.loader.timeout = 0` to hide the normal menu.
+To show it, hold Space before the boot loader initializes, as recommended by the [systemd-boot documentation](https://www.freedesktop.org/software/systemd/man/latest/systemd-boot.html#Key%20bindings).
+
+After applying and rebooting, check the firmware logo → `bgrt` splash → greeter sequence, the shutdown splash, and access to older generations through Space.
+The desktop palette and glass settings are described in [design-language.md](design-language.md).

@@ -9,6 +9,7 @@
   imports = [ inputs.lanzaboote.nixosModules.lanzaboote ];
 
   boot.loader = {
+    timeout = 0;
     systemd-boot = {
       enable = lib.mkForce false;
       editor = false;
