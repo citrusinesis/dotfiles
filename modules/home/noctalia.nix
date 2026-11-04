@@ -119,5 +119,6 @@ in
   home.packages = [
     pkgs.adw-gtk3
     pkgs.ddcui
+    pkgs.wl-clipboard
   ];
 }
