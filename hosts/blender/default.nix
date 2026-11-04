@@ -27,6 +27,8 @@
   # Track the latest stable kernel available in the locked nixpkgs input.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  environment.systemPackages = [ pkgs.efibootmgr ];
+
   services.displayManager.defaultSession = "niri";
   services.displayManager.noctalia-greeter.settings.output = {
     name = "Dell Inc. DELL U2725QE 8DNMGF4";
