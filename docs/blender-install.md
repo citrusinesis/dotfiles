@@ -2,7 +2,7 @@
 
 `blender` is a bare-metal x86_64 desktop (Core Ultra 7 265K, RTX 5070).
 disko owns its disk layout, so a first install partitions the disk from `hosts/blender/disko.nix` instead of reusing an existing installation.
-Everything below erases the target disk.
+Stage 1 erases the target disk. Stage 2 changes the existing installation without repartitioning.
 
 | Partition | Content |
 | --- | --- |
@@ -63,6 +63,18 @@ nix run --inputs-from . disko -- --mode destroy,format,mount --flake .#blender
 
 `--inputs-from .` runs the disko revision pinned in `flake.lock`, the same one that generates the mounts in the installed system.
 
+The current configuration includes lanzaboote. Before `nixos-install`, generate
+its signing keys on the mounted target so bootloader installation can sign the
+images. This step is only for a fresh installation, with Secure Boot still off:
+
+```bash
+cat > /tmp/sbctl-install.yaml <<'EOF'
+keydir: /mnt/var/lib/sbctl/keys
+guid: /mnt/var/lib/sbctl/GUID
+EOF
+nix run nixpkgs#sbctl -- --config /tmp/sbctl-install.yaml create-keys
+```
+
 The live ISO only knows `cache.nixos.org`, so pass the repository's caches to the install; otherwise packages such as the coding agents are compiled locally.
 The NVIDIA kernel module is unfree and is built locally either way, which takes a few minutes.
 
@@ -92,34 +104,110 @@ nh os switch
 
 ## Stage 2: Secure Boot and TPM unlock
 
-TPM unlock without Secure Boot is not worth having.
-Without Secure Boot, PCR 7 measures the same "Secure Boot disabled" state whatever is booted, so a USB-booted system receives the disk key just as NixOS would.
-lanzaboote boots signed unified kernel images, so an unsigned bootloader, kernel, or command line no longer matches PCR 7.
+The configuration already imports lanzaboote and signs boot images with
+`/var/lib/sbctl/keys/db/db.key`. Key generation and firmware enrollment are
+manual; the configuration does not automatically replace firmware certificates.
+See the [lanzaboote setup guide](https://nix-community.github.io/lanzaboote/getting-started/prepare-your-system.html).
 
-1. Create the signing keys: `sudo nix run nixpkgs#sbctl -- create-keys` (stored in `/var/lib/sbctl`).
-2. Add the `lanzaboote` input (`github:nix-community/lanzaboote`, following `nixpkgs`), import `inputs.lanzaboote.nixosModules.lanzaboote` in `hosts/blender/default.nix`, and replace systemd-boot in `hosts/blender/boot.nix`:
+### Prepare the installed host
 
-   ```nix
-   boot.loader.systemd-boot.enable = lib.mkForce false;
-   boot.lanzaboote = {
-     enable = true;
-     pkiBundle = "/var/lib/sbctl";
-   };
-   environment.systemPackages = [ pkgs.sbctl ];
-   ```
-
-   Switch, then check that `sudo sbctl verify` reports the `.efi` files under `/boot/EFI` as signed.
-3. Reboot into firmware setup, clear the Secure Boot keys so the firmware enters Setup Mode, and boot NixOS again.
-4. Enroll the keys, keeping Microsoft's certificates so the GPU option ROM and firmware drivers still load: `sudo sbctl enroll-keys --microsoft`.
-5. Reboot, turn Secure Boot on if the firmware did not, and confirm with `bootctl status` that Secure Boot is enabled (user).
-6. Enroll the TPM, optionally after creating a recovery key to store offline:
+1. Create the signing keys (once; skip if already generated during Stage 1). Keep private keys on the encrypted root,
+   outside the repository and Nix store:
 
    ```bash
-   sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --recovery-key
-   sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --tpm2-device=auto --tpm2-pcrs=7
+   sudo nix run nixpkgs#sbctl -- create-keys
    ```
 
-7. Reboot. The disk unlocks without a prompt.
+2. Install the prepared configuration for the next boot:
+
+   ```bash
+   nh os boot
+   sudo nix run nixpkgs#sbctl -- verify
+   ```
+
+   Check that `/boot/EFI/BOOT/BOOTX64.EFI`, the systemd-boot EFI binary and
+   `/boot/EFI/Linux/nixos-generation-*.efi` are signed. Old standalone kernel
+   files under `/boot/EFI/nixos/` may be reported unsigned; these are distinct
+   from the signed lanzaboote boot images.
+
+3. Export only the public db certificate in DER format to the Linux ESP:
+
+   ```bash
+   sudo install -d -m 0700 /boot/secureboot
+   sudo nix shell nixpkgs#openssl -c openssl x509 \
+     -in /var/lib/sbctl/keys/db/db.pem -outform DER \
+     -out /boot/secureboot/blender-db.cer
+   ```
+
+   If the firmware file picker cannot read the internal ESP, copy this `.cer`
+   file to a FAT32 USB drive. Do not copy the private `.key` files.
+
+### Preserve the firmware's existing certificates
+
+On 2026-11-05, `blender` reported an ASUS ROG STRIX B860-I GAMING WIFI board,
+Secure Boot disabled and Setup Mode disabled. The enrolled PK belongs to ASUS;
+KEK contains ASUS and Microsoft 2011/2023 certificates, and db contains ASUS,
+Microsoft UEFI 2011/2023 and Windows 2011/2023 certificates. dbx is populated.
+The user confirmed that the Windows system drive does not use BitLocker.
+
+After manual certificate enrollment and reboot on 2026-11-05, `bootctl status`
+reported `Secure Boot: enabled (user)`, `Measured UKI: yes`, and lanzastub 1.2.0
+booting generation 16. Reading db with `efi-readvar` confirmed that the original
+ASUS/Microsoft certificates and image hashes remain, with `CN=Database Key`
+appended. `systemd-analyze has-tpm2` reported all firmware, driver, subsystem
+and library checks present. After manual TPM enrollment, the header backup at
+`/mnt/data/blender-luks-header.img` was parsed successfully: keyslots 0 and 1
+exist, with a `systemd-tpm2` token using slot 1 and PCR 7. The backup resides on
+the separate HDD (`/dev/sda2`). The user confirmed automatic root unlock after
+reboot; the existing passphrase slot is retained for recovery.
+
+Use the firmware's custom key management to **append** `blender-db.cer` to db
+(the allowed signature database), preserving PK, KEK, the existing db entries
+and dbx. Do not use `sbctl enroll-keys --microsoft`, clear all keys, or replace
+the existing databases for this workflow. Do not clear the TPM.
+
+On ASUS firmware, look under Boot → Secure Boot → Custom → Key Management →
+DB Management → Append Key. Menu names and supported certificate formats need
+checking in the actual BIOS. If append is unavailable, leave the existing keys
+in place and resolve enrollment before enabling enforcement. Keep Secure Boot
+disabled until the signed boot files and db certificate are ready.
+
+Enable Secure Boot (ASUS may call the OS Type setting “Windows UEFI mode”),
+then boot NixOS and check:
+
+```bash
+bootctl status
+sudo sbctl list-enrolled-keys
+```
+
+Require `Secure Boot: enabled (user)` and confirm that db includes the new
+certificate alongside the original ASUS/Microsoft entries. Test Windows boot
+as well. If Linux is rejected, disable Secure Boot temporarily to return to
+NixOS and inspect enrollment and signatures; keep the existing keys.
+
+For a future Windows installation with TPM-backed BitLocker, save its recovery
+key and suspend BitLocker protection before changing firmware certificates,
+then resume it in Windows after completing the change.
+
+### Enroll LUKS in the final Secure Boot state
+
+Back up the LUKS header off this disk before enrollment. Optionally generate
+an offline recovery key, then enroll TPM2:
+
+```bash
+sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --recovery-key
+sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-blender-luks --tpm2-device=auto --tpm2-pcrs=7
+```
+
+Reboot and check that root unlocks without a prompt. `tpm2-device=auto` is
+already configured in `hosts/blender/disko.nix`.
+
+PCR 7 binds this enrollment to the Secure Boot policy and authorities; it is
+not a measurement of a specific kernel or command line. Keeping Microsoft
+certificates broadens the set of trusted boot software. This simple policy
+does not provide the same restriction as binding to an approved Linux image
+with an additional measured-boot policy. See
+[systemd-cryptenroll](https://www.freedesktop.org/software/systemd/man/latest/systemd-cryptenroll.html).
 
 Keep the passphrase slot.
 Changing the Secure Boot keys or certain firmware updates change PCR 7, and boot falls back to the passphrase.
