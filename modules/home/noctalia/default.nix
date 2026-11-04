@@ -4,7 +4,7 @@
   ...
 }:
 let
-  appearance = import ../../lib/desktop-appearance.nix;
+  appearance = import ../../../lib/desktop-appearance.nix;
   qtSettings = version: {
     Appearance = {
       style = "Fusion";
