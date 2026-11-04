@@ -40,7 +40,8 @@ in
         polkit_agent = true;
         launch_apps_as_systemd_services = true;
         panel.transparency_mode = "glass";
-        shadow.alpha = 0.25;
+        shadow.alpha = 0.30;
+        corner_radius_scale = 1.25;
         greeter_sync.auto_sync = true;
       };
       theme = {
@@ -66,7 +67,10 @@ in
         sunset = "19:00";
       };
       bar.main = {
-        background_opacity = 0.45;
+        radius = 16;
+        border = "outline_variant";
+        border_width = 1.0;
+        background_opacity = 0.40;
         margin_ends = 16;
         margin_edge = 10;
         start = [
@@ -85,7 +89,8 @@ in
         ];
       };
       lockscreen.transition = [ "fade" ];
-      notification.background_opacity = 0.8;
+      notification.background_opacity = 0.70;
+      osd.background_opacity = 0.70;
       brightness.enable_ddcutil = true;
     };
   };
