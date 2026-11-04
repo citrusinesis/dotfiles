@@ -17,9 +17,9 @@ Installation is described in [blender-install.md](blender-install.md).
   kime implements only v2, so under Plasma it was limited to GTK/Qt IM modules; fcitx5 implements both.
 - `hosts/blender/btrfs.nix` runs snapper on `/home` only (24 hourly, 7 daily, 4 weekly, 3 monthly), since NixOS generations already roll back the system, and scrubs the filesystem monthly to detect silent corruption.
   The NixOS snapper module does not create the `.snapshots` subvolume, so disko creates it as the top-level `@snapshots-home`, which survives replacing `@home` with one of its snapshots.
-- `hosts/blender/data-disk.nix` mounts a BitLocker-encrypted NTFS HDD shared with Windows at `/mnt/data`, through ntfs-3g and a key file outside the repository.
-  BitLocker is the only encryption both systems open natively (`cryptsetup` reads BitLocker, while Windows has no maintained LUKS driver), and ntfs-3g is preferred over the faster ntfs3 driver because the HDD, not FUSE, bounds throughput.
-  The disk is not managed by disko, so reinstalling NixOS never touches shared data; a GPT name set after Windows creates the partition keeps the mount free of machine-specific UUIDs.
+- `hosts/blender/data-disk.nix` mounts the NTFS HDD shared with Windows at `/mnt/data` through ntfs-3g.
+  Inspection on 2026-11-05 found an unencrypted `Data` volume at `/dev/sda2`, UUID `D652AEFA52AEDF0D`; the earlier planned BitLocker mapping is removed.
+  The disk is not managed by disko, so reinstalling NixOS never touches shared data. The mount uses its filesystem UUID so disk enumeration changes do not affect it.
   Windows boots from the firmware menu rather than a systemd-boot entry, which would need a UEFI shell signed for Secure Boot.
 - `modules/home/niri/` configures niri, waybar, fuzzel, mako, swaylock, swayidle and Plasma's polkit agent.
   `config.kdl` is plain KDL, checked with `niri validate` while the Home is built, so a config error fails the switch instead of niri falling back to its defaults.

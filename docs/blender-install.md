@@ -218,10 +218,11 @@ Re-enroll afterwards with `sudo systemd-cryptenroll /dev/disk/by-partlabel/disk-
 Windows lives on its own SSD and is started from the firmware boot menu; systemd-boot does not list it.
 A systemd-boot entry for an ESP on another disk needs a UEFI shell, which would have to be signed and trusted once Secure Boot is on.
 
-The HDD is shared as an NTFS volume encrypted with BitLocker.
-NixOS opens it with the BitLocker password from a key file on the encrypted root and mounts it at `/mnt/data`.
-`hosts/blender/data-disk.nix` declares both with `nofail`, so boot is unaffected until the disk is prepared.
-BitLocker's TPM protector only works under Windows; on NixOS the disk unlocks without a prompt once the root does, because the key file lives there.
+The HDD is shared as an unencrypted NTFS volume labelled `Data`.
+`hosts/blender/data-disk.nix` mounts UUID `D652AEFA52AEDF0D` (observed at
+`/dev/sda2` on 2026-11-05) directly at `/mnt/data` with ntfs-3g. No BitLocker
+mapping or key file is required. `nofail` and automount keep an absent HDD
+from preventing boot.
 
 ### Windows
 
@@ -232,30 +233,18 @@ BitLocker's TPM protector only works under Windows; on NixOS the disk unlocks wi
 
 ### HDD
 
-1. In Disk Management, initialize the HDD as GPT and create one NTFS volume.
-2. Turn on BitLocker for it with "Use a password to unlock the drive", and store the recovery key off the machine. Automatic unlocking in Windows is optional and requires a BitLocker system drive.
-3. Boot NixOS and give the BitLocker partition the label the configuration expects. GPT names are invisible to Windows and BitLocker.
+The existing HDD already contains data; do not format or repartition it.
+When replacing it with a different NTFS volume, update the filesystem UUID in
+`hosts/blender/data-disk.nix` after checking `lsblk -f`.
 
-   ```bash
-   lsblk -o NAME,SIZE,FSTYPE,PARTLABEL   # FSTYPE BitLocker; usually partition 2 after the MSR partition
-   sudo nix shell nixpkgs#gptfdisk -c sgdisk -c 2:blender-data /dev/sdX
-   sudo udevadm trigger
-   ```
+After applying the configuration with `nh os switch`, accessing `/mnt/data`
+triggers its automount:
 
-4. Store the BitLocker password as the key file. systemd-cryptsetup uses the whole file as the password, so it must not end with a newline:
+```bash
+ls /mnt/data
+findmnt -T /mnt/data
+```
 
-   ```bash
-   sudo install -d -m 0700 /etc/cryptsetup-keys.d
-   sudo sh -c 'umask 077; IFS= read -rs p; printf %s "$p" > /etc/cryptsetup-keys.d/data.key'
-   ```
-
-5. Open and check it, or reboot:
-
-   ```bash
-   sudo systemctl daemon-reload
-   sudo systemctl start systemd-cryptsetup@data.service
-   ls /mnt/data
-   ```
-
-The key file is not in this repository; restore it after a reinstall.
-Never write to the HDD from NixOS while Windows is hibernated.
+Never write to the HDD from NixOS while Windows is hibernated. Disable Windows
+hibernation and Fast Startup as described above; do not force an unsafe NTFS
+mount if ntfs-3g refuses it.

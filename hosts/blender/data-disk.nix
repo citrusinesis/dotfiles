@@ -4,12 +4,8 @@ let
   owner = config.users.users.${config.dotfiles.primaryUser};
 in
 {
-  environment.etc.crypttab.text = ''
-    data /dev/disk/by-partlabel/blender-data /etc/cryptsetup-keys.d/data.key bitlk,nofail
-  '';
-
   fileSystems."/mnt/data" = {
-    device = "/dev/mapper/data";
+    device = "/dev/disk/by-uuid/D652AEFA52AEDF0D";
     fsType = "ntfs-3g";
     options = [
       "uid=${toString owner.uid}"
