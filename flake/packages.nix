@@ -6,6 +6,7 @@
   perSystem =
     {
       config,
+      lib,
       system,
       ...
     }:
@@ -20,7 +21,12 @@
       _module.args.pkgs = pkgs;
 
       formatter = pkgs.nixfmt;
-      packages.nh = pkgs.nh;
+      packages = {
+        inherit (pkgs) nh;
+      }
+      // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+        inherit (pkgs) helium-browser;
+      };
 
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [

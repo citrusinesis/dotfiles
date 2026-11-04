@@ -3,6 +3,8 @@ final: prev:
 (inputs.fenix.overlays.default final prev)
 // (inputs.llm-agents.overlays.shared-nixpkgs final prev)
 // {
+  helium-browser = final.callPackage ../pkgs/helium { };
+
   # nixos-unstable's Lix 2.95.3 passes the ELF-only `-z,noexecstack` to ld64,
   # so it cannot link on Darwin. Fixed on nixpkgs master; drop this once the
   # nixpkgs pin carries the fix.
