@@ -1,4 +1,9 @@
-{ lib, modules, ... }:
+{
+  lib,
+  modules,
+  pkgs,
+  ...
+}:
 {
   imports = [
     modules.home.default
@@ -9,6 +14,13 @@
     modules.home.niri
     modules.home.noctalia
   ];
+
+  # Shared shell initialization already runs fastfetch for login shells.
+  programs.zsh.initContent = lib.mkAfter ''
+    if [[ -o interactive && ! -o login && -t 1 && -z ''${SSH_CONNECTION:-} && -z ''${CI:-} ]]; then
+      ${pkgs.fastfetch}/bin/fastfetch
+    fi
+  '';
 
   dotfiles.niri.extraInputConfig = ''
     mouse {
