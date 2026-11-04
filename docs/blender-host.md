@@ -139,3 +139,72 @@ After the user applied the configuration and rebooted, `uname -r` reported
 7.3.1 and `nvidia-smi` responded with driver 615.78.08. At about one minute
 of uptime, the current boot had no NVRM errors. This is an initial boot check,
 not evidence that the earlier intermittent Xid 79 issue is resolved.
+
+## niri and Noctalia — 2026-11-04
+
+The selected desktop is niri 26.04 with Noctalia 5.4.1 and Noctalia Greeter 1.7.0,
+all from the locked nixpkgs input. Plasma, SDDM, Umbriel, Waybar, Fuzzel, Mako,
+Swaylock, Swayidle, and the separate KDE authentication agent are removed from
+this host's composition. Noctalia provides the bar, launcher, notifications,
+control center, manual session lock, and Polkit agent; greetd runs its greeter.
+Automatic lock and screen-off timers retain Noctalia's disabled defaults.
+
+niri includes its packaged default configuration, excluding Waybar autostart.
+The default key positions are preserved: Super+T opens Ghostty, Super+D opens
+the Noctalia launcher, and Super+Alt+L locks through Noctalia. The monitor's
+3840×2160 at 119.999 Hz,
+125% scale, natural mouse scrolling, Ghostty font size 12, and keyd's Caps Lock
+Hangul mapping are retained.
+
+Noctalia owns the shared Qt/GTK/Ghostty palette; Qt uses Fusion through qtct,
+and GTK uses adw-gtk3 with generated colors. The shell and Zed follow the local
+07:00–19:00 light schedule. The shell uses glass panels and a translucent bar.
+No custom wallpaper is installed. Greeter appearance sync is restricted to the
+primary active local user and the packaged appearance-only helper.
+
+The cursor is Bibata Modern Ice, size 24, shared by the greeter, niri, GTK,
+Xcursor environment and X11 resources. Home Manager replaces the stale Breeze
+cursor setting in dconf. The cursor package and default-theme links are installed
+for applications that use theme-name fallback.
+
+The complete system builds, both configurations validate, and the generated
+Noctalia palette validates as part of the niri configuration. Greeter, compositor,
+GTK and standalone Home settings agree on the cursor theme and size. Actual
+login and pointer appearance across apps still need checking after reboot.
+DDC brightness access is enabled; monitor support and DDC/CI must still be
+checked on the actual display.
+
+Apply this display-manager change at the next boot rather than replacing the
+running desktop in place:
+
+```sh
+nh os boot
+systemctl reboot
+```
+
+The user confirmed a successful boot into this composition. A subsequent live
+rendering check found that forcing blur on every `noctalia-*` layer also blurred
+the full-screen outside-click shield. The niri rule now leaves blur regions to
+Noctalia and selects non-xray blur only for its bar, notification, dock, panel,
+attached-panel and OSD surfaces. The wallpaper and click shield are excluded.
+Focus decoration no longer fills transparent window backgrounds; Ghostty has
+an explicit window blur rule. The focus ring is one logical pixel wide, with
+12-pixel rounded, clipped window geometry. App-provided GTK headerbars remain.
+
+Live checks covered the launcher, control center, notification history, session
+menu, clipboard, volume OSD and floating Noctalia settings window. Their UI stays
+over the existing windows without full-screen blur. Lock and greeter rendering
+were not exercised during this check. The rendering configuration was loaded
+into the running niri session; `nh os switch` persists it without a reboot.
+
+Font preferences use Pretendard for sans-serif UI text and Hack Nerd Font Mono
+with D2KodingLigature Nerd Font as the first monospace fallback. Linux fontconfig
+declares these defaults and the fallback for explicit Hack requests; Ghostty
+declares the same two-family chain. Zed uses Pretendard for its UI and retains
+Hack/D2KodingLigature for editor and terminal text. The shared VS Code font list
+also uses the installed D2KodingLigature family spelling. Existing sizes remain.
+Checks against the generated fontconfig rules selected Pretendard for Latin and
+Hangul sans-serif, Hack for Latin monospace, and D2KodingLigature for Hangul
+monospace. Ghostty validation, the system build, configuration policy check and
+Darwin configuration evaluation passed. Apply with `nh os switch`, then reopen
+apps to refresh their font selection.

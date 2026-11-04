@@ -10,8 +10,8 @@
   imports = [
     inputs.disko.nixosModules.disko
     modules.nixos.default
-    modules.nixos.plasma
     modules.nixos.niri
+    modules.nixos.noctalia
     modules.nixos.nvidia
     modules.system.fonts
     ./hardware.nix
@@ -28,6 +28,13 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.displayManager.defaultSession = "niri";
+  services.displayManager.noctalia-greeter.settings.output = {
+    name = "Dell Inc. DELL U2725QE 8DNMGF4";
+    width = 3840;
+    height = 2160;
+    refresh_rate = 120;
+    scale = 1.25;
+  };
 
   networking.networkmanager.enable = true;
   time.timeZone = "Asia/Seoul";
