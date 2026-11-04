@@ -1,5 +1,7 @@
 { pkgs, ... }:
-
+let
+  appearance = import ../../lib/desktop-appearance.nix;
+in
 {
   dotfiles.casks = [ "zed" ];
 
@@ -51,12 +53,13 @@
       theme = "Catppuccin Mocha - No Italics";
       icon_theme = "Catppuccin Mocha";
 
-      buffer_font_family = "Hack Nerd Font Mono";
+      buffer_font_family = appearance.monospaceFont;
       buffer_font_fallbacks = [
-        "D2KodingLigature Nerd Font"
+        appearance.monospaceFallback
         "Noto Sans CJK KR"
       ];
       buffer_font_size = 15;
+      ui_font_family = appearance.font;
       ui_font_size = 15;
       colorize_brackets = true;
 
@@ -99,9 +102,9 @@
         env = {
           TERM = "xterm-256color";
         };
-        font_family = "Hack Nerd Font Mono";
+        font_family = appearance.monospaceFont;
         font_fallbacks = [
-          "D2KodingLigature Nerd Font"
+          appearance.monospaceFallback
           "Noto Sans CJK KR"
         ];
         font_size = 14;

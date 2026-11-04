@@ -4,7 +4,9 @@
   pkgs,
   ...
 }:
-
+let
+  appearance = import ../../lib/desktop-appearance.nix;
+in
 {
   imports = [ ./theme.nix ];
 
@@ -25,8 +27,8 @@
     text = ''
       theme = Catppuccin ${lib.toSentenceCase config.catppuccin.flavor}
 
-      font-family = "Hack Nerd Font Mono"
-      font-family = "Noto Sans Mono CJK KR"
+      font-family = "${appearance.monospaceFont}"
+      font-family = "${appearance.monospaceFallback}"
       font-size = 14
 
       shell-integration = zsh

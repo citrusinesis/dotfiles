@@ -51,8 +51,7 @@ in
       "workbench.list.smoothScrolling" = true;
       "terminal.integrated.smoothScrolling" = true;
 
-      "editor.fontFamily" =
-        "Hack Nerd Font Mono, GeistMono NF Medium, D2CodingLigature Nerd Font, monospace";
+      "editor.fontFamily" = "Hack Nerd Font Mono, D2KodingLigature Nerd Font, monospace";
       "editor.fontSize" = 14;
       "terminal.integrated.fontSize" = 14;
       "terminal.integrated.env.linux" = {
