@@ -1,6 +1,18 @@
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
+  # Agents sign commits through this so an uncached passphrase fails at once instead of opening pinentry over their TUI.
+  home.packages = [
+    (pkgs.writeShellScriptBin "gpg-nopinentry" ''
+      exec ${config.programs.gpg.package}/bin/gpg --pinentry-mode error "$@"
+    '')
+  ];
+
   programs.gpg = {
     enable = true;
 
