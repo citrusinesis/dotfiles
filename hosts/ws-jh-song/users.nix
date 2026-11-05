@@ -13,6 +13,7 @@
       "render"
     ];
     shell = pkgs.zsh;
+    linger = true;
     subUidRanges = [
       {
         startUid = 11001;
