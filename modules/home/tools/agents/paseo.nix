@@ -26,7 +26,7 @@ let
     ]
   );
 
-  # Agents choose a profile by its notes through list_profiles.
+  # Skills pick a profile by its notes through list_profiles; /implement picks by id.
   agentProfiles = [
     {
       id = "orchestrator";
