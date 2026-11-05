@@ -25,11 +25,6 @@ let
       "/sbin"
     ]
   );
-
-  environment = {
-    PATH = servicePath;
-    PASEO_RELAY_ENABLED = "true";
-  };
 in
 {
   home.packages = [ package ];
@@ -41,7 +36,10 @@ in
     config = {
       Label = "com.local.Paseo";
       ProgramArguments = [ server ];
-      EnvironmentVariables = environment;
+      EnvironmentVariables = {
+        PATH = servicePath;
+        PASEO_RELAY_ENABLED = "true";
+      };
       RunAtLoad = true;
       KeepAlive.SuccessfulExit = false;
     };
@@ -51,7 +49,10 @@ in
     Unit.Description = "Paseo daemon for coding agents";
     Service = {
       ExecStart = server;
-      Environment = lib.mapAttrsToList (name: value: "${name}=${value}") environment;
+      Environment = [
+        "PATH=${servicePath}"
+        "PASEO_RELAY_ENABLED=true"
+      ];
       Restart = "on-failure";
       RestartSec = 5;
       TimeoutStopSec = 15;

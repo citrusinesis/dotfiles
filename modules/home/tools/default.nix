@@ -3,8 +3,7 @@
     ./direnv.nix
     ./git.nix
     ./gpg.nix
-    ./agents.nix
-    ./paseo.nix
+    ./agents
     ./kubernetes.nix
     ./teleport.nix
   ];

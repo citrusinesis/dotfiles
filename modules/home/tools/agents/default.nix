@@ -1,9 +1,13 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./claude-code
+    ./codex
+    ./paseo.nix
+  ];
+
   home.packages = with pkgs.llm-agents; [
-    claude-code
-    codex
     pi
   ];
 
