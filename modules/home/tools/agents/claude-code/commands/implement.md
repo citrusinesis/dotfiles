@@ -66,18 +66,18 @@ Follow only the section for the executor picked in step 1.
 
 #### Paseo executor
 
-Pick the provider:
-- Call `list_providers`. Use `codex` if it is available; otherwise fall back to `claude` and report the fallback. `--agent codex` requires `codex` with no fallback; `--agent claude` uses `claude`.
-- Call `list_models` for that provider and use its default model.
+Pick the agent profile:
+- Call `list_profiles` and `list_providers`. Use the `implementer` profile if its provider is available; otherwise fall back to `implementer-claude` and report the fallback. `--agent codex` requires `implementer` with no fallback; `--agent claude` uses `implementer-claude`.
+- If the profile is missing, say so and stop — the profiles are declared in the dotfiles, not guessed here.
 
 For fan-out or grouped work, create a worktree workspace per task (or group) with `create_workspace`:
 - `isolation: "worktree"`, `mode: "branch-off"`, `branchName: "implement/<spec-slug>-<task-id>"`.
 - `baseBranch`: the current local branch. Paseo otherwise bases new worktrees on the upstream, which lacks unpushed commits such as the spec itself.
 
 Start each agent with `create_agent`:
-- `provider: "<provider>/<model>"`, `title: "<task-id>: <short summary>"`, `initialPrompt`: the task prompt above.
+- Copy the profile: `provider: "<provider>/<model>"`, plus `settings.modeId`, `settings.thinkingOptionId` and the profile's `featureValues` as `settings.features` when the profile sets them.
+- `title: "<task-id>: <short summary>"`, `initialPrompt`: the task prompt above.
 - `workspaceId`: the task's workspace; omit it for sequential work so the agent runs in your own workspace.
-- `settings.modeId`: `auto-review` for Codex (keeps the workspace-write sandbox) or `auto` for Claude (classifier-reviewed permissions).
 
 Wait for the finish notifications instead of polling.
 When an agent needs permission, inspect it with `list_pending_permissions`: approve requests that stay within its task with `respond_to_permission`, deny the rest and report them.
