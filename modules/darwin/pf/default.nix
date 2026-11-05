@@ -14,17 +14,10 @@ let
   enableTokenFile = "/var/run/pf-tailscale.enable-token";
   activationLockFile = "/var/run/pf-tailscale.lock";
 
-  writeScript =
-    name:
-    pkgs.writeTextFile {
-      inherit name;
-      executable = true;
-      text = builtins.readFile ./scripts/${name}.sh;
-    };
-  loadBootRules = writeScript "load-boot-rules";
-  updateRules = writeScript "update-rules";
-  prepareState = writeScript "prepare-state";
-  cleanupRules = writeScript "cleanup-rules";
+  loadBootRules = pkgs.writeScript "load-boot-rules" (builtins.readFile ./scripts/load-boot-rules.sh);
+  updateRules = pkgs.writeScript "update-rules" (builtins.readFile ./scripts/update-rules.sh);
+  prepareState = pkgs.writeScript "prepare-state" (builtins.readFile ./scripts/prepare-state.sh);
+  cleanupRules = pkgs.writeScript "cleanup-rules" (builtins.readFile ./scripts/cleanup-rules.sh);
 
   passRulesFile = pkgs.writeText "pf-tailscale-pass-rules" rules.passRules;
   blockRulesFile = pkgs.writeText "pf-tailscale-block-rules" rules.blockRules;
