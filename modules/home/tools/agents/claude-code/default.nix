@@ -39,10 +39,6 @@
         type = "stdio";
         command = lib.getExe pkgs.context7-mcp;
       };
-      github = {
-        type = "http";
-        url = "https://api.githubcopilot.com/mcp/";
-      };
     };
   };
 }
