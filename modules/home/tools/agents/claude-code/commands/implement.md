@@ -68,7 +68,7 @@ Follow only the section for the executor picked in step 1.
 
 Pick the agent profile:
 - Call `list_profiles` and `list_providers`. Use the `implementer` profile if its provider is available; otherwise fall back to `implementer-claude` and report the fallback. `--agent codex` requires `implementer` with no fallback; `--agent claude` uses `implementer-claude`.
-- If the profile is missing, say so and stop — the profiles are declared in the dotfiles, not guessed here.
+- If the profile is missing, or it sets no `modeId`, say so and stop — the profiles are declared in the dotfiles, not guessed here. Without an explicit mode, `create_agent` inherits your own session's mode, which may be `bypassPermissions`.
 
 For fan-out or grouped work, create a worktree workspace per task (or group) with `create_workspace`:
 - `isolation: "worktree"`, `mode: "branch-off"`, `branchName: "implement/<spec-slug>-<task-id>"`.
@@ -111,6 +111,7 @@ git merge implement/<spec-slug>-<task-id>
 Resolve any merge conflicts directly — don't stop to ask the user.
 
 Then remove each worktree: `archive_workspace` for the Paseo executor, `git worktree remove .worktrees/<task-id>` for the Direct executor.
+Delete each merged task branch with `git branch -d implement/<spec-slug>-<task-id>`; `archive_workspace` removes only the worktree directory and leaves the branch behind.
 
 ### 4. Review the diff
 
