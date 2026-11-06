@@ -26,6 +26,13 @@ let
       ${config.dotfiles.niri.extraInputConfig}
     }
 
+    blur {
+        passes 4
+        offset 4
+        noise 0.015
+        saturation 1.8
+    }
+
     layout {
         focus-ring { width 1; }
     }

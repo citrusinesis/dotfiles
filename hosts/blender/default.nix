@@ -17,6 +17,7 @@
     ./hardware.nix
     ./disko.nix
     ./boot.nix
+    ./boot-splash.nix
     ./containers.nix
     ./data-disk.nix
     ./btrfs.nix
