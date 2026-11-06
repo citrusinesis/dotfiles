@@ -38,7 +38,6 @@
   # Ghostty uses the last value when a scalar setting appears more than once.
   xdg.configFile."ghostty/config".text = lib.mkAfter ''
     font-size = 12
-    theme = noctalia
     background-opacity = 0.85
   '';
 

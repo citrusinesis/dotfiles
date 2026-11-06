@@ -45,14 +45,15 @@ in
         greeter_sync.auto_sync = true;
       };
       theme = {
-        mode = "auto";
+        # Catppuccin's dark variant is Mocha, matching the flavor used by the catppuccin modules.
+        mode = "dark";
         source = "builtin";
         builtin = "Catppuccin";
+        # Ghostty takes Catppuccin Mocha directly from the shared ghostty module.
         templates.builtin_ids = [
           "gtk3"
           "gtk4"
           "qt"
-          "ghostty"
         ];
         # Nix declares the include; only the generated palette stays mutable.
         templates.user.niri_palette = {
@@ -60,7 +61,7 @@ in
           output_path = "${config.xdg.configHome}/niri/noctalia.kdl";
         };
       };
-      # An explicit local schedule is easy to adjust and needs no location lookup.
+      # Keep a local sunrise/sunset schedule available for night light without location lookup.
       location = {
         custom_schedule = true;
         sunrise = "07:00";
