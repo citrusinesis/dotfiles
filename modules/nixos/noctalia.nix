@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   appearance = import ../../lib/desktop-appearance.nix;
+  wallpaper = pkgs.callPackage ../../lib/desktop-wallpaper.nix { };
   toml = pkgs.formats.toml { };
   initialGreeterAppearance = toml.generate "noctalia-greeter-initial-sync.toml" {
     appearance = {
@@ -29,6 +30,8 @@ in
       user.default = config.dotfiles.primaryUser;
       keyboard.layout = "us";
       cursor.size = appearance.cursorSize;
+      # Declared in greeter.toml, which the shell's appearance sync never writes.
+      appearance.wallpaper.path = "${wallpaper}";
     };
   };
 

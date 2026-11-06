@@ -5,6 +5,7 @@
 }:
 let
   appearance = import ../../../lib/desktop-appearance.nix;
+  wallpaper = pkgs.callPackage ../../../lib/desktop-wallpaper.nix { };
   qtSettings = version: {
     Appearance = {
       style = "Fusion";
@@ -89,6 +90,7 @@ in
           "session"
         ];
       };
+      wallpaper.default.path = "${wallpaper}";
       lockscreen.transition = [ "fade" ];
       notification.background_opacity = 0.70;
       osd.background_opacity = 0.70;
