@@ -98,6 +98,11 @@ in
     };
   };
 
+  # Settings UI and IPC changes land in settings.toml, which overrides config.toml.
+  # Dropping it on every start keeps Nix authoritative; UI changes last until the next restart.
+  systemd.user.services.noctalia.Service.ExecStartPre =
+    "${pkgs.coreutils}/bin/rm -f %S/noctalia/settings.toml";
+
   # Both toolkits share the shell's palette. Noctalia owns the generated colors.
   catppuccin.qt5ct.enable = false;
   catppuccin.kvantum.enable = false;
