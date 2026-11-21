@@ -3,12 +3,13 @@
 {
   security.rtkit.enable = true;
 
+  environment.systemPackages = [ pkgs.pipewire.jack ];
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true;
 
     # Disable node suspension to fix audio delay
     wireplumber.configPackages = [
