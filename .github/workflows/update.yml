@@ -1,0 +1,102 @@
+name: update
+
+on:
+  schedule:
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: update
+
+env:
+  GIT_AUTHOR_NAME: github-actions[bot]
+  GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+  GIT_COMMITTER_NAME: github-actions[bot]
+  GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+
+jobs:
+  lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - uses: samueldr/lix-gha-installer-action@a0fee77b2a98bb7c5c0ed7ae6d6ad4903dbdad0d # v2026-06-15
+
+      - name: Update flake inputs
+        run: |
+          nix flake update 2>&1 | tee "$RUNNER_TEMP/updates"
+          git diff --quiet -- flake.lock || git commit -q -m "chore(flake): update inputs" \
+            -m "$(sed -n "s/^• Updated input '\(.*\)':$/- \1/p" "$RUNNER_TEMP/updates")" -- flake.lock
+
+      - run: nix flake check --all-systems --no-build
+
+      - &push
+        name: Push to main
+        run: |
+          git fetch -q origin main
+          if git merge-base --is-ancestor origin/main HEAD; then
+            git push -q origin HEAD:main
+          else
+            echo "::warning::main moved during the run; the next run updates from the new main."
+          fi
+
+  packages:
+    needs: lock
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - uses: samueldr/lix-gha-installer-action@a0fee77b2a98bb7c5c0ed7ae6d6ad4903dbdad0d # v2026-06-15
+
+      - name: Run every package's updateScript
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          failed=()
+          for package in $(nix eval --raw .#packages.x86_64-linux --apply 'ps: toString (builtins.filter (n: builtins.getAttr n ps ? updateScript) (builtins.attrNames ps))'); do
+            nix run ".#packages.x86_64-linux.$package.updateScript" | tee -a "$RUNNER_TEMP/updates" || failed+=("$package")
+          done
+          if ((${#failed[@]})); then
+            echo "::error::failed to update: ${failed[*]}"
+            exit 1
+          fi
+          git diff --quiet -- pkgs || git commit -q -m "chore(pkgs): update packages" \
+            -m "$(sed 's/^/- /' "$RUNNER_TEMP/updates")" -- pkgs
+
+      - run: nix flake check --all-systems --no-build
+
+      - *push
+
+  report:
+    needs: [lock, packages]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open or close the failure issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          LOCK: ${{ needs.lock.result }}
+          PACKAGES: ${{ needs.packages.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          report() {
+            local issue
+            issue=$(gh issue list --label auto-update --state open --json number,title --jq ".[] | select(.title == \"$1\") | .number" | head -n1)
+            if [[ $2 == failure && -n $issue ]]; then
+              gh issue comment "$issue" --body "Failed again: $RUN_URL"
+            elif [[ $2 == failure ]]; then
+              gh label create auto-update --color B60205 --force
+              gh issue create --label auto-update --title "$1" --body "The update stopped before reaching main, so main keeps its last evaluated state. Run: $RUN_URL"
+            elif [[ $2 == success && -n $issue ]]; then
+              gh issue close "$issue" --comment "Resolved by $RUN_URL"
+            fi
+          }
+          report "Updating flake inputs failed" "$LOCK"
+          report "Updating packages failed" "$PACKAGES"
