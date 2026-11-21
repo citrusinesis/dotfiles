@@ -34,15 +34,7 @@ jobs:
 
       - run: nix flake check --all-systems --no-build
 
-      - &push
-        name: Push to main
-        run: |
-          git fetch -q origin main
-          if git merge-base --is-ancestor origin/main HEAD; then
-            git push -q origin HEAD:main
-          else
-            echo "::warning::main moved during the run; the next run updates from the new main."
-          fi
+      - run: git push origin HEAD:main
 
   packages:
     needs: lock
@@ -71,7 +63,7 @@ jobs:
 
       - run: nix flake check --all-systems --no-build
 
-      - *push
+      - run: git push origin HEAD:main
 
   report:
     needs: [lock, packages]
