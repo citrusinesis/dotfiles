@@ -28,6 +28,7 @@
 
     "cloudflare-warp"
     "ddpm"
+    "discord"
     "firefox"
     "lm-studio"
     "tableplus"
