@@ -1,7 +1,9 @@
-{ ... }:
+{ lib, pkgs, ... }:
 
 {
-  programs.firefox = {
+  dotfiles.casks = [ "firefox" ];
+
+  programs.firefox = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     enable = true;
 
     policies = {

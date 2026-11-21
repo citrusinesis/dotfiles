@@ -26,6 +26,4 @@
     restartAfterFreeze = true;
     restartAfterPowerFailure = true;
   };
-
-  homebrew.casks = [ "mongodb-compass" ];
 }

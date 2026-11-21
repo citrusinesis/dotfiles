@@ -8,4 +8,6 @@
     ../../modules/home/vscode.nix
     ../../modules/home/winbox.nix
   ];
+
+  dotfiles.casks = [ "mongodb-compass" ];
 }

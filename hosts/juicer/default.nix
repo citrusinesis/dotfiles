@@ -15,15 +15,4 @@
     };
     trackpad.Dragging = true;
   };
-
-  homebrew.casks = [
-    "notion"
-
-    "cloudflare-warp"
-    "ddpm"
-    "firefox"
-    "lm-studio"
-    "tableplus"
-    "utm"
-  ];
 }
