@@ -9,7 +9,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
 
     nix-darwin = {
       url = "github:lnl7/nix-darwin/master";
@@ -33,6 +36,7 @@
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.2.0";
+      inputs.pre-commit.follows = "git-hooks";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -43,6 +47,7 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
+      inputs.flake-parts.follows = "flake-parts";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
