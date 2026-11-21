@@ -10,9 +10,11 @@ Execute the steps below in order.
 
 ## 1. Quality Control (Lint, Format, Test & Doc)
 
-- Check for project files and run the standard quality tools:
+- Prefer the tooling the project configures itself: pre-commit or git-hooks hooks (e.g. `nix build .#checks.<system>.pre-commit`), `nix fmt` or treefmt, Justfile/Makefile targets, or the commands its CI runs.
+  The defaults below apply only to what the project leaves unconfigured, since a different formatter would rewrite files the project already formats its own way.
+- Otherwise, check for project files and run the standard quality tools:
   - Go: `go fmt ./...`, `golangci-lint run --fix`, `go test ./...`
-  - Nix: `alejandra .`
+  - Nix: `nixfmt` on the changed `.nix` files
   - Rust: 
     - `cargo fmt`
     - `cargo clippy --all-targets --fix --allow-dirty` (Must pass `--all-targets` for test-module lints)
