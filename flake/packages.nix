@@ -21,10 +21,7 @@
       _module.args.pkgs = pkgs;
 
       formatter = pkgs.nixfmt;
-      packages = {
-        inherit (pkgs) nh;
-      }
-      // lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux {
+      packages = lib.filterAttrs (_: lib.meta.availableOn pkgs.stdenv.hostPlatform) {
         inherit (pkgs) helium-browser;
       };
 

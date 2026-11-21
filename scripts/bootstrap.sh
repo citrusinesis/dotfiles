@@ -113,7 +113,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
 fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
-  info "Ready — run 'nix run .#nh -- darwin switch . -H <host>' (juicer or mixer)"
+  info "Ready — run 'nix run --inputs-from . nixpkgs#nh -- darwin switch . -H <host>' (juicer or mixer)"
 else
-  info "Ready — run 'nix run .#nh -- os switch . -H <host>' (blender or ws-jh-song)"
+  info "Ready — run 'nix run --inputs-from . nixpkgs#nh -- os switch . -H <host>' (blender or ws-jh-song)"
 fi

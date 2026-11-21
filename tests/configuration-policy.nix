@@ -162,7 +162,9 @@ lib.foldl' (checks: name: checks // hostChecks name configurations.${name}) {
         "update"
         "default"
       ];
-  pinned-nh = self.packages.${system} ? nh;
+  own-packages = lib.all (
+    package: lib.hasPrefix "${toString self.outPath}/pkgs/" (package.meta.position or "")
+  ) (builtins.attrValues self.packages.${system});
   no-local-container-pin = !((self.legacyPackages.${system} or { }) ? apple-container);
   no-local-updater = !((self.apps.${system} or { }) ? update-pinned-packages);
 } (builtins.attrNames configurations)
