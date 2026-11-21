@@ -2,6 +2,6 @@
 
 {
   home.packages = [
-    (pkgs.teleport_18.override { withRdpClient = false; })
+    pkgs.teleport_18
   ];
 }
