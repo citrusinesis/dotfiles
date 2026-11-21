@@ -27,10 +27,9 @@ let
     };
   };
 
-  built = lib.mapAttrs (name: host: mkHost (host // { inherit name; })) hosts;
   systemsOn =
     suffix:
-    lib.mapAttrs (name: _: built.${name}.system) (
+    lib.mapAttrs (name: host: mkHost (host // { inherit name; })) (
       lib.filterAttrs (_: host: lib.hasSuffix suffix host.system) hosts
     );
 in
@@ -38,8 +37,5 @@ in
   flake = {
     darwinConfigurations = systemsOn "-darwin";
     nixosConfigurations = systemsOn "-linux";
-    homeConfigurations = lib.mapAttrs' (
-      name: host: lib.nameValuePair "${host.user}@${name}" built.${name}.home
-    ) hosts;
   };
 }

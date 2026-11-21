@@ -1,7 +1,6 @@
 { lib, ... }:
 {
   imports = [
-    ./activation.nix
     ./core.nix
     ./identity.nix
     ./cli

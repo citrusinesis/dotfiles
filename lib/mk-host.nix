@@ -1,6 +1,4 @@
 { inputs, lib }:
-# Builds a host's system from hosts/<name>/default.nix and its user's Home from
-# hosts/<name>/home.nix, both as integrated Home and as standalone Home.
 {
   name,
   system,
@@ -51,7 +49,8 @@ let
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
-        backupCommand = lib.getExe (import ./home-manager-backup.nix { inherit pkgs; });
+        backupFileExtension = "bak";
+        overwriteBackup = true;
         extraSpecialArgs = specialArgs;
         users.${user}.imports = homeModules;
       };
@@ -62,24 +61,16 @@ let
     };
   };
 in
-{
-  system = (if darwin then inputs.nix-darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem) {
-    inherit specialArgs;
-    modules = [
-      ../hosts/${name}
-      (
-        if darwin then
-          inputs.home-manager.darwinModules.home-manager
-        else
-          inputs.home-manager.nixosModules.home-manager
-      )
-      hostModule
-    ];
-  };
-
-  home = inputs.home-manager.lib.homeManagerConfiguration {
-    inherit pkgs;
-    modules = homeModules;
-    extraSpecialArgs = specialArgs;
-  };
+(if darwin then inputs.nix-darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem) {
+  inherit specialArgs;
+  modules = [
+    ../hosts/${name}
+    (
+      if darwin then
+        inputs.home-manager.darwinModules.home-manager
+      else
+        inputs.home-manager.nixosModules.home-manager
+    )
+    hostModule
+  ];
 }

@@ -15,12 +15,12 @@ On NixOS, replace `darwin` with `os`.
 
 ## Hosts
 
-| Host | Platform | Home |
-| --- | --- | --- |
-| `blender` | x86_64-linux / bare metal | `citrus@blender` |
-| `juicer` | aarch64-darwin | `citrus@juicer` |
-| `mixer` | aarch64-darwin | `citrus@mixer` |
-| `ws-jh-song` | x86_64-linux / Proxmox LXC | `jh-song@ws-jh-song` |
+| Host | Platform |
+| --- | --- |
+| `blender` | x86_64-linux / bare metal |
+| `juicer` | aarch64-darwin |
+| `mixer` | aarch64-darwin |
+| `ws-jh-song` | x86_64-linux / Proxmox LXC |
 
 ## Usage
 
@@ -30,5 +30,4 @@ A failed step opens an `auto-update` issue, which closes itself on the next succ
 ```bash
 git pull && nh darwin switch
 git pull && nh os switch
-git pull && nh home switch
 ```
