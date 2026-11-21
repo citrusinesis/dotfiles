@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   ...
 }:
 
@@ -20,7 +21,13 @@ let
 
 in
 {
-  dotfiles.nvidiaLxc = {
-    driverPackage = hostNvidiaDriver;
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ hostNvidiaDriver.out ];
   };
+
+  environment.systemPackages = [
+    hostNvidiaDriver.bin
+    pkgs.nvtopPackages.nvidia
+  ];
 }

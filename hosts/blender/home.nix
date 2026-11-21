@@ -8,11 +8,12 @@
     ../../modules/home
     ../../modules/home/ghostty.nix
     ../../modules/home/firefox.nix
-    ../../modules/home/helium.nix
     ../../modules/home/zed.nix
     ../../modules/home/niri
     ../../modules/home/noctalia
   ];
+
+  home.packages = [ pkgs.helium-browser ];
 
   # Shared shell initialization already runs fastfetch for login shells.
   programs.zsh.initContent = lib.mkAfter ''

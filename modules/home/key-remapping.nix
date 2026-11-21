@@ -1,4 +1,3 @@
-{ lib, pkgs, ... }:
 let
   hidutilKeyMapping = builtins.toJSON {
     UserKeyMapping = [
@@ -10,19 +9,17 @@ let
   };
 in
 {
-  config = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-    launchd.agents.key-remapping = {
-      enable = true;
-      config = {
-        Label = "com.local.KeyRemapping";
-        ProgramArguments = [
-          "/usr/bin/hidutil"
-          "property"
-          "--set"
-          hidutilKeyMapping
-        ];
-        RunAtLoad = true;
-      };
+  launchd.agents.key-remapping = {
+    enable = true;
+    config = {
+      Label = "com.local.KeyRemapping";
+      ProgramArguments = [
+        "/usr/bin/hidutil"
+        "property"
+        "--set"
+        hidutilKeyMapping
+      ];
+      RunAtLoad = true;
     };
   };
 }
