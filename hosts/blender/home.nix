@@ -17,8 +17,6 @@
     ../../modules/home/noctalia
   ];
 
-  home.packages = [ pkgs.helium-browser ];
-
   # Shared shell initialization already runs fastfetch for login shells.
   programs.zsh.initContent = lib.mkAfter ''
     if [[ -o interactive && ! -o login && -t 1 && -z ''${SSH_CONNECTION:-} && -z ''${CI:-} ]]; then

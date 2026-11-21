@@ -20,6 +20,7 @@
 
   home.packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [
     pkgs.element-desktop
+    pkgs.helium-browser
     pkgs.obsidian
     pkgs.llm-agents.paseo-desktop
     pkgs.slack
