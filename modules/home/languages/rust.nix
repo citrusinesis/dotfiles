@@ -9,17 +9,6 @@ let
     "rustc"
     "rustfmt"
   ];
-
-  # Darwin's cctools linker crashes while linking cargo-watch. Use LLVM's
-  # Mach-O linker for this package and leave other Rust packages unchanged.
-  cargoWatch =
-    if pkgs.stdenv.hostPlatform.isDarwin then
-      pkgs.cargo-watch.overrideAttrs (old: {
-        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.llvmPackages.lld ];
-        RUSTFLAGS = "-C link-arg=-fuse-ld=lld";
-      })
-    else
-      pkgs.cargo-watch;
 in
 {
   home.packages = [
@@ -27,7 +16,7 @@ in
   ]
   ++ (with pkgs; [
     cargo-edit
-    cargoWatch
+    cargo-watch
     cargo-expand
     cargo-audit
     cargo-deny
