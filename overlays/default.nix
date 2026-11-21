@@ -1,8 +1,9 @@
 { inputs }:
 final: prev:
 (inputs.fenix.overlays.default final prev)
-// (inputs.llm-agents.overlays.shared-nixpkgs final prev)
 // {
+  llm-agents = import ./llm-agents.nix { inherit inputs final prev; };
+
   helium-browser = final.callPackage ../pkgs/helium { };
 
   # nixos-unstable's Lix 2.95.3 passes the ELF-only `-z,noexecstack` to ld64,
