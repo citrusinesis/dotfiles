@@ -6,6 +6,16 @@
 let
   appearance = import ../../../lib/desktop-appearance.nix;
   wallpaper = pkgs.callPackage ../../../lib/desktop-wallpaper.nix { };
+  communityPlugins = pkgs.fetchFromGitHub {
+    owner = "noctalia-dev";
+    repo = "community-plugins";
+    rev = "8f965305dfda5e987bbf0a17a359352f50f0539d";
+    sparseCheckout = [
+      "tailscale"
+      "warp"
+    ];
+    hash = "sha256-qLw0dcsW0ncbMiPQ0nlKS0oTOMvvZj3M7mTs9Z6gBB4=";
+  };
   qtSettings = version: {
     Appearance = {
       style = "Fusion";
@@ -83,6 +93,8 @@ in
         end = [
           "tray"
           "notifications"
+          "tailscale"
+          "warp"
           "network"
           "volume"
           "brightness"
@@ -95,6 +107,28 @@ in
       notification.background_opacity = 0.70;
       osd.background_opacity = 0.70;
       brightness.enable_ddcutil = true;
+      plugins = {
+        source = [
+          {
+            name = "pinned-community";
+            kind = "path";
+            location = "${communityPlugins}";
+            enabled = true;
+          }
+        ];
+        enabled = [
+          "davemhammer/tailscale"
+          "levi/warp"
+        ];
+      };
+      plugin_settings."davemhammer/tailscale".notify_on_peer_change = false;
+      widget = {
+        tailscale = {
+          type = "davemhammer/tailscale:status";
+          show_counts = false;
+        };
+        warp.type = "levi/warp:warp";
+      };
     };
   };
 
