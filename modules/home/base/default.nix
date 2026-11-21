@@ -24,6 +24,7 @@
     ./direnv.nix
     ./git.nix
     ./gpg.nix
+    ./helix.nix
     ./agents
     ./kubernetes.nix
     ./teleport.nix
