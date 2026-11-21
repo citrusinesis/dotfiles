@@ -4,14 +4,27 @@ Personal NixOS and macOS configuration, built and activated with [nh](https://gi
 
 ## Setup
 
+On a fresh machine without Nix, install [Lix](https://lix.systems/install/), then restart your shell:
+
+```bash
+curl -sSf -L https://install.lix.systems/lix | sh -s -- install
+```
+
+On macOS, install [Homebrew](https://brew.sh/) if needed and follow its printed shell setup instructions:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Clone and activate the host configuration:
+
 ```bash
 git clone git@github.com:citrusinesis/dotfiles.git "${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles"
 cd "${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles"
-./scripts/bootstrap.sh
 nix run --inputs-from . nixpkgs#nh -- darwin switch . -H <host>
 ```
 
-On NixOS, replace `darwin` with `os`.
+On NixOS, use its existing Nix installation and replace `darwin` with `os`.
 
 ## Hosts
 
