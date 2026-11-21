@@ -7,6 +7,7 @@
   imports = [
     ../../modules/home/base
     ../../modules/home/applications.nix
+    ../../modules/home/discord.nix
     ../../modules/home/ghostty.nix
     ../../modules/home/firefox.nix
     ../../modules/home/zed.nix
