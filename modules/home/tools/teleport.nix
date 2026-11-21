@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    teleport
+  home.packages = [
+    (pkgs.teleport_18.override { withRdpClient = false; })
   ];
 }
