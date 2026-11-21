@@ -3,7 +3,6 @@
 {
   imports = [
     inputs.nixvim.homeModules.nixvim
-    ../theme.nix
     ./core.nix
     ./filetypes.nix
     ./go.nix

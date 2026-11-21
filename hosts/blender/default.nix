@@ -8,7 +8,7 @@
 {
   imports = [
     inputs.disko.nixosModules.disko
-    ../../modules/nixos
+    ../../modules/nixos/base.nix
     ../../modules/nixos/niri.nix
     ../../modules/nixos/noctalia.nix
     ../../modules/nixos/nvidia.nix

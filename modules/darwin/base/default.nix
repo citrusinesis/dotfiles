@@ -1,7 +1,7 @@
 {
   imports = [
-    ../system/core
-    ./base.nix
+    ../../system/core
+    ./system.nix
     ./homebrew.nix
     ./launchd.nix
     ./pf

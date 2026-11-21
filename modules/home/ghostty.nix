@@ -8,8 +8,6 @@ let
   appearance = import ../../lib/desktop-appearance.nix;
 in
 {
-  imports = [ ./theme.nix ];
-
   dotfiles.casks = [ "ghostty" ];
 
   home.packages = lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.ghostty ];

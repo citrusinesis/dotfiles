@@ -1,6 +1,6 @@
 {
   imports = [
-    ../../modules/darwin
+    ../../modules/darwin/base
     ../../modules/darwin/apple-container.nix
     ../../modules/darwin/applications.nix
     ../../modules/darwin/xcode.nix

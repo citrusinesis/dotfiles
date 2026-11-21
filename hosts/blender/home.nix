@@ -5,7 +5,7 @@
 }:
 {
   imports = [
-    ../../modules/home
+    ../../modules/home/base
     ../../modules/home/ghostty.nix
     ../../modules/home/firefox.nix
     ../../modules/home/zed.nix

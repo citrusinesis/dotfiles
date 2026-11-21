@@ -1,3 +1,3 @@
 {
-  imports = [ ../../modules/home ];
+  imports = [ ../../modules/home/base ];
 }

@@ -1,8 +1,6 @@
 { ... }:
 
 {
-  imports = [ ./theme.nix ];
-
   programs.firefox = {
     enable = true;
 
