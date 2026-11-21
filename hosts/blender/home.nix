@@ -11,6 +11,8 @@
     ../../modules/home/ghostty.nix
     ../../modules/home/firefox.nix
     ../../modules/home/zed.nix
+    ../../modules/home/vscode.nix
+    ../../modules/home/winbox.nix
     ../../modules/home/niri
     ../../modules/home/noctalia
   ];
