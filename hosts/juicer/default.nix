@@ -4,6 +4,7 @@
     modules.darwin.default
     modules.darwin.apple-container
     modules.darwin.applications
+    modules.darwin.xcode
     modules.system.fonts
     ./nix-store.nix
     ./preferences.nix
