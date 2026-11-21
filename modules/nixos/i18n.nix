@@ -3,6 +3,7 @@
 {
   i18n = {
     defaultLocale = "en_US.UTF-8";
+    supportedLocales = [ "all" ];
 
     extraLocaleSettings = {
       LC_ADDRESS = "ko_KR.UTF-8";
