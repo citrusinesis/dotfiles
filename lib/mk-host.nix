@@ -14,7 +14,6 @@ let
   };
   specialArgs = {
     inherit inputs;
-    modules = import ./modules.nix { inherit lib; };
   };
   homeDirectory = "${if darwin then "/Users" else "/home"}/${user}";
   homeModules = [

@@ -1,18 +1,17 @@
 {
   lib,
-  modules,
   pkgs,
   ...
 }:
 {
   imports = [
-    modules.home.default
-    modules.home.ghostty
-    modules.home.firefox
-    modules.home.helium
-    modules.home.zed
-    modules.home.niri
-    modules.home.noctalia
+    ../../modules/home
+    ../../modules/home/ghostty.nix
+    ../../modules/home/firefox.nix
+    ../../modules/home/helium.nix
+    ../../modules/home/zed.nix
+    ../../modules/home/niri
+    ../../modules/home/noctalia
   ];
 
   # Shared shell initialization already runs fastfetch for login shells.

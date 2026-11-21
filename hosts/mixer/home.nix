@@ -1,11 +1,10 @@
-{ modules, ... }:
 {
   imports = [
-    modules.home.default
-    modules.home.key-remapping
-    modules.home.ghostty
-    modules.home.zed
-    modules.home.vscode
-    modules.home.winbox
+    ../../modules/home
+    ../../modules/home/key-remapping.nix
+    ../../modules/home/ghostty.nix
+    ../../modules/home/zed.nix
+    ../../modules/home/vscode.nix
+    ../../modules/home/winbox.nix
   ];
 }

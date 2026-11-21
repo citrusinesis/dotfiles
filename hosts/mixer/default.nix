@@ -1,10 +1,10 @@
-{ modules, ... }:
 {
   imports = [
-    modules.darwin.default
-    modules.darwin.apple-container
-    modules.darwin.applications
-    modules.system.fonts
+    ../../modules/darwin
+    ../../modules/darwin/apple-container.nix
+    ../../modules/darwin/applications.nix
+    ../../modules/system/fonts
+
     ./preferences.nix
   ];
 

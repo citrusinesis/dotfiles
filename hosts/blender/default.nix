@@ -1,7 +1,6 @@
 {
   inputs,
   lib,
-  modules,
   pkgs,
   ...
 }:
@@ -9,11 +8,12 @@
 {
   imports = [
     inputs.disko.nixosModules.disko
-    modules.nixos.default
-    modules.nixos.niri
-    modules.nixos.noctalia
-    modules.nixos.nvidia
-    modules.system.fonts
+    ../../modules/nixos
+    ../../modules/nixos/niri.nix
+    ../../modules/nixos/noctalia.nix
+    ../../modules/nixos/nvidia.nix
+    ../../modules/system/fonts
+
     ./hardware.nix
     ./disko.nix
     ./boot.nix

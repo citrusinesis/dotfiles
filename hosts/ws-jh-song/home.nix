@@ -1,4 +1,3 @@
-{ modules, ... }:
 {
-  imports = [ modules.home.default ];
+  imports = [ ../../modules/home ];
 }
