@@ -72,6 +72,11 @@
         "x86_64-linux"
       ];
 
-      imports = [ ./flake ];
+      imports = [
+        ./flake/hosts.nix
+        ./flake/packages.nix
+        ./flake/checks.nix
+        ./flake/devshell.nix
+      ];
     };
 }
