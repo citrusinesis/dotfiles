@@ -78,8 +78,6 @@ in
 {
   home.packages = [ package ];
 
-  dotfiles.casks = [ "paseo" ];
-
   launchd.agents.paseo = lib.mkIf isDarwin {
     enable = true;
     config = {
