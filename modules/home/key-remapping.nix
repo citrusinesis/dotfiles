@@ -11,10 +11,6 @@ let
 in
 {
   config = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-    home.activation.migrateLegacyKeyRemapping =
-      lib.hm.dag.entryBetween [ "setupLaunchAgents" ] [ "writeBoundary" ]
-        (builtins.readFile ./migrate-key-remapping.sh);
-
     launchd.agents.key-remapping = {
       enable = true;
       config = {
