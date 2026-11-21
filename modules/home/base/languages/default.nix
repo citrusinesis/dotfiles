@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./c.nix
     ./go.nix
     ./rust.nix
     ./typescript.nix

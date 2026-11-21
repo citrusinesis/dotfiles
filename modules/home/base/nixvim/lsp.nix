@@ -47,6 +47,14 @@
     '';
     servers = {
       biome.enable = true;
+      clangd = {
+        enable = true;
+        package = null;
+        cmd = [
+          "clangd"
+          "--query-driver=/usr/bin/*,/run/current-system/sw/bin/*,/etc/profiles/per-user/*/bin/*,/nix/store/*/bin/*"
+        ];
+      };
       basedpyright = {
         enable = true;
         settings = {

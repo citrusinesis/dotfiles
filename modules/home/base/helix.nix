@@ -61,6 +61,9 @@ in
 
     languages = {
       language-server.typos.command = "typos-lsp";
+      language-server.clangd.args = [
+        "--query-driver=/usr/bin/*,/run/current-system/sw/bin/*,/etc/profiles/per-user/*/bin/*,/nix/store/*/bin/*"
+      ];
 
       language = [
         {
@@ -77,6 +80,16 @@ in
             args = [ "-" ];
           };
           language-servers = withTypos [ "nixd" ];
+        }
+        {
+          name = "c";
+          auto-format = true;
+          language-servers = withTypos [ "clangd" ];
+        }
+        {
+          name = "cpp";
+          auto-format = true;
+          language-servers = withTypos [ "clangd" ];
         }
         {
           name = "python";
