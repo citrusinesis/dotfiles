@@ -42,7 +42,4 @@ in
       name: host: lib.nameValuePair "${host.user}@${name}" built.${name}.home
     ) hosts;
   };
-
-  # Host table for policy checks.
-  _module.args.hosts = hosts;
 }

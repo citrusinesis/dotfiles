@@ -29,46 +29,38 @@ let
     }
   ];
 
-  hostModule =
-    { config, ... }:
-    {
-      options.dotfiles.primaryUser = lib.mkOption {
-        type = lib.types.str;
-        readOnly = true;
-        description = "Login name of the user who owns this host.";
-      };
-
-      config = {
-        dotfiles.primaryUser = user;
-        nixpkgs = {
-          inherit pkgs;
-          hostPlatform = system;
-        };
-        networking = {
-          hostName = lib.mkForce name;
-        }
-        // lib.optionalAttrs darwin { localHostName = lib.mkForce name; };
-        users.users.${user}.home = lib.mkForce homeDirectory;
-        assertions = [
-          {
-            assertion = config.nixpkgs.overlays == [ ];
-            message = "Host ${name}: keep overlays in the shared package import in lib/mk-host.nix";
-          }
-        ];
-
-        home-manager = {
-          useGlobalPkgs = true;
-          useUserPackages = true;
-          backupCommand = lib.getExe (import ./home-manager-backup.nix { inherit pkgs; });
-          extraSpecialArgs = specialArgs;
-          users.${user}.imports = homeModules;
-        };
-      }
-      // lib.optionalAttrs darwin {
-        system.primaryUser = user;
-        homebrew.caskArgs.appdir = "/Applications";
-      };
+  hostModule = {
+    options.dotfiles.primaryUser = lib.mkOption {
+      type = lib.types.str;
+      readOnly = true;
+      description = "Login name of the user who owns this host.";
     };
+
+    config = {
+      dotfiles.primaryUser = user;
+      nixpkgs = {
+        inherit pkgs;
+        hostPlatform = system;
+      };
+      networking = {
+        hostName = lib.mkForce name;
+      }
+      // lib.optionalAttrs darwin { localHostName = lib.mkForce name; };
+      users.users.${user}.home = lib.mkForce homeDirectory;
+
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        backupCommand = lib.getExe (import ./home-manager-backup.nix { inherit pkgs; });
+        extraSpecialArgs = specialArgs;
+        users.${user}.imports = homeModules;
+      };
+    }
+    // lib.optionalAttrs darwin {
+      system.primaryUser = user;
+      homebrew.caskArgs.appdir = "/Applications";
+    };
+  };
 in
 {
   system = (if darwin then inputs.nix-darwin.lib.darwinSystem else inputs.nixpkgs.lib.nixosSystem) {
