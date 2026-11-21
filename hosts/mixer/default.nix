@@ -2,7 +2,6 @@
   imports = [
     ../../modules/darwin/base
     ../../modules/darwin/apple-container.nix
-    ../../modules/darwin/applications.nix
     ../../modules/system/fonts
   ];
 
@@ -28,10 +27,5 @@
     restartAfterPowerFailure = true;
   };
 
-  homebrew = {
-    casks = [ "mongodb-compass" ];
-    brews = [
-      "mole"
-    ];
-  };
+  homebrew.casks = [ "mongodb-compass" ];
 }
