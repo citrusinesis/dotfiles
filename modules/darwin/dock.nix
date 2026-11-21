@@ -4,6 +4,7 @@
   # Shared preferences; account modules may override individual keys.
   system.defaults = {
     dock = {
+      autohide = lib.mkDefault false;
       expose-group-apps = lib.mkDefault true;
       launchanim = lib.mkDefault true;
       mineffect = lib.mkDefault "genie";
@@ -22,6 +23,10 @@
 
     spaces = {
       spans-displays = lib.mkDefault false;
+    };
+
+    WindowManager = {
+      GloballyEnabled = lib.mkDefault true;
     };
   };
 }

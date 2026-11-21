@@ -6,7 +6,7 @@
     ./cache.nix
   ];
 
-  time.timeZone = lib.mkDefault "UTC";
+  time.timeZone = lib.mkDefault "Asia/Seoul";
 
   programs.zsh.enable = true;
 }

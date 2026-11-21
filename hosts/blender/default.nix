@@ -40,7 +40,6 @@
   };
 
   networking.networkmanager.enable = true;
-  time.timeZone = "Asia/Seoul";
 
   services.openssh.enable = false;
   networking.firewall.allowedTCPPorts = lib.mkForce [ ];

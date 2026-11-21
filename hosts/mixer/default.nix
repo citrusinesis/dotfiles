@@ -4,18 +4,15 @@
     ../../modules/darwin/apple-container.nix
     ../../modules/darwin/applications.nix
     ../../modules/system/fonts
-
-    ./preferences.nix
   ];
 
-  time.timeZone = "Asia/Seoul";
-
-  pf = {
-    screen-sharing = {
-      enable = true;
-      high-performance = true;
+  system.defaults = {
+    ".GlobalPreferences"."com.apple.mouse.scaling" = 0.6875;
+    NSGlobalDomain = {
+      AppleEnableSwipeNavigateWithScrolls = false;
+      "com.apple.trackpad.scaling" = 1.0;
     };
-    ssh.enable = true;
+    trackpad.Dragging = false;
   };
 
   power = {

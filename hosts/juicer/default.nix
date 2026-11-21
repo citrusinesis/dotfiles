@@ -6,18 +6,15 @@
     ../../modules/darwin/xcode.nix
     ../../modules/system/fonts
     ./nix-store.nix
-    ./preferences.nix
   ];
 
-  time.timeZone = "Asia/Seoul";
-
-  # Restrict the ports without enabling SSH or Screen Sharing services.
-  pf = {
-    screen-sharing = {
-      enable = true;
-      high-performance = true;
+  system.defaults = {
+    ".GlobalPreferences"."com.apple.mouse.scaling" = 1.5;
+    NSGlobalDomain = {
+      AppleEnableSwipeNavigateWithScrolls = true;
+      "com.apple.trackpad.scaling" = 0.875;
     };
-    ssh.enable = true;
+    trackpad.Dragging = true;
   };
 
   homebrew.brews = [ "mole" ];

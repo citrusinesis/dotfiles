@@ -22,7 +22,6 @@
   };
 
   networking.networkmanager.enable = false;
-  time.timeZone = "Asia/Seoul";
 
   services.tailscale.enable = true;
 

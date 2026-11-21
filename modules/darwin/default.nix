@@ -12,6 +12,14 @@
     ./input.nix
   ];
 
+  pf = {
+    screen-sharing = {
+      enable = true;
+      high-performance = true;
+    };
+    ssh.enable = true;
+  };
+
   system.keyboard = {
     remapCapsLockToEscape = false;
     swapLeftCommandAndLeftAlt = false;
