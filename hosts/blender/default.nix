@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -40,6 +41,12 @@
   };
 
   networking.networkmanager.enable = true;
+
+  services.tailscale = {
+    enable = true;
+    extraSetFlags = [ "--operator=${config.dotfiles.primaryUser}" ];
+  };
+  services.cloudflare-warp.enable = true;
 
   services.openssh.enable = false;
   networking.firewall.allowedTCPPorts = lib.mkForce [ ];
