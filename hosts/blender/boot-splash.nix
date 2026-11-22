@@ -1,9 +1,26 @@
 {
+  services.bootvine.enable = true;
+
+  console.colors = [
+    "1e1e2e"
+    "f38ba8"
+    "a6e3a1"
+    "f9e2af"
+    "89b4fa"
+    "f5c2e7"
+    "94e2d5"
+    "bac2de"
+    "585b70"
+    "f38ba8"
+    "a6e3a1"
+    "f9e2af"
+    "89b4fa"
+    "f5c2e7"
+    "94e2d5"
+    "a6adc8"
+  ];
+
   boot = {
-    plymouth = {
-      enable = true;
-      theme = "bgrt";
-    };
     consoleLogLevel = 3;
     initrd = {
       # NVIDIA modesetting supplies modeset=1 and fbdev=1 through modprobe.
@@ -13,7 +30,6 @@
         "nvidia_drm"
       ];
     };
-    # Plymouth adds splash; quiet also silences the systemd initrd.
     kernelParams = [
       "quiet"
       "udev.log_level=3"
