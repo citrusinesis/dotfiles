@@ -54,8 +54,6 @@ in
       cat = "${pkgs.bat}/bin/bat -p";
 
       grep = "grep --color=auto";
-
-      zshrc = "$EDITOR ~/.zshrc";
     }
     // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
       showFiles = "defaults write com.apple.finder AppleShowAllFiles YES; killall Finder";

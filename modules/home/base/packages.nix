@@ -1,29 +1,24 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  home.packages =
-    with pkgs;
-    [
-      curl
-      wget
-      jq
-      watch
-      unzip
+  home.packages = with pkgs; [
+    curl
+    wget
+    jq
+    watch
+    unzip
 
-      tree
-      fastfetch
-      entr
-      file
-      dust
-      duf
-      procs
-      rsync
-      ast-grep
-      tldr
-    ]
-    ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
-      coreutils
-    ];
+    tree
+    fastfetch
+    entr
+    file
+    dust
+    duf
+    procs
+    rsync
+    ast-grep
+    tldr
+  ];
 
   programs.less = {
     enable = true;

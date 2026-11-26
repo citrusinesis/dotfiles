@@ -20,7 +20,7 @@
       pull.rebase = true;
       push.autoSetupRemote = true;
       core.editor = "vim";
-      merge.conflictstyle = "diff3";
+      merge.conflictstyle = "zdiff3";
       diff.colorMoved = "default";
       credential.helper = "cache --timeout=3600";
     };

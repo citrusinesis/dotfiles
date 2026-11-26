@@ -1,7 +1,8 @@
 { pkgs, ... }:
 let
   withTypos = servers: servers ++ [ "typos" ];
-  yaziChooser = "/tmp/helix-yazi-chooser";
+  # Derive a user-private, per-instance chooser path using Helix's PID ($PPID) without braces that could break %sh{...}.
+  yaziChooserInit = ''dir="$XDG_RUNTIME_DIR"; [ -n "$dir" ] || dir="$TMPDIR"; [ -n "$dir" ] || dir=/tmp; chooser="$dir/helix-yazi-chooser-$PPID"'';
   restoreTerminal = [
     '':insert-output printf "\x1b[?1049h\x1b[?2004h" > /dev/tty''
     ":redraw"
@@ -41,11 +42,12 @@ in
           "keep_primary_selection"
         ];
         C-y = [
-          ":insert-output rm -f ${yaziChooser}"
-          '':insert-output yazi "%{buffer_name}" --chooser-file=${yaziChooser}''
+          '':insert-output ${yaziChooserInit}; rm -f "$chooser"; yazi "%{buffer_name}" --chooser-file="$chooser"''
         ]
         ++ restoreTerminal
-        ++ [ '':open %sh{[ -s ${yaziChooser} ] && cat ${yaziChooser} || echo "%{buffer_name}"}'' ];
+        ++ [
+          '':open %sh{${yaziChooserInit}; if [ -s "$chooser" ]; then cat "$chooser"; else printf '%s\n' "%{buffer_name}"; fi; rm -f "$chooser"}''
+        ];
         C-g = [
           ":write-all"
           ":new"

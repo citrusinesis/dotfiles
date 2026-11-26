@@ -9,10 +9,6 @@
       cleanup = "zap";
     };
 
-    taps = [
-      "anomalyco/tap"
-    ];
-
     brews = [
       "mas"
       "mole"

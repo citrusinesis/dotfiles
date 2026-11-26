@@ -12,7 +12,6 @@ with pkgs;
 ]
 ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
   noto-fonts
-  noto-fonts-cjk-sans
   noto-fonts-color-emoji
   liberation_ttf
 ]

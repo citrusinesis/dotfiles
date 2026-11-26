@@ -6,6 +6,7 @@
 }:
 
 let
+  appearance = import ../../lib/desktop-appearance.nix;
   settingsPath =
     if pkgs.stdenv.hostPlatform.isDarwin then
       "Library/Application Support/Code/User/settings.json"
@@ -51,7 +52,7 @@ in
       "workbench.list.smoothScrolling" = true;
       "terminal.integrated.smoothScrolling" = true;
 
-      "editor.fontFamily" = "Hack Nerd Font Mono, D2KodingLigature Nerd Font, monospace";
+      "editor.fontFamily" = "${appearance.monospaceFont}, ${appearance.monospaceFallback}, monospace";
       "editor.fontSize" = 14;
       "terminal.integrated.fontSize" = 14;
       "terminal.integrated.env.linux" = {
